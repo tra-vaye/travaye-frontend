@@ -10,6 +10,7 @@ import Avatar from "../../assets/avatar.png";
 import GetStarted from "../../assets/get-started.png";
 import Man from "../../assets/man.png";
 import { FacebookIcon, InstaIcon, TwitterIcon } from "./svgs";
+import { ScrollLeftBtn, ScrollRightBtn } from "../../components/UI/Buttons";
 
 const Home = () => {
   return (
@@ -44,7 +45,7 @@ const Home = () => {
       </section>
       <Perks />
       <p className={classes.text}>PLANNING WITH TRAVAYE?</p>
-      <h2>Discover Places around Nigeria</h2>
+      <h2>Discover Places Around Nigeria</h2>
       <Instructions />
       <h2>How To Use Travaye</h2>
       <Instructions />
@@ -63,20 +64,33 @@ const Home = () => {
             notch locations I can flex at within my budget. Shoutout to Travaye!{" "}
           </article>
           <div className={classes.user}>
-            <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between flex-wrap">
               <div className="d-flex justify-content-center align-items-center mt-3 me-4 ">
                 <img src={Avatar} alt="avatar" />
                 <div>
                   <p>Barnabas Peters</p>
-                  <p>Photographer</p>
+                  <p
+                    style={{
+                      fontWeight: " 700",
+                      fontSize: "22px",
+                      lineHeight: " 40px",
+                      textAlign: "justify",
+                      color: " #9d9d9d",
+                    }}
+                  >
+                    Photographer
+                  </p>
+                  <div className={classes.stars}>
+                    <img src={ReviewStars} alt="stars" className="mt-3 " />
+                  </div>
                 </div>
               </div>
 
-              <div className="d-flex justify-content-center align-items-center">
-                Buttons
+              <div className="d-flex justify-content-between align-items-center justify-self-center mx-auto mt-3">
+                <ScrollRightBtn className="review-scroll" />
+                <ScrollLeftBtn className="review-scroll" />
               </div>
             </div>
-            <img src={ReviewStars} alt="stars" className="mt-3" />
           </div>
         </div>
       </section>

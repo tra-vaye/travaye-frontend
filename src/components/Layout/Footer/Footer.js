@@ -1,8 +1,6 @@
 import classes from "./Footer.module.css";
 import WhiteLogo from "../../../assets/white-logo.png";
-import FacebookIcon from "../../../assets/facebook.png";
-import TwitterIcon from "../../../assets/twitter.png";
-import InstaIcon from "../../../assets/instagram.png";
+import { FacebookIcon, TwitterIcon, InstaIcon } from "../../../Pages/Home/svgs";
 
 const Links = ["My Account", "View Businesses", "Watch Stories"];
 const Footer = () => {
@@ -16,6 +14,9 @@ const Footer = () => {
             <br />
             Live free with Travaye
           </p>
+          <div className={classes.socials}>
+            {FacebookIcon} {TwitterIcon} {InstaIcon}
+          </div>
         </div>
         <div className="mb-5">
           <h4>Subscribe To Our Newsletter</h4>

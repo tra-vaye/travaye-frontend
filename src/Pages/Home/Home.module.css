@@ -7,6 +7,7 @@
   font-weight: 700;
   font-size: 5em;
   overflow-wrap: break-word;
+  line-height: 92px;
 }
 
 .intro + p {
@@ -67,7 +68,7 @@
 
 .text {
   font-weight: 700;
-  font-size: 28px;
+  font-size: 20px;
   line-height: 32px;
   color: #e9a309;
   text-align: center;
@@ -93,8 +94,8 @@ h2 {
 
 .reviews .content h3 {
   font-weight: 800;
-  font-size: 40px;
-  line-height: 64px;
+  font-size: 30px;
+  line-height: 50px;
   color: #000000;
 }
 
@@ -112,18 +113,10 @@ h2 {
 
 .reviews .content .user div div:nth-child(2) :first-child {
   font-weight: 700;
-  font-size: 25px;
+  font-size: 120%;
   line-height: 40px;
   text-align: justify;
   color: #009f57;
-}
-
-.reviews .content .user div div:nth-child(2) :last-child {
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 40px;
-  text-align: justify;
-  color: #9d9d9d;
 }
 
 .get-started {
@@ -194,6 +187,10 @@ h2 {
   justify-content: center;
   align-items: center;
   left: 0;
+}
+
+.stars {
+  transform: translateX(-10%);
 }
 @media (max-width: 874px) {
   .get-started div :last-child {

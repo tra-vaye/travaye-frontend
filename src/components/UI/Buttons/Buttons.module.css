@@ -12,6 +12,7 @@
   font-size: 20px;
   transform: scale(0.8);
 }
+
 .btn--alt {
   margin: auto 15px;
   display: flex;
@@ -26,4 +27,24 @@
   border: 3px solid #009f57;
   font-size: 20px;
   transform: scale(0.8);
+}
+
+.scroll {
+  width: 40px;
+  height: 40px;
+  background: #009f57;
+  border: 1px solid #009f57;
+  border-radius: 50px;
+  transform: rotate(-180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.scroll img {
+  width: 10px;
+}
+.review {
+  margin: auto 40px;
+  margin-top: 20px;
 }

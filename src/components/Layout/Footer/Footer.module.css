@@ -75,7 +75,10 @@
 }
 
 .socials {
-  transform: scale(0.4);
+  width: 200px;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
 }
 @media (max-width: 848px) {
   .footer :first-child {
