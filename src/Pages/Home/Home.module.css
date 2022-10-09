@@ -27,7 +27,9 @@
 .landing {
   transform: scale(0.9) translateY(-15%);
 }
-
+.socials {
+  transform: translateX(-50px);
+}
 .btn {
   width: 240px;
   height: 72px;
@@ -131,11 +133,13 @@ h2 {
   justify-content: center;
   padding: auto 20px;
   margin-top: 8rem;
+  margin-bottom: 50rem;
 }
 
 .get-started div {
   position: relative;
   width: 80%;
+  height: fit-content;
 }
 
 .get-started div div {
@@ -211,18 +215,23 @@ h2 {
   }
 }
 @media (max-width: 806px) {
+  .get-started {
+    display: flex;
+  }
   .get-started div {
-    height: fit-content;
+    width: 95%;
+
+    position: relative;
+  }
+  .get-started div :first-child {
+    position: relative;
+  }
+  .get-started div :first-child h2 {
   }
   .get-started div :nth-child(2) {
-    top: -80%;
-    left: 30%;
-  }
-  .get-started div :last-child {
-    top: 0;
+    display: none;
   }
 }
-
 @media (max-width: 541px) {
   .intro {
     font-size: 55px;

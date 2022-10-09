@@ -9,6 +9,7 @@ import ReviewStars from "../../assets/review-stars.png";
 import Avatar from "../../assets/avatar.png";
 import GetStarted from "../../assets/get-started.png";
 import Man from "../../assets/man.png";
+import { FacebookIcon, InstaIcon, TwitterIcon } from "./svgs";
 
 const Home = () => {
   return (
@@ -33,6 +34,11 @@ const Home = () => {
           </div>
           <div className="col-lg-6 d-flex justify-content-center align-self-start">
             <img src={LandingImage} alt="poster" className="img-fluid " />
+            <div
+              className={`d-flex flex-column justify-content-evenly ${classes.socials}`}
+            >
+              {FacebookIcon} {TwitterIcon} {InstaIcon}
+            </div>
           </div>
         </div>
       </section>
@@ -44,7 +50,7 @@ const Home = () => {
       <Instructions />
       <section className={`row px-3 ${classes.reviews}`}>
         <div className="col-lg-6 d-flex justify-content-center">
-          <img src={ReviewImage} alt="image" className="img-fluid" />
+          <img src={ReviewImage} alt="banner" className="img-fluid" />
         </div>
         <div
           className={`col-lg-6 d-flex flex-column justify-content-center px-5 ${classes.content}`}

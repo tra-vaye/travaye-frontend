@@ -54,7 +54,7 @@
   color: #9d9d9d;
 }
 
-@media (max-width: 1034px) {
+@media (max-width: 1212px) {
   .instructions {
     grid-template-columns: repeat(2, 1fr);
   }

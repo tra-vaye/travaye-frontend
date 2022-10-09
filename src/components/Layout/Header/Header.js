@@ -1,8 +1,9 @@
 import Logo from "../../../assets/logo.png";
 import classes from "./Header.module.css";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Header = () => {
-  const Links = ["Home", "Businesses", "Shop", "Contact Us"];
+  export const Links = ["Home", "Businesses", "Shop", "Contact Us"];
   return (
     <header className={classes.header}>
       <nav className={classes.nav}>
@@ -20,6 +21,9 @@ const Header = () => {
             <button className={classes["btn--alt"]}>Login</button>
           </div>
         </div>
+        <button className={classes.hamburger}>
+          <MenuIcon />
+        </button>
       </nav>
     </header>
   );
