@@ -1,9 +1,11 @@
 import Logo from "../../../assets/logo.png";
 import classes from "./Header.module.css";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import { SignUpButton, LoginButton } from "../../UI/Buttons";
 
-const Header = () => {
-  export const Links = ["Home", "Businesses", "Shop", "Contact Us"];
+export const Links = ["Home", "Businesses", "Shop", "Contact Us"];
+const Header = (props) => {
   return (
     <header className={classes.header}>
       <nav className={classes.nav}>
@@ -17,12 +19,12 @@ const Header = () => {
             ))}
           </ul>
           <div>
-            <button className={classes.btn}>Sign Up</button>
-            <button className={classes["btn--alt"]}>Login</button>
+            <LoginButton />
+            <SignUpButton />
           </div>
         </div>
-        <button className={classes.hamburger}>
-          <MenuIcon />
+        <button className={classes.hamburger} onClick={props.onToggleSideNav}>
+          {props.showSideNav ? <CloseIcon /> : <MenuIcon />}
         </button>
       </nav>
     </header>

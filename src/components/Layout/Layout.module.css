@@ -1,0 +1,34 @@
+.sideNav {
+  position: absolute;
+  z-index: 1000000;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.sideNav ul {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 30%;
+}
+
+.sideNav div {
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: scale(0.8);
+  transform: translateX(10%);
+}
+
+@media (min-width: 1034px) {
+  .sideNav {
+    display: none;
+  }
+}

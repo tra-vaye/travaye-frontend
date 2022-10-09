@@ -28,7 +28,7 @@
   transform: scale(0.9) translateY(-15%);
 }
 .socials {
-  transform: translateX(-50px);
+  transform: translateX(-30px);
 }
 .btn {
   width: 240px;
@@ -75,7 +75,6 @@
 
 h2 {
   font-weight: 800;
-  font-size: 48px;
   line-height: 56px;
   text-align: center;
 }
@@ -85,8 +84,7 @@ h2 {
 }
 
 .reviews .content h2 {
-  font-weight: 700;
-  font-size: 28px;
+  font-size: 20px;
   line-height: 32px;
   color: #e9a309;
   text-align: start;
