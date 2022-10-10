@@ -22,6 +22,8 @@ code {
   margin: 10px 0;
   transform: scale(0.7);
   padding: auto;
+  display: grid;
+  place-items: center;
 }
 
 .swiper-button-prev,
@@ -49,7 +51,7 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: auto 3px;
+  margin-right: 7px;
   cursor: pointer;
   transition: all 700ms !important;
   position: relative;

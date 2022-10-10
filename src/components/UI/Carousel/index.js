@@ -7,7 +7,6 @@ import Abuja from "../../../assets/abuja.png";
 import WaterMark from "../../../assets/watermark.png";
 import ReviewStars from "../../../assets/review-stars.png";
 import classes from "./Carousel.module.css";
-import Fade from "../../../assets/fade.png";
 
 const Data = [
   { location: "Lagos, Nigeria", img: Lagos, rating: "" },
@@ -49,7 +48,6 @@ const Carousel = () => {
             <SwiperSlide key={i}>
               <div>
                 <img src={data.img} alt="poster" className="img-fluid" />
-                <img src={Fade} alt="" className={classes.fade} />
                 <div className={classes.details}>
                   <img
                     src={WaterMark}
