@@ -11,6 +11,7 @@ import GetStarted from "../../assets/get-started.png";
 import Man from "../../assets/man.png";
 import { FacebookIcon, InstaIcon, TwitterIcon } from "./svgs";
 import { ScrollLeftBtn, ScrollRightBtn } from "../../components/UI/Buttons";
+import Carousel from "../../components/UI/Carousel";
 
 const Home = () => {
   return (
@@ -46,7 +47,7 @@ const Home = () => {
       <Perks />
       <p className={classes.text}>PLANNING WITH TRAVAYE?</p>
       <h2>Discover Places Around Nigeria</h2>
-      <Instructions />
+      <Carousel />
       <h2>How To Use Travaye</h2>
       <Instructions />
       <section className={`row px-3 ${classes.reviews}`}>

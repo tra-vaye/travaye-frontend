@@ -14,3 +14,69 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* Carousel */
+
+.swiper {
+  overflow: hidden !important ;
+  margin: 10px 0;
+  transform: scale(0.7);
+  padding: auto;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center;
+  transform: scale(1.8);
+}
+
+.swiper-button-next {
+  background-image: url("./assets/swipe-right.png");
+}
+
+.swiper-button-prev {
+  background-image: url("./assets/swipe-left.png");
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  display: none;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto 3px;
+  cursor: pointer;
+  transition: all 700ms !important;
+  position: relative;
+  object-fit: cover;
+}
+
+.swiper-wrapper:hover .swiper-slide {
+  position: relative;
+}
+
+.swiper-slide:hover p {
+  display: flex;
+}
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal,
+.swiper-pagination-custom,
+.swiper-pagination-fraction {
+  bottom: 100% !important;
+  left: 0px !important;
+}
+.swiper-pagination {
+  top: -30px !important;
+  right: 10px !important;
+  width: auto !important;
+  text-align: right !important;
+  height: auto !important;
+}
+.swiper-pagination-bullet {
+  background-color: rgb(255, 255, 255) !important;
+}

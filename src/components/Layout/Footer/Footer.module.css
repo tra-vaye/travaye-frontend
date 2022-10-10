@@ -23,8 +23,8 @@
 .footer p,
 .footer ul li {
   font-weight: 600;
-  font-size: 18px;
-  line-height: 48px;
+  font-size: 15px;
+  line-height: 40px;
   color: #ffffff;
   margin-bottom: 0;
 }
@@ -79,6 +79,10 @@
   height: 48px;
   display: flex;
   justify-content: space-between;
+}
+
+.socials svg {
+  transform: scale(0.8);
 }
 @media (max-width: 848px) {
   .footer :first-child {

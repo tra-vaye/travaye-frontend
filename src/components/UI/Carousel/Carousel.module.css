@@ -1,0 +1,27 @@
+.details {
+  display: flex;
+  margin-top: 20px;
+  text-transform: uppercase;
+}
+
+.watermark {
+  width: 50px;
+  margin-right: 30px;
+}
+
+.details {
+  position: absolute;
+  bottom: 5%;
+  left: 19%;
+  font-weight: 700;
+  color: white;
+  font-size: 20px;
+  z-index: 8;
+}
+
+.fade {
+  position: absolute;
+  top: 0;
+  left: 14%;
+  z-index: 7;
+}

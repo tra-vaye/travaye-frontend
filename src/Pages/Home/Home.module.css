@@ -1,5 +1,5 @@
 .landing {
-  margin-top: 100px;
+  margin-top: 70px;
   padding: auto 10px;
 }
 
@@ -102,7 +102,7 @@ h2 {
 .reviews .content article {
   font-weight: 600;
   font-size: 20px;
-  line-height: 40px;
+  line-height: 30px;
   text-align: start;
   color: #9d9d9d;
 }
@@ -124,7 +124,6 @@ h2 {
   justify-content: center;
   padding: auto 20px;
   margin-top: 8rem;
-  margin-bottom: 50rem;
 }
 
 .get-started div {
