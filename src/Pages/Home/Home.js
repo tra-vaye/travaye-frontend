@@ -1,7 +1,7 @@
 import classes from "./Home.module.css";
 import LandingImage from "../../assets/landing.png";
 import StoryButton from "../../assets/story-button.png";
-import Footer from "../../components/Layout/Footer/Footer";
+
 import Perks from "../../components/UI/Perks";
 import Instructions from "../../components/UI/Instructions";
 import ReviewImage from "../../assets/review-image.png";
@@ -96,18 +96,20 @@ const Home = () => {
         </div>
       </section>
       <section className={classes["get-started"]}>
-        <div>
-          <img src={GetStarted} alt="banner" className="img-fluid" />
-          <img src={Man} alt="poster" className="img-fluid" />
-          <div>
-            <h2>
-              Explore The World <br /> With Travaye
-            </h2>
-            <button>Get Started</button>
+        <div className="row">
+          <div className="col-md-6">
+            <div>
+              <h2>
+                Explore The World <br /> With Travaye
+              </h2>
+              <button>Get Started</button>
+            </div>
+          </div>
+          <div className="col-md-6">
+            {/* <img src={Man} alt="poster" className="img-fluid" /> */}
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };

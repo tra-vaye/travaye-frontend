@@ -1,0 +1,72 @@
+.login {
+  margin-top: 5%;
+  margin-bottom: 8%;
+}
+
+.login h3 {
+  color: #009f57;
+  font-weight: 700;
+}
+.login h3 + p {
+  color: #9d9d9d;
+  font-weight: 600;
+  font-size: 20px;
+}
+.form {
+  background: #ffffff;
+  border: 2px solid rgba(0, 159, 87, 0.25);
+  box-shadow: 2px 8px 30px rgba(0, 159, 87, 0.12);
+  border-radius: 15px;
+  width: 80%;
+  padding: 20px;
+}
+
+.form :first-child p {
+  color: #009f57;
+  font-weight: 600;
+}
+.form input {
+  outline: none;
+  border: 2px solid rgba(0, 159, 87, 0.25);
+  border-radius: 10px;
+  height: 40px;
+  padding-left: 30px;
+  font-weight: 400;
+  font-size: 15px;
+}
+.sapa {
+  color: #e9a309;
+}
+
+.login .text {
+  background-image: url("../../assets/plain-logo.png");
+  background-position: center;
+  background-size: 20% auto;
+  background-repeat: no-repeat;
+}
+.login .form {
+  transform: translateX(-4.5rem);
+}
+.login .form :nth-child(2) p {
+  color: #9d9d9d;
+}
+
+.login .form :nth-child(2) p span {
+  color: #009f57;
+  font-size: medium;
+  font-weight: 700;
+}
+
+/* when they stack */
+@media (max-width: 767px) {
+  .login :first-child :first-child {
+    margin-bottom: 1rem;
+    margin-top: -0.5rem;
+  }
+  .login .text {
+    background-size: 15% auto;
+  }
+  .login .form {
+    transform: translateX(0);
+  }
+}
