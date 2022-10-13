@@ -11,6 +11,7 @@
   color: white;
   font-size: 20px;
   transform: scale(0.8);
+  white-space: nowrap;
 }
 
 .btn--alt {

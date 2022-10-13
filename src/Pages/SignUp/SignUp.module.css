@@ -1,0 +1,106 @@
+.signup {
+  margin-top: 1rem;
+  margin-bottom: 8%;
+  background-image: url("../../assets/landing-bg.png");
+  background-size: 50% auto;
+  background-position: left;
+  background-repeat: no-repeat;
+}
+.signup .intro {
+  background-image: url("../../assets/plain-logo.png");
+  background-size: 30% auto;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.socials {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 2rem;
+}
+.socials svg {
+  transform: scale(0.7);
+}
+
+.text p {
+  color: #9d9d9d;
+  font-size: 15px;
+}
+
+.text p span {
+  color: #009f57;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.link {
+  width: 90%;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+/* stacking point */
+
+@media (max-width: 767px) {
+  .link {
+    font-size: 12px;
+  }
+  .signup {
+    margin-top: 0;
+  }
+  .intro {
+    transform: scale(0.9);
+    margin-top: 3rem;
+  }
+}
+.navlink {
+  cursor: pointer;
+  color: #9d9d9d;
+  border-bottom: 5px solid #9d9d9d;
+  padding-bottom: 1rem;
+}
+
+.active {
+  border-bottom: 5px solid #009f57;
+  color: #009f57;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.link p {
+  width: 50%;
+}
+
+.intro h3 {
+  color: #009f57;
+  font-weight: 700;
+}
+
+.intro h3 span {
+  color: #e9a009;
+}
+
+.intro h3 + p {
+  color: #9d9d9d;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 1.2rem;
+}
+
+.business {
+  color: #9d9d9d;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 7rem;
+}
+
+.user {
+  margin-top: 7rem;
+  font-weight: 700;
+  color: #9d9d9d;
+  font-size: 20px;
+}
+
+.user h5 {
+  color: #009f57;
+  font-weight: 600;
+}

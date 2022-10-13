@@ -7,9 +7,9 @@ export const SignUpButton = (props) => {
   return <button className={classes.btn}>Sign Up</button>;
 };
 
-//for form submit
-export const LoginFormBtn = () => {
-  return <button className={classes.btn}>Login</button>;
+//for AUth form submit
+export const AuthFormBtn = (props) => {
+  return <button className={classes.btn}>{props.children}</button>;
 };
 
 //for navigation

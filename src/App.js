@@ -5,6 +5,7 @@ import Home from "./Pages/Home/Home";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
+import SignUp from "./Pages/SignUp";
 
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
       <Footer />
     </>

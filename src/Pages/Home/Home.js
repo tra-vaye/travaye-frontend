@@ -9,7 +9,11 @@ import ReviewStars from "../../assets/review-stars.png";
 import Avatar from "../../assets/avatar.png";
 import GetStarted from "../../assets/get-started.png";
 import Man from "../../assets/man.png";
-import { FacebookIcon, InstaIcon, TwitterIcon } from "./svgs";
+import {
+  FacebookIcon,
+  InstaIcon,
+  TwitterIcon,
+} from "../../components/UI/svgs/svgs";
 import { ScrollLeftBtn, ScrollRightBtn } from "../../components/UI/Buttons";
 import Carousel from "../../components/UI/Carousel";
 
@@ -18,7 +22,7 @@ const Home = () => {
     <>
       <section className={classes.landing}>
         <div className="row">
-          <div className="col-lg-6 mb-5">
+          <div className="col-lg-6 mb-2">
             <p className={classes.intro}>
               Enjoy Outings without having to think of{" "}
               <span className={classes.sapa}>Sapa!</span>{" "}

@@ -1,5 +1,5 @@
 import classes from "./Login.module.css";
-import { LoginFormBtn } from "../../components/UI/Buttons";
+import { AuthFormBtn } from "../../components/UI/Buttons";
 
 const Login = () => {
   return (
@@ -18,22 +18,28 @@ const Login = () => {
           </div>
         </div>
         <div className="col-md-6 d-flex justify-content-center">
-          <form className={classes.form}>
+          <AuthFormWrapper>
             <div className="d-flex flex-column">
               <input className="mt-5" type="text" placeholder="Email Address" />
               <input className="mt-5" type="password" placeholder="Password" />
-              <p className="mb-5 text-end mt-4">Forgot Password?</p>
+              <p className={`mb-5 text-end mt-4 ${classes.p}`}>
+                Forgot Password?
+              </p>
             </div>
             <div className="d-flex justify-content-between">
               <p className="align-self-center">
                 New To Travaye? <span>Sign Up</span>
               </p>
-              <LoginFormBtn />
+              <AuthFormBtn>Login</AuthFormBtn>
             </div>
-          </form>
+          </AuthFormWrapper>
         </div>
       </div>
     </section>
   );
 };
 export default Login;
+
+export const AuthFormWrapper = (props) => {
+  return <form className={classes.form}>{props.children}</form>;
+};

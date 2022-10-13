@@ -1,6 +1,6 @@
 import classes from "./Footer.module.css";
 import WhiteLogo from "../../../assets/white-logo.png";
-import { FacebookIcon, TwitterIcon, InstaIcon } from "../../../Pages/Home/svgs";
+import { FacebookIcon, TwitterIcon, InstaIcon } from "../../UI/svgs/svgs";
 
 const Links = ["My Account", "View Businesses", "Watch Stories"];
 const Footer = () => {
