@@ -40,3 +40,22 @@ export const ScrollRightBtn = (props) => {
     </button>
   );
 };
+
+export const GreenBtn = (props) => {
+  return (
+    <button className={classes.btn} onClick={props.onClick}>
+      {props.children}
+    </button>
+  );
+};
+
+export const OrangeBtn = (props) => {
+  return (
+    <button
+      className={classes.btn}
+      style={{ backgroundColor: "#e9a009", borderColor: "#e9a009" }}
+    >
+      {props.children}
+    </button>
+  );
+};

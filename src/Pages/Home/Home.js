@@ -16,6 +16,7 @@ import {
 } from "../../components/UI/svgs/svgs";
 import { ScrollLeftBtn, ScrollRightBtn } from "../../components/UI/Buttons";
 import Carousel from "../../components/UI/Carousel";
+import Footer from "../../components/Layout/Footer/Footer";
 
 const Home = () => {
   return (
@@ -114,6 +115,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 };

@@ -1,0 +1,19 @@
+.large {
+  width: 248px;
+  height: 307px;
+}
+
+.small {
+  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.small img {
+  width: 255px;
+  height: 146px;
+}
+
+.stars {
+  transform: scale(0.7) translateX(-20px) translateY(-3px);
+}

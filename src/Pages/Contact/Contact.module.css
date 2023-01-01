@@ -1,0 +1,105 @@
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px;
+  letter-spacing: 0.0005em;
+}
+.contact h4 {
+  color: #009f57;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+.contact h5 {
+  font-weight: bold;
+}
+
+.contact p {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 32px;
+  text-align: center;
+}
+
+.contact form {
+  padding: 25px;
+  box-shadow: 0px 8px 16px rgba(205, 218, 240, 0.79);
+  width: 40%;
+}
+
+.contact form svg {
+  transform: translateY(-36px) translateX(10px);
+}
+.contact input::placeholder,
+.contact textarea::placeholder {
+  color: #9d9d9db7;
+}
+
+.contact label {
+  align-self: start;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 30px;
+  letter-spacing: 0.0005em;
+  color: #009f57;
+  margin-bottom: 10px;
+}
+.contact input {
+  outline: none;
+  height: 40px;
+  border: 2px solid rgba(0, 159, 87, 0.25);
+  border-radius: 5px;
+  width: 100%;
+  padding-left: 50px;
+}
+
+.contact textarea {
+  border: 2px solid rgba(0, 159, 87, 0.25);
+  border-radius: 5px;
+  width: 100%;
+  outline: none;
+  margin-bottom: 20px;
+  padding-left: 10px;
+}
+
+.contact button {
+  background: #009f57;
+  border: none;
+  border-radius: 5px;
+  width: 160px;
+  height: 50px;
+  color: white;
+  margin: auto;
+}
+
+.contact a {
+  text-decoration: none;
+}
+
+.contact a div {
+  width: 300px;
+  padding-top: 10px;
+  margin: 20px;
+  box-shadow: 0px 8px 16px rgba(205, 218, 240, 0.79);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact .links {
+  display: flex;
+  margin-bottom: 60px;
+}
+.contact .links p {
+  margin-left: 20px;
+  font-size: 15px;
+  color: black;
+}
+
+@media (max-width: 850px) {
+  .contact form {
+    width: 90%;
+  }
+}
