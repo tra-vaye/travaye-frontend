@@ -7,6 +7,7 @@ import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import UserProfile from "./Pages/UserProfile";
 import Contact from "./Pages/Contact";
+import PlanTrip from "./Pages/Plan-a-trip";
 
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -25,6 +26,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/user" element={<UserProfile />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/plan-a-trip" element={<PlanTrip />} />
       </Routes>
     </>
   );

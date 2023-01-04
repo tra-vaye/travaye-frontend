@@ -2,6 +2,9 @@
   display: flex;
   background-color: #c4c5c72d;
 }
+.user a {
+  text-decoration: none;
+}
 
 .dashboard {
   display: flex;

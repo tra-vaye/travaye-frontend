@@ -6,6 +6,7 @@ import { useState } from "react";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
 import PointsModal from "../../components/UI/Modal/PointsModal";
+import { Link } from "react-router-dom";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -29,7 +30,9 @@ const UserProfile = () => {
         <div className="d-flex justify-content-between align-items-center p-3 mb-5">
           <div className="d-flex ">
             <GreenBtn onClick={toggleNewLocationModal}>Post New</GreenBtn>
-            <OrangeBtn>Plan A Trip</OrangeBtn>
+            <Link to="/plan-a-trip">
+              <OrangeBtn>Plan A Trip</OrangeBtn>
+            </Link>
           </div>
           <div
             style={{ transform: "scale(0.9)", cursor: "pointer" }}
