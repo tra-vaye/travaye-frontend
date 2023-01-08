@@ -8,6 +8,8 @@ import SignUp from "./Pages/SignUp";
 import UserProfile from "./Pages/UserProfile";
 import Contact from "./Pages/Contact";
 import PlanTrip from "./Pages/Plan-a-trip";
+import LocationDetails from "./Pages/LocationDetails";
+import AddedLocations from "./Pages/AddedLocations";
 
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -27,6 +29,8 @@ function App() {
         <Route path="/user" element={<UserProfile />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/plan-a-trip" element={<PlanTrip />} />
+        <Route path="/location" element={<LocationDetails />} />
+        <Route path="/added" element={<AddedLocations />} />
       </Routes>
     </>
   );

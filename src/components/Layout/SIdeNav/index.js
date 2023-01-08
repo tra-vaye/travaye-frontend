@@ -1,6 +1,6 @@
 import classes from "./SideNav.module.css";
 import { Links } from "../Header/Header";
-import { SignUpButton, LoginButton } from "../../UI/Buttons";
+import { AltButton, Button } from "../../UI/Buttons";
 
 const SideNav = () => {
   return (
@@ -11,8 +11,8 @@ const SideNav = () => {
         })}
       </ul>
       <div>
-        <SignUpButton />
-        <LoginButton />
+        <Button color="green">Sign Up</Button>
+        <AltButton>Login</AltButton>
       </div>
     </div>
   );

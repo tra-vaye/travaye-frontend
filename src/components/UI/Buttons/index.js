@@ -1,21 +1,21 @@
 import classes from "./Buttons.module.css";
 import ArrowBackIosNewIcon from "../../../assets/left-arrow.png";
 import ArrowForwardIosIcon from "../../../assets/right-arrow.png";
+import styled from "styled-components";
 
-//for navigation
-export const SignUpButton = (props) => {
-  return <button className={classes.btn}>Sign Up</button>;
-};
-
-//for AUth form submit
-export const AuthFormBtn = (props) => {
-  return <button className={classes.btn}>{props.children}</button>;
-};
-
-//for navigation
-export const LoginButton = (props) => {
-  return <button className={classes["btn--alt"]}>Login</button>;
-};
+export const AltButton = styled.button`
+  margin: auto ${(props) => (props.location ? "0" : "15px")};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: ${(props) => (props.location ? "10px" : "15px")};
+  background-color: white;
+  color: #009f57;
+  border: 3px solid #009f57;
+  font-size: 20px;
+`;
 
 export const ScrollLeftBtn = (props) => {
   return (
@@ -41,21 +41,19 @@ export const ScrollRightBtn = (props) => {
   );
 };
 
-export const GreenBtn = (props) => {
-  return (
-    <button className={classes.btn} onClick={props.onClick}>
-      {props.children}
-    </button>
-  );
-};
-
-export const OrangeBtn = (props) => {
-  return (
-    <button
-      className={classes.btn}
-      style={{ backgroundColor: "#e9a009", borderColor: "#e9a009" }}
-    >
-      {props.children}
-    </button>
-  );
-};
+export const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  transform: scale(${(props) => (props.location ? "" : "0.9")});
+  border: 2px solid
+    ${(props) => (props.color === "green" ? " #009f57" : "#e9a009")};
+  border-radius: ${(props) => (props.header ? "15px" : "10px")};
+  background-color: ${(props) =>
+    props.color === "green" ? " #009f57" : "#e9a009"};
+  color: white;
+  white-space: nowrap;
+  margin-right: ${(props) => props.location && "20px"};
+  font-size: 20px;
+`;

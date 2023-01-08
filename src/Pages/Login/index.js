@@ -1,5 +1,5 @@
 import classes from "./Login.module.css";
-import { AuthFormBtn } from "../../components/UI/Buttons";
+import { Button } from "../../components/UI/Buttons";
 
 const Login = () => {
   return (
@@ -30,7 +30,7 @@ const Login = () => {
               <p className="align-self-center">
                 New To Travaye? <span>Sign Up</span>
               </p>
-              <AuthFormBtn>Login</AuthFormBtn>
+              <Button color="green">Login</Button>
             </div>
           </AuthFormWrapper>
         </div>

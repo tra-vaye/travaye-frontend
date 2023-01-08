@@ -7,7 +7,7 @@ import {
   Alternate,
 } from "../../components/UI/svgs/svgs";
 
-import { AuthFormBtn } from "../../components/UI/Buttons";
+import { Button } from "../../components/UI/Buttons";
 import { AuthFormWrapper } from "../Login";
 import Avatar from "../../assets/signup-avatar.png";
 import { useState } from "react";
@@ -94,7 +94,7 @@ const SignUp = () => {
               <p className="align-self-center">
                 Already have an account? <span>Login</span>
               </p>
-              <AuthFormBtn>Sign Up</AuthFormBtn>
+              <Button color="green">Sign Up</Button>
             </div>
           </AuthFormWrapper>
         </div>

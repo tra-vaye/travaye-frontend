@@ -1,6 +1,6 @@
 import Avatar from "../../assets/user-avatar.png";
 import classes from "./UserProfile.module.css";
-import { GreenBtn, OrangeBtn } from "../../components/UI/Buttons";
+import { Button } from "../../components/UI/Buttons";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import { useState } from "react";
 import LocationModal from "../../components/UI/Modal/LocationModal";
@@ -29,9 +29,11 @@ const UserProfile = () => {
       <div className={classes.main}>
         <div className="d-flex justify-content-between align-items-center p-3 mb-5">
           <div className="d-flex ">
-            <GreenBtn onClick={toggleNewLocationModal}>Post New</GreenBtn>
+            <Button color="green" onClick={toggleNewLocationModal}>
+              Post New
+            </Button>
             <Link to="/plan-a-trip">
-              <OrangeBtn>Plan A Trip</OrangeBtn>
+              <Button>Plan A Trip</Button>
             </Link>
           </div>
           <div
