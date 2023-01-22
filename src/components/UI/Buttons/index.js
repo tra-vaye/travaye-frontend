@@ -55,5 +55,8 @@ export const Button = styled.button`
   color: white;
   white-space: nowrap;
   margin-right: ${(props) => props.location && "20px"};
+  font-weight: 600;
   font-size: 20px;
+  line-height: 32px;
+  color: #f0f0f0;
 `;

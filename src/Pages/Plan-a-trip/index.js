@@ -87,7 +87,7 @@ const States = [
   "Zamfara",
 ];
 
-const categories = [
+export const categories = [
   "Special Events",
   "Food & Drinks",
   "Entertainment Venues",

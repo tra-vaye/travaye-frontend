@@ -10,6 +10,7 @@ import Contact from "./Pages/Contact";
 import PlanTrip from "./Pages/Plan-a-trip";
 import LocationDetails from "./Pages/LocationDetails";
 import AddedLocations from "./Pages/AddedLocations";
+import Register from "./Pages/Business/Register";
 
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -31,6 +32,7 @@ function App() {
         <Route path="/plan-a-trip" element={<PlanTrip />} />
         <Route path="/location" element={<LocationDetails />} />
         <Route path="/added" element={<AddedLocations />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </>
   );

@@ -2,7 +2,7 @@ import Modal from "./Modal";
 import classes from "./PointsModal.module.css";
 const PointsModal = (props) => {
   return (
-    <Modal onClick={props.onClick} className="points-modal">
+    <Modal onClick={props.onClick}>
       <h3>Travaye Points</h3>
       <p className={classes.balance}>Balance: 80 Travaye Points</p>
       <article>
