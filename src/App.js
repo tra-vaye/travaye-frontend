@@ -11,6 +11,7 @@ import PlanTrip from "./Pages/Plan-a-trip";
 import LocationDetails from "./Pages/LocationDetails";
 import AddedLocations from "./Pages/AddedLocations";
 import Register from "./Pages/Business/Register";
+import Locations from "./Pages/Business/Locations";
 
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -33,6 +34,7 @@ function App() {
         <Route path="/location" element={<LocationDetails />} />
         <Route path="/added" element={<AddedLocations />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/business-locations" element={<Locations />} />
       </Routes>
     </>
   );

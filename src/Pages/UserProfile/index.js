@@ -52,9 +52,6 @@ const UserProfile = () => {
           {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />}
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
           <LocationBox onClick={toggleShowLocationModal} />
-          {/* <LocationBox /> <LocationBox /> <LocationBox /> <LocationBox />{" "}
-          <LocationBox /> <LocationBox /> <LocationBox /> <LocationBox />{" "}
-          <LocationBox /> */}
         </div>
       </div>
     </section>

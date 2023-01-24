@@ -17,8 +17,8 @@ const Register = () => {
             <div>
               <label htmlFor="name">
                 Business Name <span>*</span>
-                <input id="name" />
               </label>
+              <input id="name" />
             </div>
             <div>
               <label htmlFor="category">
@@ -43,22 +43,22 @@ const Register = () => {
             <div>
               <label htmlFor="email">
                 Business Email <span>*</span>
-                <input id="email" type="email" />
               </label>
+              <input id="email" type="email" />
             </div>
           </div>
           <div className="col-md-6">
             <div>
               <label htmlFor="address">
                 Business Address <span>*</span>
-                <input id="address" />
               </label>
+              <input id="address" />
             </div>
             <div>
               <label htmlFor="phone">
                 Business Telephone <span>*</span>
-                <input id="phone" />
               </label>
+              <input id="phone" />
             </div>
           </div>
         </div>
@@ -68,19 +68,6 @@ const Register = () => {
             <h6>
               Please ensure to upload clear, concise and correct documents.
             </h6>
-
-            {/* <input type="file" />
-            <input type="file" />
-            <input type="file" />
-            <FileUploadBtn>
-          
-            </FileUploadBtn>
-            <FileUploadBtn>
-            
-            </FileUploadBtn>
-            <FileUploadBtn>
-          
-            </FileUploadBtn> */}
             <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
               {({ getRootProps, getInputProps }) => (
                 <section {...getRootProps()}>
@@ -115,23 +102,22 @@ const Register = () => {
           <div className="col-md-6">
             <h4>Add Card Information</h4>
             <div>
-              <label htmlFor="card-name">
-                Card Name
-                <input id="card-name" />
-              </label>
+              <label htmlFor="card-name">Card Name</label>
+              <input id="card-name" />
             </div>
             <div>
-              <label htmlFor="card-number">
-                Card Number
-                <input id="card-number" />
-              </label>
+              <label htmlFor="card-number">Card Number</label>
+              <input id="card-number" />
             </div>
-            <div>
-              <label htmlFor="card-expiry">Expiry Date</label>
-              <input id="card-expiry" />
-
-              <label htmlFor="cvv">Cvv</label>
-              <input id="cvv" type="number" />
+            <div className="d-flex justify-content-between">
+              <div>
+                <label htmlFor="card-expiry">Expiry Date</label>
+                <input id="card-expiry" />
+              </div>
+              <div>
+                <label htmlFor="cvv">Cvv</label>
+                <input id="cvv" type="number" />
+              </div>
             </div>
             <div>
               <Button color="green" type="submit">
@@ -165,7 +151,7 @@ const Container = styled.div`
   select {
     outline: none;
     display: block;
-    width: 50%;
+    width: 100%;
     background: #ffffff;
     border: 2px solid rgba(0, 159, 87, 0.25);
     border-radius: 5px;
@@ -173,28 +159,28 @@ const Container = styled.div`
     margin-bottom: 16px;
     padding: 4px 8px;
 
-    @media (max-width: 767px) {
+    /* @media (max-width: 767px) {
       width: 90%;
-    }
+    } */
   }
-  input[type="file"] {
-    display: none;
-  }
+
   h4 {
     font-weight: 600;
     font-size: 24px;
     color: #009f57;
   }
   button {
-    @media (max-width: 450px) {
-      width: 90%;
+    margin-left: auto;
+    border-radius: 5px;
+    @media (max-width: 767px) {
+      width: 100%;
     }
   }
 `;
 
 const FileUpload = styled.div`
   display: block;
-  width: 50%;
+  width: 100%;
   background: #ffffff;
   text-align: center;
   color: #e9a309;
@@ -206,9 +192,6 @@ const FileUpload = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media (max-width: 767px) {
-    width: 90%;
-  }
 `;
 
 const categories = [
