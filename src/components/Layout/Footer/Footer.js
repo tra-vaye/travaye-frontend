@@ -45,7 +45,7 @@ const Footer = () => {
           <h4>Useful Links</h4>
           <ul>
             {Links.map((link, i) => {
-              return <li>{link}</li>;
+              return <li key={i}>{link}</li>;
             })}
           </ul>
         </div>

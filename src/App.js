@@ -23,13 +23,13 @@ function App() {
   return (
     <>
       <Header onToggleSideNav={toggleSideNav} showSideNav={showSideNav} />
-      {showSideNav && <SideNav />}
+      {showSideNav && <SideNav onToggleSideNav={toggleSideNav} />}
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/user" element={<UserProfile />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact-us" element={<Contact />} />
         <Route path="/plan-a-trip" element={<PlanTrip />} />
         <Route path="/location" element={<LocationDetails />} />
         <Route path="/added" element={<AddedLocations />} />
