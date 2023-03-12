@@ -6,8 +6,7 @@
 .landing > div {
   background-image: url("../../assets/landing-bg.png");
   background-repeat: no-repeat;
-  background-size: contain;
-  background-position: 60px;
+  background-position: center;
 }
 
 .intro {
@@ -26,7 +25,7 @@
 
 .intro,
 .intro + p {
-  margin-bottom: 1.3rem;
+  margin-bottom: 2rem;
 }
 .sapa {
   color: #e9a309;
@@ -125,21 +124,6 @@ h2 {
   line-height: 40px;
   text-align: justify;
   color: #009f57;
-}
-
-.get-started {
-  display: flex;
-  justify-content: center;
-  padding: auto 20px;
-  margin-top: 8rem;
-}
-
-.get-started div {
-  background-image: url("../../assets/get-started.png");
-  width: 80%;
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  background-position: center;
 }
 
 @media (max-width: 541px) {

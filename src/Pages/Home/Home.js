@@ -9,21 +9,29 @@ import ReviewStars from "../../assets/review-stars.png";
 import Avatar from "../../assets/avatar.png";
 import GetStarted from "../../assets/get-started.png";
 import Man from "../../assets/man.png";
+import PurpleBistro from "../../assets/purple-bistro.png";
+import Maryland from "../../assets/maryland-landing.png";
+
 import {
   FacebookIcon,
   InstaIcon,
   TwitterIcon,
 } from "../../components/UI/svgs/svgs";
-import { ScrollLeftBtn, ScrollRightBtn } from "../../components/UI/Buttons";
+import {
+  Button,
+  ScrollLeftBtn,
+  ScrollRightBtn,
+} from "../../components/UI/Buttons";
 import Carousel from "../../components/UI/Carousel";
 import Footer from "../../components/Layout/Footer/Footer";
+import styled from "styled-components";
 
 const Home = () => {
   return (
     <>
       <section className={classes.landing}>
         <div className="row">
-          <div className="col-lg-6 mb-2">
+          <div className="col-lg-6 mb-2 mt-4">
             <p className={classes.intro}>
               Enjoy Outings without having to think of{" "}
               <span className={classes.sapa}>Sapa!</span>{" "}
@@ -39,14 +47,16 @@ const Home = () => {
               </button>
             </div>
           </div>
-          <div className="col-lg-6 d-flex justify-content-center align-self-start">
+          <LandingImagesContainer className="col-lg-6 d-flex justify-content-center align-self-start">
+            <PurpleBistroLink src={PurpleBistro} className="img-fluid " />
+            <MarylandLink src={Maryland} className="img-fluid " />
             <img src={LandingImage} alt="poster" className="img-fluid " />
             <div
               className={`d-flex flex-column justify-content-evenly ${classes.socials}`}
             >
               {FacebookIcon} {TwitterIcon} {InstaIcon}
             </div>
-          </div>
+          </LandingImagesContainer>
         </div>
       </section>
       <Perks />
@@ -100,24 +110,87 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className={classes["get-started"]}>
-        <div className="row">
-          <div className="col-md-6">
+      <GetStartedConainer>
+        <GetStartedContent className="row">
+          <div className="col-md-6 d-flex justify-content-center align-items-center  ">
             <div>
               <h2>
                 Explore The World <br /> With Travaye
               </h2>
-              <button>Get Started</button>
+              <Button color="orange">Get Started</Button>
             </div>
           </div>
-          <div className="col-md-6">
-            {/* <img src={Man} alt="poster" className="img-fluid" /> */}
+          <div className="d-none d-md-block col-md-6 ">
+            <img src={Man} alt="poster" className="img-fluid" />
           </div>
-        </div>
-      </section>
+        </GetStartedContent>
+      </GetStartedConainer>
       <Footer />
     </>
   );
 };
 
 export default Home;
+
+const GetStartedConainer = styled.section`
+  margin-top: 8rem;
+  display: flex;
+  justify-content: center;
+  h2 {
+    text-align: start;
+    color: white;
+    margin-bottom: 50px;
+    @media (max-width: 767px) {
+      text-align: center;
+    }
+  }
+  img {
+    width: 280px;
+    height: 320px;
+    position: relative;
+    left: 20%;
+    bottom: 0;
+  }
+`;
+
+const GetStartedContent = styled.div`
+  width: 70%;
+  background-color: #009f57;
+  background-image: url(${GetStarted});
+  background-position: center;
+  border-radius: 50px;
+
+  @media (max-width: 1030px) {
+    width: 90%;
+  }
+  @media (max-width: 767px) {
+    padding: 15px;
+    button {
+      width: 100%;
+    }
+  }
+`;
+
+const LandingImagesContainer = styled.div`
+  position: relative;
+`;
+
+const PurpleBistroLink = styled.img`
+  position: absolute;
+  top: 7%;
+  left: 0;
+  transform: scale(0.9);
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+const MarylandLink = styled.img`
+  position: absolute;
+  bottom: 17%;
+  left: 0;
+  transform: scale(0.9);
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;

@@ -83,7 +83,7 @@ const Register = () => {
                 <section {...getRootProps()}>
                   <input {...getInputProps()} />
                   <FileUpload>
-                    Revenue Receipts with Address <i>{CloudUpload}</i>
+                    Proof Of Address (e.g Utility Bill) <i>{CloudUpload}</i>
                   </FileUpload>
                 </section>
               )}

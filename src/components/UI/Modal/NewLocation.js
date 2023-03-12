@@ -1,6 +1,6 @@
 import Modal from "./Modal";
-import React, { useCallback } from "react";
-import Dropzone, { useDropzone } from "react-dropzone";
+import React from "react";
+import Dropzone from "react-dropzone";
 import styled from "styled-components";
 import { ArrowCloud, BlankStars } from "../svgs/svgs";
 import { Button } from "../Buttons";

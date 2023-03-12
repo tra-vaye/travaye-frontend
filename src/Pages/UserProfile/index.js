@@ -1,5 +1,4 @@
 import Avatar from "../../assets/user-avatar.png";
-import classes from "./UserProfile.module.css";
 import { Button } from "../../components/UI/Buttons";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import { useState } from "react";
@@ -7,6 +6,7 @@ import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
 import PointsModal from "../../components/UI/Modal/PointsModal";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -24,9 +24,9 @@ const UserProfile = () => {
     setShowPointsModal((prevState) => !prevState);
   };
   return (
-    <section className={classes.user}>
-      <div className={classes.dashboard}>{Dashboard}</div>
-      <div className={classes.main}>
+    <Container>
+      <Dashboard>{DashboardContent}</Dashboard>
+      <Main>
         <div className="d-flex justify-content-between align-items-center p-3 mb-5">
           <div className="d-flex ">
             <Button color="green" onClick={toggleNewLocationModal}>
@@ -53,20 +53,21 @@ const UserProfile = () => {
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
           <LocationBox onClick={toggleShowLocationModal} />
         </div>
-      </div>
-    </section>
+      </Main>
+    </Container>
   );
 };
 
 export default UserProfile;
 
-const Dashboard = (
+const DashboardContent = (
   <>
     <img src={Avatar} alt="avatar" />
-    <div className={classes.info}>
-      <h3 className="mt-1">Kenny Olu-Onifade</h3>
-      <h4>@kaizenschmoney</h4>
-      <h4>University Student</h4>
+    <div>
+      {/*  indo */}
+      <h5 className="mt-1">Kenny Olu-Onifade</h5>
+      <h6 usernamame={true}>@kaizenschmoney</h6>
+      <h6>University Student</h6>
     </div>
     <div>
       <div>
@@ -91,3 +92,67 @@ const Dashboard = (
     </div>
   </>
 );
+
+const Container = styled.div`
+  display: flex;
+  background-color: #c4c5c72d;
+  a {
+    text-decoration: none;
+  }
+`;
+
+const Dashboard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 25%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgb(255, 254, 252);
+  border-top: 0;
+  border-right: 2px solid transparent;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
+  padding-top: 8%;
+  z-index: 10;
+  &:nth-child(5) div {
+    margin-top: 1rem;
+  }
+  img {
+    width: 150px;
+    height: 150px;
+  }
+  h5 {
+    color: #009f57;
+    font-weight: 700;
+  }
+  @media (max-width: 1150px) {
+    display: none;
+  }
+`;
+
+const Info = styled.div`
+  transform: scale(0.8);
+`;
+
+const Main = styled.div`
+  width: 70%;
+  margin-left: 25%;
+  min-height: 100vh;
+  @media (max-width: 1150px) {
+    .main {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+`;
+
+// .info :nth-child(2) {
+//   color: #e9a009;
+// }
+
+// .info :last-child {
+//   color: #9d9d9d;
+// }
