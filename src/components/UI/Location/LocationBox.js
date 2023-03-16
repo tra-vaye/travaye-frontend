@@ -27,7 +27,7 @@ const Box = styled.div`
   width: ${(props) => props.search && "200px"};
   box-shadow: ${(props) =>
     props.search && "0px 8px 16px rgba(0, 159, 87, 0.12)"};
-
+  transform: scale(0.9);
   cursor: pointer;
   h6 {
     font-weight: bold;

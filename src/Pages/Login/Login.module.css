@@ -6,6 +6,9 @@
   background-repeat: repeat-x;
   background-size: contain;
 }
+.login a {
+  text-decoration: none;
+}
 
 .login h3 {
   color: #009f57;

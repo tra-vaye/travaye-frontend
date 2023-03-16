@@ -13,7 +13,8 @@ export const AltButton = styled.button`
   border-radius: ${(props) => (props.location ? "10px" : "15px")};
   background-color: white;
   color: #009f57;
-  border: 3px solid #009f57;
+  width: ${(props) => props.sidenav && "85.91px"};
+  border: 2px solid #009f57;
   font-size: 20px;
 `;
 

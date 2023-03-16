@@ -7,11 +7,14 @@ import NewLocation from "../../components/UI/Modal/NewLocation";
 import PointsModal from "../../components/UI/Modal/PointsModal";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CloseIcon from "@mui/icons-material/Close";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [newLocationModal, setNewLocationModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
 
   const toggleShowLocationModal = () => {
     setShowLocationModal((prevState) => !prevState);
@@ -23,12 +26,52 @@ const UserProfile = () => {
   const togglePointsModal = () => {
     setShowPointsModal((prevState) => !prevState);
   };
+
+  const toggleDashboard = () => {
+    setShowDashboard((prevState) => !prevState);
+  };
+
   return (
     <Container>
-      <Dashboard>{DashboardContent}</Dashboard>
+      <Dashboard showDashboard={showDashboard}>
+        <Profile close={true}>
+          <CloseIcon onClick={toggleDashboard} />
+        </Profile>
+
+        <img src={Avatar} alt="avatar" />
+        <div>
+          <h5 className="mt-1">Kenny Olu-Onifade</h5>
+          <h6 usernamame={true}>@kaizenschmoney</h6>
+          <h6>University Student</h6>
+        </div>
+        <div>
+          <div>
+            <h5>About</h5>
+            <p>
+              Civil Engineer (In View) // <br /> Creative Director at Kaizen
+              Brand // <br /> Chelsea FC Fanatic
+            </p>
+          </div>
+          <div>
+            <h5>Total Outings</h5>
+            <p>27 Outings</p>
+          </div>
+          <div>
+            <h5>Total Posts</h5>
+            <p>6 Posts</p>
+          </div>
+          <div>
+            <h5>Average Review</h5>
+            <p>4.5 stars</p>
+          </div>
+        </div>
+      </Dashboard>
       <Main>
-        <div className="d-flex justify-content-between align-items-center p-3 mb-5">
-          <div className="d-flex ">
+        <div className="d-flex justify-content-between align-items-center mb-5 mt-3">
+          <Profile onClick={toggleDashboard}>
+            <AccountCircleIcon />
+          </Profile>
+          <div className="d-flex justify-content-between">
             <Button color="green" onClick={toggleNewLocationModal}>
               Post New
             </Button>
@@ -37,7 +80,7 @@ const UserProfile = () => {
             </Link>
           </div>
           <div
-            style={{ transform: "scale(0.9)", cursor: "pointer" }}
+            style={{ transform: "scale(0.7)", cursor: "pointer" }}
             className="text-center"
             onClick={togglePointsModal}
           >
@@ -45,14 +88,19 @@ const UserProfile = () => {
             <strong>80 Points</strong>
           </div>
         </div>
-        <div>
+        <BoxContainer>
           {showLocationModal && (
             <LocationModal onClick={toggleShowLocationModal} />
           )}
           {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />}
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
+          <LocationBox onClick={toggleShowLocationModal} />{" "}
+          <LocationBox onClick={toggleShowLocationModal} />{" "}
           <LocationBox onClick={toggleShowLocationModal} />
-        </div>
+          <LocationBox onClick={toggleShowLocationModal} />{" "}
+          <LocationBox onClick={toggleShowLocationModal} />{" "}
+          <LocationBox onClick={toggleShowLocationModal} />
+        </BoxContainer>
       </Main>
     </Container>
   );
@@ -60,44 +108,34 @@ const UserProfile = () => {
 
 export default UserProfile;
 
-const DashboardContent = (
-  <>
-    <img src={Avatar} alt="avatar" />
-    <div>
-      {/*  indo */}
-      <h5 className="mt-1">Kenny Olu-Onifade</h5>
-      <h6 usernamame={true}>@kaizenschmoney</h6>
-      <h6>University Student</h6>
-    </div>
-    <div>
-      <div>
-        <h5>About</h5>
-        <p>
-          Civil Engineer (In View) // <br /> Creative Director at Kaizen Brand
-          // <br /> Chelsea FC Fanatic
-        </p>
-      </div>
-      <div>
-        <h5>Total Outings</h5>
-        <p>27 Outings</p>
-      </div>
-      <div>
-        <h5>Total Posts</h5>
-        <p>6 Posts</p>
-      </div>
-      <div>
-        <h5>Average Review</h5>
-        <p>4.5 stars</p>
-      </div>
-    </div>
-  </>
-);
+const Profile = styled.i`
+  margin-right: auto;
+  svg {
+    transform: scale(${(props) => !props.close && "1.5"});
+    cursor: pointer;
+    /* position: absolute;
+    left: ${(props) => (props.close ? "2%" : "50%")};
+    color: ${(props) => props.close && "#e9a009"}; */
+  }
+  @media (min-width: 1150px) {
+    display: none;
+  }
+`;
+const BoxContainer = styled.div`
+  @media (max-width: 532px) {
+    display: grid;
+    place-items: center;
+  }
+`;
 
 const Container = styled.div`
   display: flex;
   background-color: #c4c5c72d;
   a {
     text-decoration: none;
+  }
+  button {
+    transform: scale(0.7);
   }
 `;
 
@@ -106,7 +144,7 @@ const Dashboard = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 25%;
+  width: 320px;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -115,7 +153,8 @@ const Dashboard = styled.div`
   border-top: 0;
   border-right: 2px solid transparent;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-  padding-top: 8%;
+  padding-top: 120px;
+
   z-index: 10;
   &:nth-child(5) div {
     margin-top: 1rem;
@@ -128,31 +167,23 @@ const Dashboard = styled.div`
     color: #009f57;
     font-weight: 700;
   }
-  @media (max-width: 1150px) {
+  svg {
     display: none;
   }
-`;
-
-const Info = styled.div`
-  transform: scale(0.8);
-`;
-
-const Main = styled.div`
-  width: 70%;
-  margin-left: 25%;
-  min-height: 100vh;
   @media (max-width: 1150px) {
-    .main {
-      margin-left: 0;
-      width: 100%;
+    display: ${(props) => (props.showDashboard ? "block" : "none")};
+    svg {
+      display: block;
     }
   }
 `;
 
-// .info :nth-child(2) {
-//   color: #e9a009;
-// }
-
-// .info :last-child {
-//   color: #9d9d9d;
-// }
+const Main = styled.div`
+  width: 70%;
+  margin-left: 30%;
+  min-height: 100vh;
+  @media (max-width: 1150px) {
+    margin-left: 10%;
+    width: 100%;
+  }
+`;

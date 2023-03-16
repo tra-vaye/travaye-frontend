@@ -10,10 +10,10 @@
 
 .overlay {
   position: fixed;
-  top: 50vh;
+  top: 55vh;
   left: 50%;
   z-index: 3000;
-  width: 600px;
+  width: 30%;
   height: fit-content;
   background-color: #fff;
   border-radius: 25px;
@@ -21,8 +21,8 @@
   padding: 30px;
   color: #9d9d9d;
   font-weight: 600;
-  font-size: 16px;
-  line-height: 28px;
+  font-size: 13px;
+  line-height: 20px;
 }
 
 .overlay span {
@@ -30,18 +30,32 @@
   position: fixed;
   top: 4%;
   right: 4%;
+  transform: scale(0.8);
 }
 
 .overlay h3 {
   text-align: center;
   color: #009f57;
+  font-size: 15px;
 }
 .overlay h6 {
   text-align: center;
   margin-bottom: 20px;
+  font-size: 13px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1160px) {
+  .overlay {
+    width: 40%;
+  }
+}
+
+@media (max-width: 900px) {
+  .overlay {
+    width: 50%;
+  }
+}
+@media (max-width: 700px) {
   .overlay {
     width: 90%;
   }

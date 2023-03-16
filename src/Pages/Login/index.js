@@ -1,5 +1,6 @@
 import classes from "./Login.module.css";
 import { Button } from "../../components/UI/Buttons";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
@@ -10,7 +11,6 @@ const Login = () => {
         >
           <div>
             <h3>
-              {" "}
               Ready to go out without <br />
               <span className={classes.sapa}>Sapa? </span>
             </h3>
@@ -28,7 +28,10 @@ const Login = () => {
             </div>
             <div className="d-flex justify-content-between">
               <p className="align-self-center">
-                New To Travaye? <span>Sign Up</span>
+                New To Travaye?{" "}
+                <Link to="/signup">
+                  <span>Sign Up</span>
+                </Link>
               </p>
               <Button color="green">Login</Button>
             </div>

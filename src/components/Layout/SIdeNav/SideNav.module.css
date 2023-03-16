@@ -16,18 +16,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 30%;
+  padding-inline-start: 0;
 }
 
 .sideNav div {
   height: 30%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transform: scale(0.8);
-  transform: translateX(10%);
+  align-items: center;
 }
 
+.sideNav li,
+.sideNav button {
+  margin-top: 15px;
+}
+.sideNav a {
+  text-decoration: none;
+}
 @media (min-width: 1034px) {
   .sideNav {
     display: none;

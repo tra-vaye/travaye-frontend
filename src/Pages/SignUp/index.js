@@ -8,6 +8,7 @@ import {
 } from "../../components/UI/svgs/svgs";
 
 import { Button } from "../../components/UI/Buttons";
+import { Link } from "react-router-dom";
 import { AuthFormWrapper } from "../Login";
 import Avatar from "../../assets/signup-avatar.png";
 import { useState } from "react";
@@ -92,7 +93,10 @@ const SignUp = () => {
               className={`d-flex justify-content-between mt-3 ${classes.text}`}
             >
               <p className="align-self-center">
-                Already have an account? <span>Login</span>
+                Already have an account?{" "}
+                <Link to="/login">
+                  <span>Login</span>
+                </Link>
               </p>
               <Button color="green">Sign Up</Button>
             </div>

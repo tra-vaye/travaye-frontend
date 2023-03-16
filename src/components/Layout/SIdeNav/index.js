@@ -32,8 +32,26 @@ const SideNav = (props) => {
         })}
       </ul>
       <div>
-        <Button color="green">Sign Up</Button>
-        <AltButton>Login</AltButton>
+        <Link to="/signup">
+          <Button
+            color="green"
+            onClick={() => {
+              props.onToggleSideNav();
+            }}
+          >
+            Sign Up
+          </Button>
+        </Link>
+        <Link to="/login">
+          <AltButton
+            onClick={() => {
+              props.onToggleSideNav();
+            }}
+            sidenav={true}
+          >
+            Login
+          </AltButton>
+        </Link>
       </div>
     </div>
   );

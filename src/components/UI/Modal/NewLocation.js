@@ -50,7 +50,7 @@ const Container = styled.div`
   background: #fff;
   box-shadow: 4px 4px 32px 2px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
-  height: 30vh;
+  height: 20vh;
   padding: 15px;
   margin-top: 5%;
   p {

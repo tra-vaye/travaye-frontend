@@ -12,6 +12,9 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+.signup a {
+  text-decoration: none;
+}
 .socials {
   display: flex;
   justify-content: space-evenly;
