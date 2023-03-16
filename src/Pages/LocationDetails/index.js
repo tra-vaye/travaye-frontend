@@ -111,7 +111,7 @@ const LocationDetails = () => {
                   viewing was ecstatic. Fantastic Popcorns as well!
                 </p>
                 <div className={classes.user}>
-                  <img src={Avatar} className="img-fluid  me-2" />
+                  <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
                   <p className="mt-1" style={{ color: "#009f57" }}>
                     Kehinde Olu-Onifade
                   </p>
@@ -133,7 +133,7 @@ const LocationDetails = () => {
                   viewing was ecstatic. Fantastic Popcorns as well!
                 </p>
                 <div className={classes.user}>
-                  <img src={Avatar} className="img-fluid  me-2" />
+                  <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
                   <p className="mt-1" style={{ color: "#009f57" }}>
                     Kehinde Olu-Onifade
                   </p>
