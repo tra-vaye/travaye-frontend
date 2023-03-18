@@ -109,17 +109,14 @@ const UserProfile = () => {
 export default UserProfile;
 
 const Profile = styled.i`
-  margin-right: auto;
+  margin-right: 10px;
   margin-left: 10px;
 
   svg {
     transform: scale(${(props) => !props.close && "1.5"});
     cursor: pointer;
-    /* position: absolute;
-    left: ${(props) => (props.close ? "2%" : "50%")};
-    color: ${(props) => props.close && "#e9a009"}; */
   }
-  @media (min-width: 1150px) {
+  @media (min-width: 1151px) {
     display: none;
   }
 `;
@@ -174,6 +171,7 @@ const Dashboard = styled.div`
   }
   @media (max-width: 1150px) {
     display: ${(props) => (props.showDashboard ? "block" : "none")};
+    padding-top: 100px;
     svg {
       display: block;
     }
