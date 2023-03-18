@@ -11,6 +11,9 @@
 .location img {
   width: 100%;
 }
+.location a {
+  text-decoration: none;
+}
 
 .location h4 {
   font-weight: 700;

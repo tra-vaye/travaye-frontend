@@ -31,7 +31,7 @@ const Home = () => {
     <>
       <section className={classes.landing}>
         <div className="row">
-          <div className="col-lg-6 mb-2 mt-4">
+          <div className="col-lg-6  mt-4">
             <p className={classes.intro}>
               Enjoy Outings without having to think of{" "}
               <span className={classes.sapa}>Sapa!</span>{" "}
@@ -151,6 +151,10 @@ const GetStartedConainer = styled.section`
     left: 20%;
     bottom: 0;
   }
+  button {
+    width: 250px;
+    border-radius: 30px;
+  }
 `;
 
 const GetStartedContent = styled.div`
@@ -173,6 +177,9 @@ const GetStartedContent = styled.div`
 
 const LandingImagesContainer = styled.div`
   position: relative;
+  @media (max-width: 991px) {
+    transform: translateY(150px);
+  }
 `;
 
 const PurpleBistroLink = styled.img`
@@ -180,8 +187,10 @@ const PurpleBistroLink = styled.img`
   top: 7%;
   left: 0;
   transform: scale(0.9);
-  @media (max-width: 767px) {
-    display: none;
+  @media (max-width: 640px) {
+    transform: scale(0.7);
+    left: -40px;
+    top: -30px;
   }
 `;
 
@@ -190,7 +199,9 @@ const MarylandLink = styled.img`
   bottom: 17%;
   left: 0;
   transform: scale(0.9);
-  @media (max-width: 767px) {
-    display: none;
+  @media (max-width: 640px) {
+    transform: scale(0.7);
+    left: -40px;
+    bottom: 0;
   }
 `;

@@ -6,10 +6,14 @@
   margin-bottom: 30px;
 }
 
+.faqs h5 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 .faqs p {
   font-weight: 400;
-  font-size: 15.5px;
-  line-height: 30px;
+  font-size: 15px;
   text-align: start;
 }
 .faqs i {
@@ -18,6 +22,6 @@
 
 @media (max-width: 940px) {
   .faqs {
-    width: 90%;
+    width: 100%;
   }
 }

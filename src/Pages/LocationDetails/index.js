@@ -43,7 +43,10 @@ const LocationDetails = () => {
               </span>{" "}
               #1500 - #6000
               <div className="ms-auto">
-                <span style={{ color: " #009F57" }}>Book Tickets</span>{" "}
+                <a href="https://genesiscinemas.com/maryland-mall-lagos/#/ms-2287/1">
+                  <span style={{ color: " #009F57" }}>Book Tickets</span>{" "}
+                </a>
+
                 <i>
                   <svg
                     width="28"
