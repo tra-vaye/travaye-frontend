@@ -93,4 +93,6 @@ const Login = () => {
 };
 export default Login;
 
-export const AuthFormWrapper = (props) => {};
+export const AuthFormWrapper = (props) => {
+  return <form className={classes.form}>{props.children}</form>;
+};

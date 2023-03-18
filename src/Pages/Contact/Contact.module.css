@@ -18,8 +18,7 @@
 
 .contact p {
   font-weight: 600;
-  font-size: 18px;
-  line-height: 32px;
+  font-size: 15px;
   text-align: center;
 }
 
@@ -95,8 +94,9 @@
   padding: auto 200px;
 }
 .contact .links p {
-  font-size: 15px;
+  font-size: 13px;
   color: black;
+  transform: translateY(8px);
 }
 
 @media (max-width: 850px) {
