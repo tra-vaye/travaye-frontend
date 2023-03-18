@@ -47,7 +47,9 @@
   .link {
     font-size: 12px;
   }
-
+  .signup {
+    margin-top: 0;
+  }
   .intro {
     transform: scale(0.9);
     margin-top: 3rem;
