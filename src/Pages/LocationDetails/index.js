@@ -1,9 +1,9 @@
-import Maryland from "../../assets/mm-ticket-prices.png";
-import Avatar from "../../assets/user-avatar.png";
 import { AltButton, Button } from "../../components/UI/Buttons";
 import classes from "./LocationDetails.module.css";
+import Maryland from "../../assets/mm-ticket-prices.png";
+import Avatar from "../../assets/user-avatar.png";
 
-import { FiveStars, FourStars } from "../../components/UI/svgs/svgs";
+import { FourStars, FiveStars } from "../../components/UI/svgs/svgs";
 
 const LocationDetails = () => {
   return (
@@ -43,7 +43,10 @@ const LocationDetails = () => {
               </span>{" "}
               #1500 - #6000
               <div className="ms-auto">
-                <span style={{ color: " #009F57" }}>Book Tickets</span>{" "}
+                <a href="https://genesiscinemas.com/maryland-mall-lagos/#/ms-2287/1">
+                  <span style={{ color: " #009F57" }}>Book Tickets</span>{" "}
+                </a>
+
                 <i>
                   <svg
                     width="28"
@@ -111,7 +114,7 @@ const LocationDetails = () => {
                   viewing was ecstatic. Fantastic Popcorns as well!
                 </p>
                 <div className={classes.user}>
-                  <img src={Avatar} alt="Avatar" className="img-fluid  me-2" />
+                  <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
                   <p className="mt-1" style={{ color: "#009f57" }}>
                     Kehinde Olu-Onifade
                   </p>
@@ -133,7 +136,7 @@ const LocationDetails = () => {
                   viewing was ecstatic. Fantastic Popcorns as well!
                 </p>
                 <div className={classes.user}>
-                  <img src={Avatar} alt="Avatar" className="img-fluid  me-2" />
+                  <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
                   <p className="mt-1" style={{ color: "#009f57" }}>
                     Kehinde Olu-Onifade
                   </p>

@@ -57,7 +57,7 @@ export const Button = styled.button`
   white-space: nowrap;
   margin-right: ${(props) => props.location && "20px"};
   font-weight: 600;
-  font-size: 20px;
+  font-size: ${(props) => (props.location ? "15px" : "20px")};
   line-height: 32px;
   color: #f0f0f0;
 `;

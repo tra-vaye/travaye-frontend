@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
-import AddedLocations from "./Pages/AddedLocations";
-import Locations from "./Pages/Business/Locations";
-import Register from "./Pages/Business/Register";
-import Contact from "./Pages/Contact";
-import Home from "./Pages/Home/Home";
-import LocationDetails from "./Pages/LocationDetails";
-import Login from "./Pages/Login";
-import PlanTrip from "./Pages/Plan-a-trip";
-import SignUp from "./Pages/SignUp";
-import UserProfile from "./Pages/UserProfile";
 import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
+import Home from "./Pages/Home/Home";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import Login from "./Pages/Login";
+import SignUp from "./Pages/SignUp";
+import UserProfile from "./Pages/UserProfile";
+import Contact from "./Pages/Contact";
+import PlanTrip from "./Pages/Plan-a-trip";
+import LocationDetails from "./Pages/LocationDetails";
+import AddedLocations from "./Pages/AddedLocations";
+import Register from "./Pages/Business/Register";
+import Locations from "./Pages/Business/Locations";
 
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
