@@ -20,7 +20,6 @@ import classes from "./Login.module.css";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
 
   const [userLoginData, setUserLoginData] = useState({
     username: "",
@@ -190,8 +189,8 @@ export const AuthFormWrapper = (props) => {
   return <div className={classes.form}>{props.children}</div>;
 };
 
-const routes = ["user", "business"];
-const RouteLink = styled.li`
+export const routes = ["user", "business"];
+export const RouteLink = styled.li`
   color: ${(props) => (props.active ? "#009f57" : "#9d9d9d")};
   border-bottom: 3px solid ${(props) => (props.active ? "#009f57" : "#9d9d9d")};
   width: 100%;
