@@ -110,6 +110,8 @@ export default UserProfile;
 
 const Profile = styled.i`
   margin-right: auto;
+  margin-left: 10px;
+
   svg {
     transform: scale(${(props) => !props.close && "1.5"});
     cursor: pointer;
@@ -183,7 +185,7 @@ const Main = styled.div`
   margin-left: 30%;
   min-height: 100vh;
   @media (max-width: 1150px) {
-    margin-left: 10%;
+    margin-left: 0;
     width: 100%;
   }
 `;
