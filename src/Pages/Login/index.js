@@ -1,8 +1,36 @@
-import classes from "./Login.module.css";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/UI/Buttons";
-import { Link } from "react-router-dom";
+import classes from "./Login.module.css";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [userLoginData, setUserLoginData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    const userLoginResponse = await fetch(
+      `${process.env.REACT_APP_SERVER_URL}/api/user/login`,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userLoginData),
+      }
+    );
+    const loggedInUser = await userLoginResponse.json();
+    if (userLoginResponse.ok) {
+      console.log(loggedInUser);
+      navigate("/login");
+    } else {
+      console.log(loggedInUser);
+    }
+  };
   return (
     <section className={classes.login}>
       <div className="row">
@@ -20,8 +48,28 @@ const Login = () => {
         <div className="col-md-6 d-flex justify-content-center">
           <AuthFormWrapper>
             <div className="d-flex flex-column">
-              <input className="mt-5" type="text" placeholder="Email Address" />
-              <input className="mt-5" type="password" placeholder="Password" />
+              <input
+                className="mt-5"
+                type="text"
+                placeholder="Username"
+                onChange={(e) =>
+                  setUserLoginData({
+                    ...userLoginData,
+                    username: e.target.value,
+                  })
+                }
+              />
+              <input
+                className="mt-5"
+                type="password"
+                placeholder="Password"
+                onChange={(e) =>
+                  setUserLoginData({
+                    ...userLoginData,
+                    password: e.target.value,
+                  })
+                }
+              />
               <p className={`mb-5 text-end mt-4 ${classes.p}`}>
                 Forgot Password?
               </p>
@@ -33,7 +81,9 @@ const Login = () => {
                   <span>Sign Up</span>
                 </Link>
               </p>
-              <Button color="green">Login</Button>
+              <Button color="green" onClick={handleClick}>
+                Login
+              </Button>
             </div>
           </AuthFormWrapper>
         </div>
@@ -43,6 +93,4 @@ const Login = () => {
 };
 export default Login;
 
-export const AuthFormWrapper = (props) => {
-  return <form className={classes.form}>{props.children}</form>;
-};
+export const AuthFormWrapper = (props) => {};

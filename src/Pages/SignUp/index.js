@@ -1,23 +1,74 @@
-import classes from "./SignUp.module.css";
-
+import { useNavigate } from "react-router-dom";
 import {
+  Alternate,
+  AppleAuth,
   FaceBookAuth,
   GoogleAuth,
-  AppleAuth,
-  Alternate,
 } from "../../components/UI/svgs/svgs";
+import classes from "./SignUp.module.css";
 
-import { Button } from "../../components/UI/Buttons";
-import { Link } from "react-router-dom";
-import { AuthFormWrapper } from "../Login";
-import Avatar from "../../assets/signup-avatar.png";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import Avatar from "../../assets/signup-avatar.png";
+import { Button } from "../../components/UI/Buttons";
+import { AuthFormWrapper } from "../Login";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState({
+    fullName: "",
+    username: "",
+    password: "",
+    email: "",
+  });
+  const [businessData, setBusinessData] = useState({
+    businessName: "",
+    businessEmail: "",
+    address: "",
+    password: "",
+  });
   const [userSignUp, setUserSignUp] = useState(true);
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
+  };
+  const handleClick = async (e) => {
+    e.preventDefault();
+    if (userSignUp) {
+      const userSignUpResponse = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/user/`,
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
+      const savedUser = await userSignUpResponse.json();
+      if (userSignUpResponse.ok) {
+        navigate("/login");
+      } else {
+        console.log(savedUser);
+      }
+    } else if (!userSignUp) {
+      const businessSignUpResponse = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/business/`,
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(businessData),
+        }
+      );
+      const savedBusiness = await businessSignUpResponse.json();
+      if (businessSignUpResponse.ok) {
+        navigate("/login");
+      }
+    }
   };
 
   return (
@@ -71,16 +122,60 @@ const SignUp = () => {
               <input
                 className="mt-4"
                 placeholder={userSignUp ? "Full Name" : "Business Name"}
+                onChange={
+                  userSignUp
+                    ? (e) =>
+                        setUserData({ ...userData, fullName: e.target.value })
+                    : (e) =>
+                        setBusinessData({
+                          ...businessData,
+                          businessName: e.target.value,
+                        })
+                }
               />
               <input
                 className="mt-4"
                 placeholder={userSignUp ? "Username" : "Address"}
+                onChange={
+                  userSignUp
+                    ? (e) =>
+                        setUserData({ ...userData, username: e.target.value })
+                    : (e) =>
+                        setBusinessData({
+                          ...businessData,
+                          address: e.target.value,
+                        })
+                }
               />
               <input
                 className="mt-4"
+                type="email"
                 placeholder={userSignUp ? "Email Address" : "Business Email"}
+                onChange={
+                  userSignUp
+                    ? (e) => setUserData({ ...userData, email: e.target.value })
+                    : (e) =>
+                        setBusinessData({
+                          ...businessData,
+                          businessEmail: e.target.value,
+                        })
+                }
               />
-              <input className="mt-4" type="password" placeholder="Password" />
+              <input
+                className="mt-4"
+                type="password"
+                placeholder="Password"
+                onChange={
+                  userSignUp
+                    ? (e) =>
+                        setUserData({ ...userData, password: e.target.value })
+                    : (e) =>
+                        setBusinessData({
+                          ...businessData,
+                          password: e.target.value,
+                        })
+                }
+              />
             </div>
             <br />
             <div className="d-flex justify-content-center mt-2">
@@ -98,7 +193,9 @@ const SignUp = () => {
                   <span>Login</span>
                 </Link>
               </p>
-              <Button color="green">Sign Up</Button>
+              <Button color="green" onClick={handleClick}>
+                Sign Up
+              </Button>
             </div>
           </AuthFormWrapper>
         </div>

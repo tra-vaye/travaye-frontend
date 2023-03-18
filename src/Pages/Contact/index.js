@@ -45,8 +45,7 @@ const Contact = () => {
             <div>
               <i>{EmailLink}</i>
               <p>
-                Email Address <br />
-                <i> travaye@gmail.com</i>
+                <b>Email Address</b> <br /> travaye@gmail.com
               </p>
             </div>
           </a>
@@ -54,8 +53,8 @@ const Contact = () => {
             <div>
               <i>{PhoneLink}</i>
               <p>
-                Contact <br />
-                <i> +234 5678-234-33</i>
+                <b>Contact </b> <br />
+                +234 5678-234-33
               </p>
             </div>
           </a>
@@ -65,8 +64,8 @@ const Contact = () => {
         <h4 className="text-center">Freuently Asked Questions (FAQs)</h4>
         <p>
           Here’s a few answers to some questions you might have in mind. If your
-          questions are different from this, feel free to contact us using the
-          form above.
+          questions are different from this, feel free <br /> to contact us
+          using the form above.
         </p>
         <div className="d-flex flex-column align-items-center">
           {faqs.map(({ question, answer }, i) => {
