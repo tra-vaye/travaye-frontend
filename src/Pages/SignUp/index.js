@@ -189,7 +189,7 @@ const SignUp = () => {
             >
               <p className="align-self-center">
                 Already have an account?{" "}
-                <Link to="/login">
+                <Link to="/login/user">
                   <span>Login</span>
                 </Link>
               </p>
