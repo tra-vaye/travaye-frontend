@@ -51,7 +51,7 @@ const Login = () => {
               <input
                 className="mt-5"
                 type="text"
-                placeholder="Email Address"
+                placeholder="Username"
                 onChange={(e) =>
                   setUserLoginData({
                     ...userLoginData,

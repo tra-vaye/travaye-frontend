@@ -149,6 +149,7 @@ const SignUp = () => {
               />
               <input
                 className="mt-4"
+                type="email"
                 placeholder={userSignUp ? "Email Address" : "Business Email"}
                 onChange={
                   userSignUp
