@@ -48,6 +48,8 @@ const SignUp = () => {
       );
       const savedUser = await userSignUpResponse.json();
       if (userSignUpResponse.ok) {
+        console.log(userSignUpResponse);
+        console.log(savedUser);
         navigate("/login");
       } else {
         console.log(savedUser);

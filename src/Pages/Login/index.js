@@ -26,7 +26,7 @@ const Login = () => {
     const loggedInUser = await userLoginResponse.json();
     if (userLoginResponse.ok) {
       console.log(loggedInUser);
-      navigate("/login");
+      navigate("/user");
     } else {
       console.log(loggedInUser);
     }
