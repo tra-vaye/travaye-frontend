@@ -12,6 +12,7 @@ import LocationDetails from "./Pages/LocationDetails";
 import AddedLocations from "./Pages/AddedLocations";
 import Register from "./Pages/Business/Register";
 import Locations from "./Pages/Business/Locations";
+import Verification from "./Pages/SignUp/Verification";
 
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -35,6 +36,7 @@ function App() {
         <Route path="/added" element={<AddedLocations />} />
         <Route path="/register" element={<Register />} />
         <Route path="/business-locations" element={<Locations />} />
+        <Route path="/verify" element={<Verification />} />
       </Routes>
     </>
   );
