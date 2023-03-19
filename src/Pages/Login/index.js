@@ -1,30 +1,28 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Alternate,
   AppleAuth,
   FaceBookAuth,
   GoogleAuth,
 } from "../../components/UI/svgs/svgs";
-
-import {
-  Link,
-  Route,
-  Routes,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
+import styled from "styled-components";
 import classes from "./Login.module.css";
 
 const Login = () => {
+  const [userSignUp, setUserSignUp] = useState(true);
+
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [userLoginData, setUserLoginData] = useState({
     username: "",
     password: "",
   });
+
+  const toggleSignUp = () => {
+    setUserSignUp((prevState) => !prevState);
+  };
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -47,103 +45,6 @@ const Login = () => {
       console.log(loggedInUser);
     }
   };
-
-  const UserLogin = () => {
-    return (
-      <form>
-        <div className="d-flex flex-column">
-          <input
-            className="mt-5"
-            type="text"
-            placeholder="Username"
-            onChange={(e) =>
-              setUserLoginData({
-                ...userLoginData,
-                username: e.target.value,
-              })
-            }
-          />
-          <input
-            className="mt-5"
-            type="password"
-            placeholder="Password"
-            onChange={(e) =>
-              setUserLoginData({
-                ...userLoginData,
-                password: e.target.value,
-              })
-            }
-          />
-
-          <p className={`mb-3 text-end mt-4 ${classes.p}`}>Forgot Password?</p>
-        </div>
-        <div className="d-flex justify-content-center">{Alternate}</div>
-        <SocialsContainer>
-          {FaceBookAuth} {GoogleAuth} {AppleAuth}
-        </SocialsContainer>
-        <div className="d-flex justify-content-between">
-          <p className="align-self-center">
-            New To Travaye?{" "}
-            <Link to="/signup">
-              <span>Sign Up</span>
-            </Link>
-          </p>
-          <Button color="green" onClick={handleClick}>
-            Login
-          </Button>
-        </div>
-      </form>
-    );
-  };
-
-  const BusinessLogin = () => {
-    return (
-      <form>
-        <div className="d-flex flex-column">
-          <input
-            className="mt-5"
-            type="text"
-            placeholder="Email Address"
-            onChange={(e) =>
-              setUserLoginData({
-                ...userLoginData,
-                username: e.target.value,
-              })
-            }
-          />
-          <input
-            className="mt-5"
-            type="password"
-            placeholder="Password"
-            onChange={(e) =>
-              setUserLoginData({
-                ...userLoginData,
-                password: e.target.value,
-              })
-            }
-          />
-
-          <p className={`mb-3 text-end mt-4 ${classes.p}`}>Forgot Password?</p>
-        </div>
-        <div className="d-flex justify-content-center">{Alternate}</div>
-        <SocialsContainer>
-          {FaceBookAuth} {GoogleAuth} {AppleAuth}
-        </SocialsContainer>
-        <div className="d-flex justify-content-between">
-          <p className="align-self-center">
-            New To Travaye?{" "}
-            <Link to="/signup">
-              <span>Sign Up</span>
-            </Link>
-          </p>
-          <Button color="green" onClick={handleClick}>
-            Login
-          </Button>
-        </div>
-      </form>
-    );
-  };
-
   return (
     <section className={classes.login}>
       <div className="row">
@@ -160,23 +61,58 @@ const Login = () => {
         </div>
         <div className="col-md-6 d-flex justify-content-center">
           <AuthFormWrapper>
-            <LoginRoutes>
-              {routes.map((route, i) => {
-                return (
-                  <RouteLink
-                    key={i}
-                    active={`/login/${route}` === location.pathname}
-                  >
-                    <Link to={route}>{route.toUpperCase()}</Link>
-                  </RouteLink>
-                );
-              })}
-            </LoginRoutes>
-
-            <Routes>
-              <Route path="/business" element={<BusinessLogin />} />
-              <Route path="/user" element={<UserLogin />} />
-            </Routes>
+            <AuthRoutes>
+              <RouteLink onClick={toggleSignUp} active={userSignUp}>
+                USER
+              </RouteLink>
+              <RouteLink onClick={toggleSignUp} active={!userSignUp}>
+                BUSINESS
+              </RouteLink>
+            </AuthRoutes>
+            <div className="d-flex flex-column">
+              <input
+                className="mt-5"
+                type={`${userSignUp ? "text" : "email"}`}
+                placeholder={`${userSignUp ? "Username" : "Email Address"}`}
+                onChange={(e) =>
+                  setUserLoginData({
+                    ...userLoginData,
+                    username: e.target.value,
+                  })
+                }
+              />
+              <input
+                className="mt-5"
+                type="password"
+                placeholder="Password"
+                onChange={(e) =>
+                  setUserLoginData({
+                    ...userLoginData,
+                    password: e.target.value,
+                  })
+                }
+              />
+              <p className={`mb-3 text-end mt-4 ${classes.p}`}>
+                Forgot Password?
+              </p>
+            </div>
+            <div className="d-flex justify-content-center">{Alternate}</div>
+            <SocialsContainer>
+              {FaceBookAuth} {GoogleAuth} {AppleAuth}
+            </SocialsContainer>
+            <div
+              className={`d-flex justify-content-between mt-3 ${classes.text}`}
+            >
+              <p className="align-self-center">
+                New To Travaye?{" "}
+                <Link to="/signup">
+                  <span>Sign Up</span>
+                </Link>
+              </p>
+              <Button color="green" onClick={handleClick}>
+                Login
+              </Button>
+            </div>
           </AuthFormWrapper>
         </div>
       </div>
@@ -186,19 +122,19 @@ const Login = () => {
 export default Login;
 
 export const AuthFormWrapper = (props) => {
-  return <div className={classes.form}>{props.children}</div>;
+  return <form className={classes.form}>{props.children}</form>;
 };
 
-export const routes = ["user", "business"];
 export const RouteLink = styled.li`
   color: ${(props) => (props.active ? "#009f57" : "#9d9d9d")};
   border-bottom: 3px solid ${(props) => (props.active ? "#009f57" : "#9d9d9d")};
   width: 100%;
   height: 43px;
+  cursor: pointer;
   text-align: center;
 `;
 
-const LoginRoutes = styled.ul`
+export const AuthRoutes = styled.ul`
   padding-inline-start: 0;
   display: flex;
   justify-content: space-around;
@@ -213,7 +149,6 @@ const SocialsContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   margin-top: 2rem;
-
   svg {
     transform: scale(0.7);
   }

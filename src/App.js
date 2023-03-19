@@ -2,7 +2,7 @@ import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
 import Home from "./Pages/Home/Home";
 import { useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import UserProfile from "./Pages/UserProfile";
@@ -26,8 +26,8 @@ function App() {
       {showSideNav && <SideNav onToggleSideNav={toggleSideNav} />}
       <Routes>
         <Route path="/" exact element={<Home />} />
-        <Route path="/login/*" element={<Login />} />
-        <Route path="/signup/*" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/user" element={<UserProfile />} />
         <Route path="/contact-us" element={<Contact />} />
         <Route path="/plan-a-trip" element={<PlanTrip />} />

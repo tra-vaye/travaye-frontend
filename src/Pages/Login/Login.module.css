@@ -51,6 +51,11 @@
   background-size: 20% auto;
   background-repeat: no-repeat;
 }
+.text p span {
+  color: #009f57;
+  font-weight: bold;
+  font-size: 17px;
+}
 .login .form {
   transform: translateX(-4.5rem);
 }

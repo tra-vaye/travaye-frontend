@@ -11,7 +11,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/signup-avatar.png";
 import { Button } from "../../components/UI/Buttons";
-import { AuthFormWrapper } from "../Login";
+import { AuthFormWrapper, AuthRoutes, RouteLink } from "../Login";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -95,111 +95,94 @@ const SignUp = () => {
         </div>
         <div className="col-md-6 d-flex justify-content-center  order-1 order-md-2">
           <AuthFormWrapper>
-            <form>
-              <div className="d-flex justify-content-center">
-                <div
-                  className={`d-flex justify-content-between  ${classes.link}`}
-                >
-                  <p
-                    onClick={toggleSignUp}
-                    className={`${classes.navlink} ${
-                      userSignUp && classes.active
-                    }`}
-                  >
-                    Sign Up as User
-                  </p>
-                  <p
-                    onClick={toggleSignUp}
-                    className={`text-end ${classes.navlink} ${
-                      !userSignUp && classes.active
-                    }`}
-                  >
-                    Sign Up as a Business
-                  </p>
-                </div>
-              </div>
+            <AuthRoutes>
+              <RouteLink onClick={toggleSignUp} active={userSignUp}>
+                User Sign Up
+              </RouteLink>
+              <RouteLink onClick={toggleSignUp} active={!userSignUp}>
+                Business Sign Up
+              </RouteLink>
+            </AuthRoutes>
 
-              <div className="d-flex flex-column">
-                <input
-                  className="mt-4"
-                  placeholder={userSignUp ? "Full Name" : "Business Name"}
-                  onChange={
-                    userSignUp
-                      ? (e) =>
-                          setUserData({ ...userData, fullName: e.target.value })
-                      : (e) =>
-                          setBusinessData({
-                            ...businessData,
-                            businessName: e.target.value,
-                          })
-                  }
-                />
-                <input
-                  className="mt-4"
-                  placeholder={userSignUp ? "Username" : "Address"}
-                  onChange={
-                    userSignUp
-                      ? (e) =>
-                          setUserData({ ...userData, username: e.target.value })
-                      : (e) =>
-                          setBusinessData({
-                            ...businessData,
-                            address: e.target.value,
-                          })
-                  }
-                />
-                <input
-                  className="mt-4"
-                  type="email"
-                  placeholder={userSignUp ? "Email Address" : "Business Email"}
-                  onChange={
-                    userSignUp
-                      ? (e) =>
-                          setUserData({ ...userData, email: e.target.value })
-                      : (e) =>
-                          setBusinessData({
-                            ...businessData,
-                            businessEmail: e.target.value,
-                          })
-                  }
-                />
-                <input
-                  className="mt-4"
-                  type="password"
-                  placeholder="Password"
-                  onChange={
-                    userSignUp
-                      ? (e) =>
-                          setUserData({ ...userData, password: e.target.value })
-                      : (e) =>
-                          setBusinessData({
-                            ...businessData,
-                            password: e.target.value,
-                          })
-                  }
-                />
-              </div>
-              <br />
-              <div className="d-flex justify-content-center mt-2">
-                {Alternate}
-              </div>
-              <div className={classes.socials}>
-                {FaceBookAuth} {GoogleAuth} {AppleAuth}
-              </div>
-              <div
-                className={`d-flex justify-content-between mt-3 ${classes.text}`}
-              >
-                <p className="align-self-center">
-                  Already have an account?{" "}
-                  <Link to="/login/user">
-                    <span>Login</span>
-                  </Link>
-                </p>
-                <Button color="green" onClick={handleClick}>
-                  Sign Up
-                </Button>
-              </div>
-            </form>
+            <div className="d-flex flex-column">
+              <input
+                className="mt-4"
+                placeholder={userSignUp ? "Full Name" : "Business Name"}
+                onChange={
+                  userSignUp
+                    ? (e) =>
+                        setUserData({ ...userData, fullName: e.target.value })
+                    : (e) =>
+                        setBusinessData({
+                          ...businessData,
+                          businessName: e.target.value,
+                        })
+                }
+              />
+              <input
+                className="mt-4"
+                placeholder={userSignUp ? "Username" : "Address"}
+                onChange={
+                  userSignUp
+                    ? (e) =>
+                        setUserData({ ...userData, username: e.target.value })
+                    : (e) =>
+                        setBusinessData({
+                          ...businessData,
+                          address: e.target.value,
+                        })
+                }
+              />
+              <input
+                className="mt-4"
+                type="email"
+                placeholder={userSignUp ? "Email Address" : "Business Email"}
+                onChange={
+                  userSignUp
+                    ? (e) => setUserData({ ...userData, email: e.target.value })
+                    : (e) =>
+                        setBusinessData({
+                          ...businessData,
+                          businessEmail: e.target.value,
+                        })
+                }
+              />
+              <input
+                className="mt-4"
+                type="password"
+                placeholder="Password"
+                onChange={
+                  userSignUp
+                    ? (e) =>
+                        setUserData({ ...userData, password: e.target.value })
+                    : (e) =>
+                        setBusinessData({
+                          ...businessData,
+                          password: e.target.value,
+                        })
+                }
+              />
+            </div>
+            <br />
+            <div className="d-flex justify-content-center mt-2">
+              {Alternate}
+            </div>
+            <div className={classes.socials}>
+              {FaceBookAuth} {GoogleAuth} {AppleAuth}
+            </div>
+            <div
+              className={`d-flex justify-content-between mt-3 ${classes.text}`}
+            >
+              <p className="align-self-center">
+                Already have an account?{" "}
+                <Link to="/login">
+                  <span>Login</span>
+                </Link>
+              </p>
+              <Button color="green" onClick={handleClick}>
+                Sign Up
+              </Button>
+            </div>
           </AuthFormWrapper>
         </div>
       </div>
