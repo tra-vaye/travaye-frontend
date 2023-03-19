@@ -42,7 +42,7 @@ const SideNav = (props) => {
             Sign Up
           </Button>
         </Link>
-        <Link to="/login/user">
+        <Link to="/login">
           <AltButton
             onClick={() => {
               props.onToggleSideNav();

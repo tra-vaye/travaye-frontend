@@ -11,7 +11,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/signup-avatar.png";
 import { Button } from "../../components/UI/Buttons";
-import { AuthFormWrapper } from "../Login";
+import { AuthFormWrapper, AuthRoutes, RouteLink } from "../Login";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -99,28 +99,14 @@ const SignUp = () => {
         </div>
         <div className="col-md-6 d-flex justify-content-center  order-1 order-md-2">
           <AuthFormWrapper>
-            <div className="d-flex justify-content-center">
-              <div
-                className={`d-flex justify-content-between  ${classes.link}`}
-              >
-                <p
-                  onClick={toggleSignUp}
-                  className={`${classes.navlink} ${
-                    userSignUp && classes.active
-                  }`}
-                >
-                  Sign Up as User
-                </p>
-                <p
-                  onClick={toggleSignUp}
-                  className={`text-end ${classes.navlink} ${
-                    !userSignUp && classes.active
-                  }`}
-                >
-                  Sign Up as a Business
-                </p>
-              </div>
-            </div>
+            <AuthRoutes>
+              <RouteLink onClick={toggleSignUp} active={userSignUp}>
+                User Sign Up
+              </RouteLink>
+              <RouteLink onClick={toggleSignUp} active={!userSignUp}>
+                Business Sign Up
+              </RouteLink>
+            </AuthRoutes>
 
             <div className="d-flex flex-column">
               <input
@@ -193,7 +179,7 @@ const SignUp = () => {
             >
               <p className="align-self-center">
                 Already have an account?{" "}
-                <Link to="/login/user">
+                <Link to="/login">
                   <span>Login</span>
                 </Link>
               </p>
