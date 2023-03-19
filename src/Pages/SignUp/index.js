@@ -68,6 +68,8 @@ const SignUp = () => {
       );
       const savedBusiness = await businessSignUpResponse.json();
       if (businessSignUpResponse.ok) {
+        console.log(businessSignUpResponse);
+        console.log(savedBusiness);
         navigate("/user");
       } else {
         console.log(savedBusiness);
