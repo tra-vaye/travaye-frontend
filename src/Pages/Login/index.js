@@ -19,30 +19,58 @@ const Login = () => {
     username: "",
     password: "",
   });
+  const [businessLoginData, setBusinessLoginData] = useState({
+    businessEmail: "",
+    password: "",
+  });
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
   };
 
+  // const handleClick = async (e) => {
+  //   e.preventDefault();
+
+  // };
   const handleClick = async (e) => {
     e.preventDefault();
-    const userLoginResponse = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/api/user/login`,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userLoginData),
+    if (userSignUp) {
+      const userLoginResponse = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/user/login`,
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userLoginData),
+        }
+      );
+      const loggedInUser = await userLoginResponse.json();
+      if (userLoginResponse.ok) {
+        console.log(loggedInUser);
+        navigate("/user");
+      } else {
+        console.log(loggedInUser);
       }
-    );
-    const loggedInUser = await userLoginResponse.json();
-    if (userLoginResponse.ok) {
-      console.log(loggedInUser);
-      navigate("/user");
-    } else {
-      console.log(loggedInUser);
+    } else if (!userSignUp) {
+      const businessLoginResponse = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/business/login`,
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(businessLoginData),
+        }
+      );
+      const loggedInBusiness = await businessLoginResponse.json();
+      if (businessLoginResponse.ok) {
+        navigate("/user");
+      } else {
+        console.log(loggedInBusiness);
+      }
     }
   };
   return (
@@ -74,22 +102,36 @@ const Login = () => {
                 className="mt-5"
                 type={`${userSignUp ? "text" : "email"}`}
                 placeholder={`${userSignUp ? "Username" : "Email Address"}`}
-                onChange={(e) =>
-                  setUserLoginData({
-                    ...userLoginData,
-                    username: e.target.value,
-                  })
+                onChange={
+                  userSignUp
+                    ? (e) =>
+                        setUserLoginData({
+                          ...userLoginData,
+                          username: e.target.value,
+                        })
+                    : (e) =>
+                        setBusinessLoginData({
+                          ...businessLoginData,
+                          businessEmail: e.target.value,
+                        })
                 }
               />
               <input
                 className="mt-5"
                 type="password"
                 placeholder="Password"
-                onChange={(e) =>
-                  setUserLoginData({
-                    ...userLoginData,
-                    password: e.target.value,
-                  })
+                onChange={
+                  userSignUp
+                    ? (e) =>
+                        setUserLoginData({
+                          ...userLoginData,
+                          password: e.target.value,
+                        })
+                    : (e) =>
+                        setBusinessLoginData({
+                          ...businessLoginData,
+                          password: e.target.value,
+                        })
                 }
               />
               <p className={`mb-3 text-end mt-4 ${classes.p}`}>
