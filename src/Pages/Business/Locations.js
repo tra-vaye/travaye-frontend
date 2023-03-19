@@ -167,7 +167,7 @@ const SideBar = styled.div`
   height: 100%;
   padding: 3%;
   padding-top: 140px;
-  z-index: 3000;
+  z-index: 3000000;
   h6 {
     margin-bottom: 20px;
     font-weight: 700;

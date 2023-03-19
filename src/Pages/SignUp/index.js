@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Avatar from "../../assets/signup-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import { AuthFormWrapper, AuthRoutes, RouteLink } from "../Login";
+import Loader from "../../components/UI/Loader";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -28,15 +29,17 @@ const SignUp = () => {
     password: "",
   });
   const [userSignUp, setUserSignUp] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
   };
   const handleClick = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     if (userSignUp) {
       const userSignUpResponse = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/user/`,
+        "https://travaye-backend.onrender.com/api/user/",
         {
           method: "POST",
           mode: "cors",
@@ -50,9 +53,13 @@ const SignUp = () => {
       if (userSignUpResponse.ok) {
         console.log(userSignUpResponse);
         console.log(savedUser);
+        setIsLoading(false);
         navigate("/login");
       } else {
+        setIsLoading(false);
         console.log(savedUser);
+        alert("Error");
+        return;
       }
     } else if (!userSignUp) {
       const businessSignUpResponse = await fetch(
@@ -70,15 +77,20 @@ const SignUp = () => {
       if (businessSignUpResponse.ok) {
         console.log(businessSignUpResponse);
         console.log(savedBusiness);
+        setIsLoading(false);
         navigate("/user");
       } else {
+        setIsLoading(false);
+        alert("Error");
         console.log(savedBusiness);
+        return;
       }
     }
   };
 
   return (
     <section className={classes.signup}>
+      {isLoading && <Loader />}
       <div className="row">
         <div
           className={`col-md-6 d-flex flex-column justify-content-center align-items-center order-2 order-md-1 ${classes.intro}`}
@@ -102,10 +114,16 @@ const SignUp = () => {
         <div className="col-md-6 d-flex justify-content-center  order-1 order-md-2">
           <AuthFormWrapper>
             <AuthRoutes>
-              <RouteLink onClick={toggleSignUp} active={userSignUp}>
+              <RouteLink
+                onClick={!userSignUp ? toggleSignUp : undefined}
+                active={userSignUp}
+              >
                 User Sign Up
               </RouteLink>
-              <RouteLink onClick={toggleSignUp} active={!userSignUp}>
+              <RouteLink
+                onClick={userSignUp ? toggleSignUp : undefined}
+                active={!userSignUp}
+              >
                 Business Sign Up
               </RouteLink>
             </AuthRoutes>

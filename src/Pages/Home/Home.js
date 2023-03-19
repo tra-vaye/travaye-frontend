@@ -41,7 +41,7 @@ const Home = () => {
               Plan your trips with Travaye and get the best places to visit for
               within and even under your budget.
             </p>
-            <div className="d-flex">
+            <LandingButtonsContainer>
               <Link to="/plan-a-trip">
                 <button className={classes.btn}>Plan A Trip</button>
               </Link>
@@ -51,7 +51,7 @@ const Home = () => {
                   <img src={StoryButton} alt="play" /> Watch Stories
                 </button>
               </a>
-            </div>
+            </LandingButtonsContainer>
           </div>
           <LandingImagesContainer className="col-lg-6 d-flex justify-content-center align-self-start">
             <MarylandLink src={Maryland} className="img-fluid " />
@@ -214,5 +214,16 @@ const MarylandLink = styled.img`
     transform: scale(0.7);
     left: -40px;
     bottom: 0;
+  }
+`;
+
+const LandingButtonsContainer = styled.div`
+  display: flex;
+
+  @media (max-width: 767px) {
+    transform: translatex(-50px);
+    button {
+      transform: scale(0.8);
+    }
   }
 `;
