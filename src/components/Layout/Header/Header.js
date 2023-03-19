@@ -41,7 +41,7 @@ const Header = (props) => {
                 Sign Up
               </Button>
             </Link>
-            <Link to="/login/user" style={{ textDecoration: "none" }}>
+            <Link to="/login" style={{ textDecoration: "none" }}>
               <AltButton>Login</AltButton>
             </Link>
           </div>

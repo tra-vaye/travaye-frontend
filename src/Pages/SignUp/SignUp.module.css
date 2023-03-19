@@ -35,40 +35,13 @@
   font-size: 17px;
 }
 
-.link {
-  width: 90%;
-  white-space: nowrap;
-  font-weight: 700;
-}
-
 /* stacking point */
 
 @media (max-width: 767px) {
-  .link {
-    font-size: 12px;
-  }
-
   .intro {
     transform: scale(0.9);
     margin-top: 3rem;
   }
-}
-.navlink {
-  cursor: pointer;
-  color: #9d9d9d;
-  border-bottom: 5px solid #9d9d9d;
-  padding-bottom: 1rem;
-}
-
-.active {
-  border-bottom: 5px solid #009f57;
-  color: #009f57;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.link p {
-  width: 50%;
 }
 
 .intro h3 {
