@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { Button } from "../../components/UI/Buttons";
 import {
   Alternate,
   AppleAuth,
   FaceBookAuth,
   GoogleAuth,
 } from "../../components/UI/svgs/svgs";
-import { Button } from "../../components/UI/Buttons";
-import styled from "styled-components";
 import classes from "./Login.module.css";
 
 const Login = () => {
@@ -40,7 +40,7 @@ const Login = () => {
     const loggedInUser = await userLoginResponse.json();
     if (userLoginResponse.ok) {
       console.log(loggedInUser);
-      navigate("/login");
+      navigate("/user");
     } else {
       console.log(loggedInUser);
     }
