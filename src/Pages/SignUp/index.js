@@ -157,6 +157,7 @@ const SignUp = () => {
                         })
                 }
               />
+
               <input
                 className="mt-4"
                 type="email"
@@ -171,6 +172,17 @@ const SignUp = () => {
                         })
                 }
               />
+              <select className="mt-4">
+                <option disabled selected hidden>
+                  Category
+                </option>
+                <option>Student</option>
+                <option>Photographer</option>
+                <option>Artist</option>
+                <option>Enterpreneur</option>
+                <option>Writer</option>
+                <option>Digital Creator</option>
+              </select>
               <input
                 className="mt-4"
                 type="password"

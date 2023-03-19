@@ -50,9 +50,12 @@ export const Button = styled.button`
   transform: scale(${(props) => (props.location ? "" : "0.9")});
   border: 2px solid
     ${(props) => (props.color === "green" ? " #009f57" : "#e9a009")};
+  border: ${(props) => props.disabled && props.color === "green" && "none"};
   border-radius: ${(props) => (props.header ? "15px" : "10px")};
   background-color: ${(props) =>
     props.color === "green" ? " #009f57" : "#e9a009"};
+  background-color: ${(props) =>
+    props.disabled && props.color === "green" && "#009f576e"};
   color: white;
   white-space: nowrap;
   margin-right: ${(props) => props.location && "20px"};

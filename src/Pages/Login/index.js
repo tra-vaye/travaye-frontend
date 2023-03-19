@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
+import { useFormik } from "formik";
 import {
   Alternate,
   AppleAuth,
@@ -13,6 +14,8 @@ import {
 import { setUser } from "../../state";
 import classes from "./Login.module.css";
 
+const { businessLoginSchema, userLoginSchema } = require("../../schemas");
+
 const Login = () => {
   const dispatch = useDispatch();
 
@@ -20,28 +23,15 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const [userLoginData, setUserLoginData] = useState({
-    username: "",
-    password: "",
-  });
-  const [businessLoginData, setBusinessLoginData] = useState({
-    businessEmail: "",
-    password: "",
-  });
-
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
   };
 
-  // const handleClick = async (e) => {
-  //   e.preventDefault();
-
-  // };
   const handleClick = async (e) => {
     setIsLoading(true);
-    e.preventDefault();
+
     if (userSignUp) {
       const userLoginResponse = await fetch(
         "https://travaye-backend.onrender.com/api/user/login",
@@ -51,7 +41,10 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(userLoginData),
+          body: JSON.stringify({
+            username: values.userName,
+            password: values.passWord,
+          }),
         }
       );
       const loggedInUser = await userLoginResponse.json();
@@ -76,7 +69,10 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(businessLoginData),
+          body: JSON.stringify({
+            businessEmail: values.email,
+            password: values.passWord,
+          }),
         }
       );
       const loggedInBusiness = await businessLoginResponse.json();
@@ -94,6 +90,24 @@ const Login = () => {
       }
     }
   };
+
+  //formik
+
+  const onSubmit = () => {
+    console.log(values);
+    handleClick();
+  };
+
+  const { values, errors, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      userName: "",
+      email: "",
+      passWord: "",
+    },
+    validationSchema: userSignUp ? userLoginSchema : businessLoginSchema,
+    onSubmit,
+  });
+
   return (
     <>
       {" "}
@@ -112,7 +126,7 @@ const Login = () => {
             </div>
           </div>
           <div className="col-md-6 d-flex justify-content-center">
-            <AuthFormWrapper>
+            <AuthFormWrapper onSubmit={handleSubmit}>
               <AuthRoutes>
                 <RouteLink
                   onClick={!userSignUp ? toggleSignUp : undefined}
@@ -129,41 +143,39 @@ const Login = () => {
               </AuthRoutes>
               <div className="d-flex flex-column">
                 <input
-                  className="mt-5"
+                  id={userSignUp ? "userName" : "email"}
+                  name={userSignUp ? "userName" : "email"}
+                  className={`${
+                    (userSignUp ? errors.userName : errors.email) &&
+                    classes["input-error"]
+                  } mt-5`}
                   type={`${userSignUp ? "text" : "email"}`}
                   placeholder={`${userSignUp ? "Username" : "Email Address"}`}
-                  onChange={
-                    userSignUp
-                      ? (e) =>
-                          setUserLoginData({
-                            ...userLoginData,
-                            username: e.target.value,
-                          })
-                      : (e) =>
-                          setBusinessLoginData({
-                            ...businessLoginData,
-                            businessEmail: e.target.value,
-                          })
-                  }
+                  error={userSignUp ? errors.userName : errors.email}
+                  value={userSignUp ? values.userName : values.email}
+                  onChange={handleChange}
                 />
+
+                <ErrorText>
+                  {userSignUp && errors.userName && errors.userName}
+                </ErrorText>
+
+                <ErrorText>
+                  {!userSignUp && errors.email && errors.email}
+                </ErrorText>
+
                 <input
-                  className="mt-5"
-                  type="password"
+                  className={`${
+                    errors.passWord && classes["input-error"]
+                  } mt-5`}
+                  id="passWord"
+                  name="passWord"
+                  type="passWord"
                   placeholder="Password"
-                  onChange={
-                    userSignUp
-                      ? (e) =>
-                          setUserLoginData({
-                            ...userLoginData,
-                            password: e.target.value,
-                          })
-                      : (e) =>
-                          setBusinessLoginData({
-                            ...businessLoginData,
-                            password: e.target.value,
-                          })
-                  }
+                  value={values.passWord}
+                  onChange={handleChange}
                 />
+                <ErrorText>{errors.passWord && errors.passWord}</ErrorText>
                 <p className={`mb-3 text-end mt-4 ${classes.p}`}>
                   Forgot Password?
                 </p>
@@ -181,7 +193,11 @@ const Login = () => {
                     <span>Sign Up</span>
                   </Link>
                 </p>
-                <Button color="green" onClick={handleClick}>
+                <Button
+                  color="green"
+                  type="submit"
+                  disabled={errors.email || errors.passWord || errors.userName}
+                >
                   Login
                 </Button>
               </div>
@@ -195,7 +211,11 @@ const Login = () => {
 export default Login;
 
 export const AuthFormWrapper = (props) => {
-  return <form className={classes.form}>{props.children}</form>;
+  return (
+    <form className={classes.form} onSubmit={props.onSubmit}>
+      {props.children}
+    </form>
+  );
 };
 
 export const RouteLink = styled.li`
@@ -225,4 +245,10 @@ const SocialsContainer = styled.div`
   svg {
     transform: scale(0.7);
   }
+`;
+
+const ErrorText = styled.p`
+  color: #f67f7f;
+  font-size: 14px;
+  margin-top: 10px;
 `;
