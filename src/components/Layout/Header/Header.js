@@ -1,16 +1,22 @@
-import Logo from "../../../assets/logo.png";
-import classes from "./Header.module.css";
-import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { Button, AltButton } from "../../UI/Buttons";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux/es";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
 import styled from "styled-components";
+import Logo from "../../../assets/logo.png";
+import { setLogout } from "../../../state";
+import { AltButton, Button } from "../../UI/Buttons";
+import classes from "./Header.module.css";
 
 const Header = (props) => {
+  const dispatch = useDispatch();
   const [isActive, setIsActive] = useState("");
   const Location = useLocation();
-
+  const isAuthenticated = Boolean(useSelector((state) => state.user));
+  const handleLogoutClick = () => {
+    dispatch(setLogout());
+  };
   useEffect(() => {
     setIsActive(Location.pathname);
   }, [Location.pathname]);
@@ -36,14 +42,27 @@ const Header = (props) => {
             })}
           </ul>
           <div>
-            <Link to="/signup" style={{ textDecoration: "none" }}>
-              <Button header={true} color="green">
-                Sign Up
-              </Button>
-            </Link>
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              <AltButton>Login</AltButton>
-            </Link>
+            {!isAuthenticated && (
+              <Link to="/signup" style={{ textDecoration: "none" }}>
+                <Button header={true} color="green">
+                  Sign Up
+                </Button>
+              </Link>
+            )}
+            {!isAuthenticated && (
+              <Link to="/login" style={{ textDecoration: "none" }}>
+                <AltButton>Login</AltButton>
+              </Link>
+            )}
+            {isAuthenticated && (
+              <Link
+                to="/login"
+                style={{ textDecoration: "none" }}
+                onClick={handleLogoutClick}
+              >
+                <AltButton>Logout</AltButton>
+              </Link>
+            )}
           </div>
         </div>
         <button className={classes.hamburger} onClick={props.onToggleSideNav}>

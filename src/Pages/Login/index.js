@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux/es";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
@@ -8,9 +9,12 @@ import {
   FaceBookAuth,
   GoogleAuth,
 } from "../../components/UI/svgs/svgs";
+import { setUser } from "../../state";
 import classes from "./Login.module.css";
 
 const Login = () => {
+  const dispatch = useDispatch();
+
   const [userSignUp, setUserSignUp] = useState(true);
 
   const navigate = useNavigate();
@@ -49,6 +53,8 @@ const Login = () => {
       const loggedInUser = await userLoginResponse.json();
       if (userLoginResponse.ok) {
         console.log(loggedInUser);
+        console.log(loggedInUser.user);
+        dispatch(setUser({ user: loggedInUser.user }));
         navigate("/user");
       } else {
         console.log(loggedInUser);
@@ -67,6 +73,10 @@ const Login = () => {
       );
       const loggedInBusiness = await businessLoginResponse.json();
       if (businessLoginResponse.ok) {
+        console.log(businessLoginResponse);
+        console.log(loggedInBusiness.user);
+        dispatch(setUser({ user: loggedInBusiness.user }));
+
         navigate("/user");
       } else {
         console.log(loggedInBusiness);
