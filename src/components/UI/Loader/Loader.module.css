@@ -1,7 +1,7 @@
 .lds-roller {
   display: inline-block;
   position: absolute;
-  top: 55vh;
+  top: 50vh;
   left: 50%;
   z-index: 30000;
   transform: translate(-50%, -50%);

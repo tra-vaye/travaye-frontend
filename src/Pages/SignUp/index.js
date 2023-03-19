@@ -35,6 +35,7 @@ const SignUp = () => {
     setUserSignUp((prevState) => !prevState);
   };
   const handleClick = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     if (userSignUp) {
       const userSignUpResponse = await fetch(
@@ -58,6 +59,7 @@ const SignUp = () => {
         setIsLoading(false);
         console.log(savedUser);
         alert("Error");
+        return;
       }
     } else if (!userSignUp) {
       const businessSignUpResponse = await fetch(
@@ -81,6 +83,7 @@ const SignUp = () => {
         setIsLoading(false);
         alert("Error");
         console.log(savedBusiness);
+        return;
       }
     }
   };
@@ -112,13 +115,13 @@ const SignUp = () => {
           <AuthFormWrapper>
             <AuthRoutes>
               <RouteLink
-                onClick={!userSignUp && toggleSignUp}
+                onClick={!userSignUp ? toggleSignUp : undefined}
                 active={userSignUp}
               >
                 User Sign Up
               </RouteLink>
               <RouteLink
-                onClick={userSignUp && toggleSignUp}
+                onClick={userSignUp ? toggleSignUp : undefined}
                 active={!userSignUp}
               >
                 Business Sign Up

@@ -65,6 +65,7 @@ const Login = () => {
         setIsLoading(false);
         alert("Error");
         console.log(loggedInUser);
+        return;
       }
     } else if (!userSignUp) {
       const businessLoginResponse = await fetch(
@@ -86,105 +87,109 @@ const Login = () => {
         setIsLoading(false);
         navigate("/user");
       } else {
-        setIsLoading(false);
         console.log(loggedInBusiness);
         alert("Error");
+        setIsLoading(false);
+        return;
       }
     }
   };
   return (
-    <section className={classes.login}>
-      {isLoading && <Loader />}
-      <div className="row">
-        <div
-          className={`col-md-6 d-flex justify-content-center align-items-center ${classes.text}`}
-        >
-          <div>
-            <h3>
-              Ready to go out without <br />
-              <span className={classes.sapa}>Sapa? </span>
-            </h3>
-            <p>Login now and Plan a Trip</p>
+    <>
+      {" "}
+      {isLoading && <Loader />}{" "}
+      <section className={classes.login}>
+        <div className="row">
+          <div
+            className={`col-md-6 d-flex justify-content-center align-items-center ${classes.text}`}
+          >
+            <div>
+              <h3>
+                Ready to go out without <br />
+                <span className={classes.sapa}>Sapa? </span>
+              </h3>
+              <p>Login now and Plan a Trip</p>
+            </div>
+          </div>
+          <div className="col-md-6 d-flex justify-content-center">
+            <AuthFormWrapper>
+              <AuthRoutes>
+                <RouteLink
+                  onClick={!userSignUp ? toggleSignUp : undefined}
+                  active={userSignUp}
+                >
+                  USER
+                </RouteLink>
+                <RouteLink
+                  onClick={userSignUp ? toggleSignUp : undefined}
+                  active={!userSignUp}
+                >
+                  BUSINESS
+                </RouteLink>
+              </AuthRoutes>
+              <div className="d-flex flex-column">
+                <input
+                  className="mt-5"
+                  type={`${userSignUp ? "text" : "email"}`}
+                  placeholder={`${userSignUp ? "Username" : "Email Address"}`}
+                  onChange={
+                    userSignUp
+                      ? (e) =>
+                          setUserLoginData({
+                            ...userLoginData,
+                            username: e.target.value,
+                          })
+                      : (e) =>
+                          setBusinessLoginData({
+                            ...businessLoginData,
+                            businessEmail: e.target.value,
+                          })
+                  }
+                />
+                <input
+                  className="mt-5"
+                  type="password"
+                  placeholder="Password"
+                  onChange={
+                    userSignUp
+                      ? (e) =>
+                          setUserLoginData({
+                            ...userLoginData,
+                            password: e.target.value,
+                          })
+                      : (e) =>
+                          setBusinessLoginData({
+                            ...businessLoginData,
+                            password: e.target.value,
+                          })
+                  }
+                />
+                <p className={`mb-3 text-end mt-4 ${classes.p}`}>
+                  Forgot Password?
+                </p>
+              </div>
+              <div className="d-flex justify-content-center">{Alternate}</div>
+              <SocialsContainer>
+                {FaceBookAuth} {GoogleAuth} {AppleAuth}
+              </SocialsContainer>
+              <div
+                className={`d-flex justify-content-between mt-3 ${classes.text}`}
+              >
+                <p className="align-self-center">
+                  New To Travaye?{" "}
+                  <Link to="/signup">
+                    <span>Sign Up</span>
+                  </Link>
+                </p>
+                <Button color="green" onClick={handleClick}>
+                  Login
+                </Button>
+              </div>
+            </AuthFormWrapper>
           </div>
         </div>
-        <div className="col-md-6 d-flex justify-content-center">
-          <AuthFormWrapper>
-            <AuthRoutes>
-              <RouteLink
-                onClick={!userSignUp && toggleSignUp}
-                active={userSignUp}
-              >
-                USER
-              </RouteLink>
-              <RouteLink
-                onClick={userSignUp && toggleSignUp}
-                active={!userSignUp}
-              >
-                BUSINESS
-              </RouteLink>
-            </AuthRoutes>
-            <div className="d-flex flex-column">
-              <input
-                className="mt-5"
-                type={`${userSignUp ? "text" : "email"}`}
-                placeholder={`${userSignUp ? "Username" : "Email Address"}`}
-                onChange={
-                  userSignUp
-                    ? (e) =>
-                        setUserLoginData({
-                          ...userLoginData,
-                          username: e.target.value,
-                        })
-                    : (e) =>
-                        setBusinessLoginData({
-                          ...businessLoginData,
-                          businessEmail: e.target.value,
-                        })
-                }
-              />
-              <input
-                className="mt-5"
-                type="password"
-                placeholder="Password"
-                onChange={
-                  userSignUp
-                    ? (e) =>
-                        setUserLoginData({
-                          ...userLoginData,
-                          password: e.target.value,
-                        })
-                    : (e) =>
-                        setBusinessLoginData({
-                          ...businessLoginData,
-                          password: e.target.value,
-                        })
-                }
-              />
-              <p className={`mb-3 text-end mt-4 ${classes.p}`}>
-                Forgot Password?
-              </p>
-            </div>
-            <div className="d-flex justify-content-center">{Alternate}</div>
-            <SocialsContainer>
-              {FaceBookAuth} {GoogleAuth} {AppleAuth}
-            </SocialsContainer>
-            <div
-              className={`d-flex justify-content-between mt-3 ${classes.text}`}
-            >
-              <p className="align-self-center">
-                New To Travaye?{" "}
-                <Link to="/signup">
-                  <span>Sign Up</span>
-                </Link>
-              </p>
-              <Button color="green" onClick={handleClick}>
-                Login
-              </Button>
-            </div>
-          </AuthFormWrapper>
-        </div>
-      </div>
-    </section>
+      </section>{" "}
+    </>
   );
 };
 export default Login;
