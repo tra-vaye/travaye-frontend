@@ -16,7 +16,7 @@ import classes from "./Login.module.css";
 const Login = () => {
   const dispatch = useDispatch();
 
-  const [userLogin, setUserLogin] = useState(true);
+  const [userSignUp, setUserSignUp] = useState(true);
 
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleSignUp = () => {
-    setUserLogin((prevState) => !prevState);
+    setUserSignUp((prevState) => !prevState);
   };
 
   // const handleClick = async (e) => {
@@ -42,7 +42,7 @@ const Login = () => {
   const handleClick = async (e) => {
     setIsLoading(true);
     e.preventDefault();
-    if (userLogin) {
+    if (userSignUp) {
       const userLoginResponse = await fetch(
         "https://travaye-backend.onrender.com/api/user/login",
         {
@@ -67,7 +67,7 @@ const Login = () => {
         console.log(loggedInUser);
         return;
       }
-    } else if (!userLogin) {
+    } else if (!userSignUp) {
       const businessLoginResponse = await fetch(
         `https://travaye-backend.onrender.com/api/business/login`,
         {
@@ -96,7 +96,7 @@ const Login = () => {
   };
 
   const googleSignIn = () => {
-    if (userLogin) {
+    if (userSignUp) {
       window.open(
         `${process.env.REACT_APP_SERVER_URL}/api/user/auth/google`,
         "self",
