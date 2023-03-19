@@ -15,7 +15,7 @@ import classes from "./Login.module.css";
 const Login = () => {
   const dispatch = useDispatch();
 
-  const [userSignUp, setUserSignUp] = useState(true);
+  const [userLogin, setUserLogin] = useState(true);
 
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ const Login = () => {
   });
 
   const toggleSignUp = () => {
-    setUserSignUp((prevState) => !prevState);
+    setUserLogin((prevState) => !prevState);
   };
 
   // const handleClick = async (e) => {
@@ -38,7 +38,7 @@ const Login = () => {
   // };
   const handleClick = async (e) => {
     e.preventDefault();
-    if (userSignUp) {
+    if (userLogin) {
       const userLoginResponse = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/user/login`,
         {
@@ -59,7 +59,7 @@ const Login = () => {
       } else {
         console.log(loggedInUser);
       }
-    } else if (!userSignUp) {
+    } else if (!userLogin) {
       const businessLoginResponse = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/business/login`,
         {
@@ -83,6 +83,23 @@ const Login = () => {
       }
     }
   };
+
+  const googleSignIn = () => {
+    if (userLogin) {
+      window.open(
+        `${process.env.REACT_APP_SERVER_URL}/api/user/auth/google`,
+        "self",
+        "width=500 height=600"
+      );
+    } else {
+      window.open(
+        `${process.env.REACT_APP_SERVER_URL}/api/business/google`,
+        "self",
+        "width=500 height=600"
+      );
+    }
+  };
+
   return (
     <section className={classes.login}>
       <div className="row">
@@ -100,20 +117,20 @@ const Login = () => {
         <div className="col-md-6 d-flex justify-content-center">
           <AuthFormWrapper>
             <AuthRoutes>
-              <RouteLink onClick={toggleSignUp} active={userSignUp}>
+              <RouteLink onClick={toggleSignUp} active={userLogin}>
                 USER
               </RouteLink>
-              <RouteLink onClick={toggleSignUp} active={!userSignUp}>
+              <RouteLink onClick={toggleSignUp} active={!userLogin}>
                 BUSINESS
               </RouteLink>
             </AuthRoutes>
             <div className="d-flex flex-column">
               <input
                 className="mt-5"
-                type={`${userSignUp ? "text" : "email"}`}
-                placeholder={`${userSignUp ? "Username" : "Email Address"}`}
+                type={`${userLogin ? "text" : "email"}`}
+                placeholder={`${userLogin ? "Username" : "Email Address"}`}
                 onChange={
-                  userSignUp
+                  userLogin
                     ? (e) =>
                         setUserLoginData({
                           ...userLoginData,
@@ -131,7 +148,7 @@ const Login = () => {
                 type="password"
                 placeholder="Password"
                 onChange={
-                  userSignUp
+                  userLogin
                     ? (e) =>
                         setUserLoginData({
                           ...userLoginData,
@@ -150,7 +167,7 @@ const Login = () => {
             </div>
             <div className="d-flex justify-content-center">{Alternate}</div>
             <SocialsContainer>
-              {FaceBookAuth} {GoogleAuth} {AppleAuth}
+              {FaceBookAuth} {<GoogleAuth onClick={googleSignIn} />} {AppleAuth}
             </SocialsContainer>
             <div
               className={`d-flex justify-content-between mt-3 ${classes.text}`}
