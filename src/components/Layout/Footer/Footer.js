@@ -1,8 +1,12 @@
 import classes from "./Footer.module.css";
 import WhiteLogo from "../../../assets/white-logo.png";
 import { FacebookIcon, TwitterIcon, InstaIcon } from "../../UI/svgs/svgs";
+import { Link } from "react-router-dom";
 
-const Links = ["My Account", "View Businesses", "Watch Stories"];
+const Links = [
+  { name: "My Account", href: "/user" },
+  { name: "View Businesses", href: "/business-locations" },
+];
 const Footer = () => {
   return (
     <footer className={classes.footer}>
@@ -15,7 +19,9 @@ const Footer = () => {
             Live free with Travaye
           </p>
           <div className={classes.socials}>
-            {FacebookIcon} {TwitterIcon} {InstaIcon}
+            {FacebookIcon}
+            <a href="https://www.instagram.com/travaye_/"> {InstaIcon} </a>
+            <a href="http://twitter.com/travaye_"> {TwitterIcon}</a>
           </div>
         </div>
         <div className="mb-5">
@@ -44,9 +50,20 @@ const Footer = () => {
         <div className="mb-4">
           <h4>Useful Links</h4>
           <ul>
-            {Links.map((link, i) => {
-              return <li key={i}>{link}</li>;
+            {Links.map(({ name, href }, i) => {
+              return (
+                <li key={i}>
+                  <Link to={href} key={i}>
+                    {name}
+                  </Link>
+                </li>
+              );
             })}
+            <li>
+              <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
+                Watch Stories
+              </a>
+            </li>
           </ul>
         </div>
       </div>
