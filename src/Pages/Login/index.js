@@ -10,8 +10,8 @@ import {
   Link,
   Route,
   Routes,
-  useNavigate,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
@@ -20,7 +20,6 @@ import classes from "./Login.module.css";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
 
   const [userLoginData, setUserLoginData] = useState({
     username: "",

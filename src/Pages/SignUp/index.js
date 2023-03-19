@@ -68,7 +68,9 @@ const SignUp = () => {
       );
       const savedBusiness = await businessSignUpResponse.json();
       if (businessSignUpResponse.ok) {
-        navigate("/login");
+        navigate("/user");
+      } else {
+        console.log(savedBusiness);
       }
     }
   };
