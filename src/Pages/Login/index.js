@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux/es";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
+import Loader from "../../components/UI/Loader";
 import {
   Alternate,
   AppleAuth,
@@ -28,6 +29,8 @@ const Login = () => {
     password: "",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
   };
@@ -37,10 +40,11 @@ const Login = () => {
 
   // };
   const handleClick = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     if (userSignUp) {
       const userLoginResponse = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/user/login`,
+        "https://travaye-backend.onrender.com/api/user/login",
         {
           method: "POST",
           mode: "cors",
@@ -55,13 +59,16 @@ const Login = () => {
         console.log(loggedInUser);
         console.log(loggedInUser.user);
         dispatch(setUser({ user: loggedInUser.user }));
+        setIsLoading(false);
         navigate("/user");
       } else {
+        setIsLoading(false);
+        alert("Error");
         console.log(loggedInUser);
       }
     } else if (!userSignUp) {
       const businessLoginResponse = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/business/login`,
+        `https://travaye-backend.onrender.com/api/business/login`,
         {
           method: "POST",
           mode: "cors",
@@ -76,15 +83,18 @@ const Login = () => {
         console.log(businessLoginResponse);
         console.log(loggedInBusiness.user);
         dispatch(setUser({ user: loggedInBusiness.user }));
-
+        setIsLoading(false);
         navigate("/user");
       } else {
+        setIsLoading(false);
         console.log(loggedInBusiness);
+        alert("Error");
       }
     }
   };
   return (
     <section className={classes.login}>
+      {isLoading && <Loader />}
       <div className="row">
         <div
           className={`col-md-6 d-flex justify-content-center align-items-center ${classes.text}`}
@@ -100,10 +110,16 @@ const Login = () => {
         <div className="col-md-6 d-flex justify-content-center">
           <AuthFormWrapper>
             <AuthRoutes>
-              <RouteLink onClick={toggleSignUp} active={userSignUp}>
+              <RouteLink
+                onClick={!userSignUp && toggleSignUp}
+                active={userSignUp}
+              >
                 USER
               </RouteLink>
-              <RouteLink onClick={toggleSignUp} active={!userSignUp}>
+              <RouteLink
+                onClick={userSignUp && toggleSignUp}
+                active={!userSignUp}
+              >
                 BUSINESS
               </RouteLink>
             </AuthRoutes>

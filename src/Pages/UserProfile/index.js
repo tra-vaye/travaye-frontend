@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -31,6 +32,10 @@ const UserProfile = () => {
     setShowDashboard((prevState) => !prevState);
   };
 
+  const user = useSelector((state) => state.user);
+
+  const { fullName, username, address, businessName, businessEmail } = user;
+
   return (
     <Container>
       <Dashboard showDashboard={showDashboard}>
@@ -40,25 +45,30 @@ const UserProfile = () => {
 
         <img src={Avatar} alt="avatar" />
         <div>
-          <h5 className="mt-1">Kenny Olu-Onifade</h5>
-          <h6 usernamame={true}>@kaizenschmoney</h6>
+          <h5 className="mt-1">{fullName || businessName}</h5>
+          <h6 usernamame={true}>
+            {businessEmail ? businessEmail : `@${username}`}
+          </h6>
           <h6>University Student</h6>
         </div>
         <div>
           <div>
-            <h5>About</h5>
+            <h5>{address ? "Address" : "About"}</h5>
             <p>
-              Civil Engineer (In View) // <br /> Creative Director at Kaizen
-              Brand // <br /> Chelsea FC Fanatic
+              {address
+                ? address
+                : "  Civil Engineer (In View) // <br /> Creative Director at Kaizen  Brand  {' //'} <br /> Chelsea FC Fanatic"}
             </p>
           </div>
+          {!businessName && (
+            <div>
+              <h5>Total Outings</h5>
+              <p>27 Outings</p>
+            </div>
+          )}
           <div>
-            <h5>Total Outings</h5>
-            <p>27 Outings</p>
-          </div>
-          <div>
-            <h5>Total Posts</h5>
-            <p>6 Posts</p>
+            <h5>{fullName ? "Total Posts" : "User Visits"}</h5>
+            <p>{fullName ? "6 Posts" : "null"}</p>
           </div>
           <div>
             <h5>Average Review</h5>
