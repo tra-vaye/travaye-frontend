@@ -20,6 +20,15 @@
   overflow-wrap: break-word;
 }
 
+.footer a {
+  text-decoration: none;
+  color: inherit;
+}
+.footer a:hover {
+  text-decoration: underline;
+  transition: 300ms ease-in-out;
+}
+
 .footer p,
 .footer ul li {
   font-weight: 600;
@@ -82,7 +91,7 @@
 }
 
 .socials svg {
-  transform: scale(0.8);
+  transform: scale(0.75);
 }
 @media (max-width: 848px) {
   .footer :first-child {

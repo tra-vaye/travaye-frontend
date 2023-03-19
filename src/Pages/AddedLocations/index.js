@@ -18,10 +18,10 @@ const AddedLocations = () => {
                 <h6>Movie Theatre</h6>
               </div>
             </div>
-            <div className="d-flex  align-items-center col-md-2">
+            <StarContainer className="d-flex  align-items-center col-md-3">
               <i>{FourStars}</i>
-            </div>
-            <div className="d-flex col-md-4 justify-content-between align-items-center ">
+            </StarContainer>
+            <div className="d-flex col-md-3 justify-content-between align-items-center ">
               <b>#500 2movies</b>
               <i>{Bin}</i>
             </div>
@@ -37,10 +37,10 @@ const AddedLocations = () => {
                 <h6>Movie Theatre</h6>
               </div>
             </div>
-            <div className="d-flex  align-items-center col-md-2">
+            <StarContainer className="d-flex  align-items-center col-md-3">
               <i>{FourStars}</i>
-            </div>
-            <div className="d-flex col-md-4 justify-content-between align-items-center ">
+            </StarContainer>
+            <div className="d-flex col-md-3 justify-content-between align-items-center ">
               <b>#500 2movies</b>
               <i>{Bin}</i>
             </div>
@@ -56,10 +56,10 @@ const AddedLocations = () => {
                 <h6>Movie Theatre</h6>
               </div>
             </div>
-            <div className="d-flex  align-items-center col-md-2">
+            <StarContainer className="d-flex  align-items-center col-md-3">
               <i>{FourStars}</i>
-            </div>
-            <div className="d-flex col-md-4 justify-content-between align-items-center ">
+            </StarContainer>
+            <div className="d-flex col-md-3 justify-content-between align-items-center ">
               <b>#500 2movies</b>
               <i>{Bin}</i>
             </div>
@@ -75,10 +75,10 @@ const AddedLocations = () => {
                 <h6>Movie Theatre</h6>
               </div>
             </div>
-            <div className="d-flex  align-items-center col-md-2">
+            <StarContainer className="d-flex  align-items-center col-md-3">
               <i>{FourStars}</i>
-            </div>
-            <div className="d-flex col-md-4 justify-content-between align-items-center ">
+            </StarContainer>
+            <div className="d-flex col-md-3 justify-content-between align-items-center ">
               <b>#500 2movies</b>
               <i>{Bin}</i>
             </div>
@@ -94,10 +94,10 @@ const AddedLocations = () => {
                 <h6>Movie Theatre</h6>
               </div>
             </div>
-            <div className="d-flex  align-items-center col-md-2">
+            <StarContainer className="d-flex  align-items-center col-md-3">
               <i>{FourStars}</i>
-            </div>
-            <div className="d-flex col-md-4 justify-content-between align-items-center ">
+            </StarContainer>
+            <div className="d-flex col-md-3 justify-content-between align-items-center ">
               <b>#500 2movies</b>
               <i>{Bin}</i>
             </div>
@@ -113,10 +113,10 @@ const AddedLocations = () => {
                 <h6>Movie Theatre</h6>
               </div>
             </div>
-            <div className="d-flex  align-items-center col-md-2">
+            <StarContainer className="d-flex  align-items-center col-md-3">
               <i>{FourStars}</i>
-            </div>
-            <div className="d-flex col-md-4 justify-content-between align-items-center ">
+            </StarContainer>
+            <div className="d-flex col-md-3 justify-content-between align-items-center ">
               <b>#500 2movies</b>
               <i>{Bin}</i>
             </div>
@@ -156,12 +156,12 @@ const Container = styled.div`
   }
   p {
     font-weight: 700;
+    font-size: 15px;
     color: #000000;
   }
   h6 {
     font-weight: 600;
     font-size: 16px;
-    line-height: 28px;
     color: #e9a309;
   }
 `;
@@ -172,21 +172,44 @@ const Card = styled.div`
   border-radius: 15px;
   padding: 12px;
   margin: 30px auto;
+
   img {
     width: 125px;
     margin-right: 20px;
+    @media (max-width: 767px) {
+      transform: scaleY(1.4) translateY(20px);
+    }
   }
   h5 {
     font-weight: 600;
-    font-size: 16px;
-    line-height: 28px;
+    font-size: 14px;
+  }
+  p,
+  h5,
+  h6 {
+    margin-bottom: 10px;
+  }
+  b {
+    @media (max-width: 767px) {
+      transform: translateX(145px);
+    }
   }
 `;
 
+const StarContainer = styled.div`
+  i {
+    @media (max-width: 767px) {
+      transform: translateX(130px);
+    }
+  }
+  svg {
+    transform: scale(0.8);
+  }
+`;
 const Title = styled.h5`
   font-weight: 700;
   font-size: 22px;
-  line-height: 32px;
+
   color: #009f57;
 `;
 

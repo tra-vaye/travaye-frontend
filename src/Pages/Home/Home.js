@@ -25,6 +25,7 @@ import {
 import Carousel from "../../components/UI/Carousel";
 import Footer from "../../components/Layout/Footer/Footer";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -41,20 +42,30 @@ const Home = () => {
               within and even under your budget.
             </p>
             <div className="d-flex">
-              <button className={classes.btn}>Plan A Trip</button>
-              <button className={classes["btn--alt"]}>
-                <img src={StoryButton} alt="play" /> Watch Stories
-              </button>
+              <Link to="/plan-a-trip">
+                <button className={classes.btn}>Plan A Trip</button>
+              </Link>
+
+              <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
+                <button className={classes["btn--alt"]}>
+                  <img src={StoryButton} alt="play" /> Watch Stories
+                </button>
+              </a>
             </div>
           </div>
           <LandingImagesContainer className="col-lg-6 d-flex justify-content-center align-self-start">
-            <PurpleBistroLink src={PurpleBistro} className="img-fluid " />
             <MarylandLink src={Maryland} className="img-fluid " />
+
+            <Link to="/location">
+              <PurpleBistroLink src={PurpleBistro} className="img-fluid " />
+            </Link>
             <img src={LandingImage} alt="poster" className="img-fluid " />
             <div
               className={`d-flex flex-column justify-content-evenly ${classes.socials}`}
             >
-              {FacebookIcon} {TwitterIcon} {InstaIcon}
+              {FacebookIcon}{" "}
+              <a href="http://twitter.com/travaye_"> {TwitterIcon}</a>
+              <a href="https://www.instagram.com/travaye_/"> {InstaIcon} </a>
             </div>
           </LandingImagesContainer>
         </div>
