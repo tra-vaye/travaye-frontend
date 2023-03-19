@@ -4,7 +4,7 @@ import { AuthFormWrapper } from "../Login";
 
 const Verification = () => {
   return (
-    <Container className="d-flex justify-content-center col-md-6 offset-md-3 mt-5 text-center">
+    <Container className="d-flex justify-content-center col-md-6 offset-md-3 mt-3 text-center">
       <AuthFormWrapper>
         <h3>Verify Account</h3>
         <p>
@@ -15,7 +15,7 @@ const Verification = () => {
           <input /> <input /> <input /> <input />
         </div>
         <Timer>
-          Resend code in <span>59:00</span>
+          Resend code in : <span>59:00</span>
         </Timer>
         <Button color="green">Verify</Button>
       </AuthFormWrapper>
