@@ -67,6 +67,10 @@
   margin-top: 7rem;
 }
 
+.signup .input-error {
+  border: 2px solid #f67f7f;
+}
+
 .user {
   margin-top: 7rem;
   font-weight: 700;

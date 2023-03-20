@@ -14,7 +14,7 @@ import {
 import { setUser } from "../../state";
 import classes from "./Login.module.css";
 
-const { businessLoginSchema, userLoginSchema } = require("../../schemas");
+import { businessLoginSchema, userLoginSchema } from "../../schemas";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -155,14 +155,12 @@ const Login = () => {
                   value={userSignUp ? values.userName : values.email}
                   onChange={handleChange}
                 />
-
-                <ErrorText>
-                  {userSignUp && errors.userName && errors.userName}
-                </ErrorText>
-
-                <ErrorText>
-                  {!userSignUp && errors.email && errors.email}
-                </ErrorText>
+                {userSignUp && errors.userName && (
+                  <ErrorText>{errors.userName}</ErrorText>
+                )}
+                {!userSignUp && errors.email && (
+                  <ErrorText>{errors.email}</ErrorText>
+                )}
 
                 <input
                   className={`${
@@ -175,7 +173,7 @@ const Login = () => {
                   value={values.passWord}
                   onChange={handleChange}
                 />
-                <ErrorText>{errors.passWord && errors.passWord}</ErrorText>
+                {errors.passWord && <ErrorText> {errors.passWord}</ErrorText>}
                 <p className={`mb-3 text-end mt-4 ${classes.p}`}>
                   Forgot Password?
                 </p>
@@ -247,8 +245,9 @@ const SocialsContainer = styled.div`
   }
 `;
 
-const ErrorText = styled.p`
+export const ErrorText = styled.p`
   color: #f67f7f;
   font-size: 14px;
   margin-top: 10px;
+  margin-bottom: 0;
 `;
