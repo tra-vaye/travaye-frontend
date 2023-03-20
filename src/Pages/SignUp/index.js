@@ -239,7 +239,6 @@ const SignUp = () => {
               </p>
               <Button
                 color="green"
-                onClick={handleClick}
                 type="submit"
                 disabled={
                   errors.email ||

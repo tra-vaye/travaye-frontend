@@ -47,7 +47,7 @@
   border: 2px solid #f67f7f;
 }
 
-.form select {
+.form p[login="true"] {
   color: #9d9d9d;
 }
 .login .text {

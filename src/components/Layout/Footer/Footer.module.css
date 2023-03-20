@@ -65,6 +65,7 @@
 .footer img {
   width: 200px;
   height: 60px;
+  transform: scale(0.8) translateX(-30px);
 }
 
 .footer h4 {

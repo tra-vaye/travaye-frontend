@@ -151,7 +151,6 @@ const Login = () => {
                   } mt-5`}
                   type={`${userSignUp ? "text" : "email"}`}
                   placeholder={`${userSignUp ? "Username" : "Email Address"}`}
-                  error={userSignUp ? errors.userName : errors.email}
                   value={userSignUp ? values.userName : values.email}
                   onChange={handleChange}
                 />
@@ -185,7 +184,7 @@ const Login = () => {
               <div
                 className={`d-flex justify-content-between mt-3 ${classes.text}`}
               >
-                <p className="align-self-center">
+                <p className="align-self-center" login="true">
                   New To Travaye?{" "}
                   <Link to="/signup">
                     <span>Sign Up</span>
