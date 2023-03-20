@@ -24,7 +24,10 @@ const Header = (props) => {
   return (
     <header className={classes.header}>
       <nav className={classes.nav}>
-        <img src={Logo} alt="logo" className={classes.logo} />
+        <Link to="/">
+          <img src={Logo} alt="logo" className={classes.logo} />
+        </Link>
+
         <div>
           <ul className={classes.links}>
             {Links.map(({ name, path }, i) => {

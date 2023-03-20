@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 import {
   Alternate,
   AppleAuth,
@@ -11,23 +12,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/signup-avatar.png";
 import { Button } from "../../components/UI/Buttons";
-import { AuthFormWrapper, AuthRoutes, RouteLink } from "../Login";
+import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
 import Loader from "../../components/UI/Loader";
+import { businessSignUpSchema, userSignUpSchema } from "../../schemas";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
-    fullName: "",
-    username: "",
-    password: "",
-    email: "",
-  });
-  const [businessData, setBusinessData] = useState({
-    businessName: "",
-    businessEmail: "",
-    address: "",
-    password: "",
-  });
+
   const [userSignUp, setUserSignUp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,7 +37,12 @@ const SignUp = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(userData),
+          body: JSON.stringify({
+            fullName: values.fullName,
+            username: values.userName,
+            email: values.email,
+            password: values.passWord,
+          }),
         }
       );
       const savedUser = await userSignUpResponse.json();
@@ -70,7 +66,12 @@ const SignUp = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(businessData),
+          body: JSON.stringify({
+            businessName: values.businessName,
+            businessEmail: values.email,
+            address: values.address,
+            password: values.passWord,
+          }),
         }
       );
       const savedBusiness = await businessSignUpResponse.json();
@@ -87,6 +88,27 @@ const SignUp = () => {
       }
     }
   };
+
+  //formik
+
+  const onSubmit = () => {
+    console.log(values);
+    handleClick();
+  };
+
+  const { values, errors, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      fullName: "",
+      userName: "",
+      passWord: "",
+      email: "",
+      businessName: "",
+      address: "",
+      occupation: "",
+    },
+    validationSchema: userSignUp ? userSignUpSchema : businessSignUpSchema,
+    onSubmit,
+  });
 
   return (
     <section className={classes.signup}>
@@ -112,7 +134,7 @@ const SignUp = () => {
           </div>
         </div>
         <div className="col-md-6 d-flex justify-content-center  order-1 order-md-2">
-          <AuthFormWrapper>
+          <AuthFormWrapper onSubmit={handleSubmit}>
             <AuthRoutes>
               <RouteLink
                 onClick={!userSignUp ? toggleSignUp : undefined}
@@ -130,62 +152,74 @@ const SignUp = () => {
 
             <div className="d-flex flex-column">
               <input
-                className="mt-4"
+                id={userSignUp ? "fullName" : "businessName"}
+                name={userSignUp ? "fullName" : "businessName"}
+                value={userSignUp ? values.fullName : values.businessName}
+                className={`${
+                  (userSignUp ? errors.fullName : errors.businessName) &&
+                  classes["input-error"]
+                } mt-4`}
                 placeholder={userSignUp ? "Full Name" : "Business Name"}
-                onChange={
-                  userSignUp
-                    ? (e) =>
-                        setUserData({ ...userData, fullName: e.target.value })
-                    : (e) =>
-                        setBusinessData({
-                          ...businessData,
-                          businessName: e.target.value,
-                        })
-                }
+                onChange={handleChange}
               />
+              {(userSignUp ? errors.fullName : errors.businessName) && (
+                <ErrorText>
+                  {userSignUp ? errors.fullName : errors.businessName}
+                </ErrorText>
+              )}
               <input
-                className="mt-4"
+                id={userSignUp ? "userName" : "address"}
+                name={userSignUp ? "userName" : "address"}
+                value={userSignUp ? values.userName : values.address}
+                className={`${
+                  (userSignUp ? errors.userName : errors.address) &&
+                  classes["input-error"]
+                } mt-4`}
                 placeholder={userSignUp ? "Username" : "Address"}
-                onChange={
-                  userSignUp
-                    ? (e) =>
-                        setUserData({ ...userData, username: e.target.value })
-                    : (e) =>
-                        setBusinessData({
-                          ...businessData,
-                          address: e.target.value,
-                        })
-                }
+                onChange={handleChange}
               />
+              {(userSignUp ? errors.userName : errors.address) && (
+                <ErrorText>
+                  {userSignUp ? errors.userName : errors.address}
+                </ErrorText>
+              )}
               <input
-                className="mt-4"
+                id="email"
+                name="email"
+                value={values.email}
+                className={`${errors.email && classes["input-error"]} mt-4`}
                 type="email"
                 placeholder={userSignUp ? "Email Address" : "Business Email"}
-                onChange={
-                  userSignUp
-                    ? (e) => setUserData({ ...userData, email: e.target.value })
-                    : (e) =>
-                        setBusinessData({
-                          ...businessData,
-                          businessEmail: e.target.value,
-                        })
-                }
-              />
+                onChange={handleChange}
+              />{" "}
+              {errors.email && <ErrorText>{errors.email}</ErrorText>}
+              {userSignUp && (
+                <>
+                  <input
+                    placeholder="Occupation"
+                    id="occupation"
+                    name="occupation"
+                    value={values.occupation}
+                    className={`${
+                      errors.occupation && classes["input-error"]
+                    } mt-4`}
+                    onChange={handleChange}
+                  />
+                  {errors.occupation && (
+                    <ErrorText>{errors.occupation}</ErrorText>
+                  )}
+                </>
+              )}
               <input
-                className="mt-4"
-                type="password"
+                className={`${errors.passWord && classes["input-error"]} mt-4`}
+                id="passWord"
+                name="passWord"
+                type="passWord"
                 placeholder="Password"
-                onChange={
-                  userSignUp
-                    ? (e) =>
-                        setUserData({ ...userData, password: e.target.value })
-                    : (e) =>
-                        setBusinessData({
-                          ...businessData,
-                          password: e.target.value,
-                        })
-                }
-              />
+                value={values.passWord}
+                onChange={handleChange}
+              />{" "}
+              {errors.passWord && <ErrorText>{errors.passWord}</ErrorText>}
             </div>
             <br />
             <div className="d-flex justify-content-center mt-2">
@@ -203,7 +237,19 @@ const SignUp = () => {
                   <span>Login</span>
                 </Link>
               </p>
-              <Button color="green" onClick={handleClick}>
+              <Button
+                color="green"
+                type="submit"
+                disabled={
+                  errors.email ||
+                  errors.passWord ||
+                  errors.userName ||
+                  errors.fullName ||
+                  errors.businessName ||
+                  errors.address ||
+                  errors.occupation
+                }
+              >
                 Sign Up
               </Button>
             </div>
