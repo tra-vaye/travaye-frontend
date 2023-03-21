@@ -178,10 +178,10 @@ const Login = () => {
                 </p>
               </div>
               <div className="d-flex justify-content-center">{Alternate}</div>
-              <SocialsContainer>
+              {/* <SocialsContainer>
                 {FaceBookAuth} {<GoogleAuth onClick={googleSignIn} />}{" "}
                 {AppleAuth}
-              </SocialsContainer>
+              </SocialsContainer> */}
               <div
                 className={`d-flex justify-content-between mt-3 ${classes.text}`}
               >
