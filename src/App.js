@@ -4,7 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import Loader from "./components/UI/Loader";
 import Header from "./components/Layout/Header/Header";
-
+import Home from "./Pages/Home/Home";
 import SideNav from "./components/Layout/SIdeNav";
 
 const AddedLocations = lazy(() => {
@@ -20,8 +20,6 @@ const Register = lazy(() => {
 const Contact = lazy(() => {
   return import("./Pages/Contact");
 });
-
-import Home from "./Pages/Home/Home";
 
 const LocationDetails = lazy(() => {
   return import("./Pages/LocationDetails");
