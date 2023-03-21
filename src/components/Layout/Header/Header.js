@@ -81,7 +81,7 @@ export default Header;
 export const Links = [
   { name: "Home", path: "/" },
   { name: "Businesses", path: "/business-locations" },
-  { name: "Shop", path: "/#" },
+  { name: "Dashboard", path: "/user" },
   { name: "Contact Us", path: "/contact-us" },
 ];
 
