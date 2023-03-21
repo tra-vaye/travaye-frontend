@@ -21,9 +21,7 @@ const Contact = lazy(() => {
   return import("./Pages/Contact");
 });
 
-const Home = lazy(() => {
-  return import("./Pages/Home/Home");
-});
+import Home from "./Pages/Home/Home";
 
 const LocationDetails = lazy(() => {
   return import("./Pages/LocationDetails");
