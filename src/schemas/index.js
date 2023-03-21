@@ -3,6 +3,7 @@ import * as yup from "yup";
 export const userLoginSchema = yup.object({
   userName: yup
     .string()
+    .matches(/^[a-zA-Z0-9_-]{3,16}$/, "Please choose another username")
     .min(6, "Too Short!")
     .max(12, "Too Long")
     .required("Username cannot be blank!"),
@@ -18,6 +19,7 @@ export const userLoginSchema = yup.object({
 export const businessLoginSchema = yup.object({
   email: yup
     .string()
+    .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, "Invalid Email")
     .email("Invalid email!")
     .required("Email cannot be blank!"),
   passWord: yup
@@ -38,11 +40,13 @@ export const userSignUpSchema = yup.object({
     .required("Field cannot be blank!"),
   userName: yup
     .string()
+    .matches(/^[a-zA-Z0-9_-]{3,16}$/, "Please choose another username")
     .min(6, "Too Short!")
     .max(12, "Too Long")
     .required("Username cannot be blank!"),
   email: yup
     .string()
+    .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, "Invalid Email")
     .email("Invalid email!")
     .required("Email cannot be blank!"),
   passWord: yup
@@ -67,11 +71,13 @@ export const businessSignUpSchema = yup.object({
     .required("Field cannot be blank!"),
   address: yup
     .string()
+    .matches(/^\d+\s[A-z]+\s[A-z]+/, "Wrong address format")
     .min(3, "Too Short!")
     .max(50, "Too Long")
     .required("Field cannot be blank!"),
   email: yup
     .string()
+    .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, "Enter a valid email")
     .email("Invalid email!")
     .required("Email cannot be blank!"),
   passWord: yup
