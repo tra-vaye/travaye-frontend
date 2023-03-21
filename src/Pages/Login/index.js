@@ -1,10 +1,10 @@
+import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch } from "react-redux/es";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
-import { useFormik } from "formik";
 import {
   Alternate,
   AppleAuth,
@@ -178,9 +178,10 @@ const Login = () => {
                 </p>
               </div>
               <div className="d-flex justify-content-center">{Alternate}</div>
-              <SocialsContainer>
-                {FaceBookAuth} {GoogleAuth} {AppleAuth}
-              </SocialsContainer>
+              {/* <SocialsContainer>
+                {FaceBookAuth} {<GoogleAuth onClick={googleSignIn} />}{" "}
+                {AppleAuth}
+              </SocialsContainer> */}
               <div
                 className={`d-flex justify-content-between mt-3 ${classes.text}`}
               >

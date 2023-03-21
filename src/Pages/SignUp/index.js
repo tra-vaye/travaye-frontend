@@ -1,20 +1,15 @@
-import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import {
-  Alternate,
-  AppleAuth,
-  FaceBookAuth,
-  GoogleAuth,
-} from "../../components/UI/svgs/svgs";
+import { useNavigate } from "react-router-dom";
+import { Alternate } from "../../components/UI/svgs/svgs";
 import classes from "./SignUp.module.css";
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/signup-avatar.png";
 import { Button } from "../../components/UI/Buttons";
-import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
 import Loader from "../../components/UI/Loader";
 import { businessSignUpSchema, userSignUpSchema } from "../../schemas";
+import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -224,9 +219,9 @@ const SignUp = () => {
             <div className="d-flex justify-content-center mt-2">
               {Alternate}
             </div>
-            <div className={classes.socials}>
+            {/* <div className={classes.socials}>
               {FaceBookAuth} {GoogleAuth} {AppleAuth}
-            </div>
+            </div> */}
             <div
               className={`d-flex justify-content-between mt-3 ${classes.text}`}
             >
