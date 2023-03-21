@@ -8,8 +8,10 @@ export const userLoginSchema = yup.object({
     .required("Username cannot be blank!"),
   passWord: yup
     .string()
-    .min(5, "Too Short")
-    .max(12, "Too Long!")
+    .matches(
+      /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+    )
     .required("Password must include 5-12 characters"),
 });
 
@@ -20,14 +22,17 @@ export const businessLoginSchema = yup.object({
     .required("Email cannot be blank!"),
   passWord: yup
     .string()
-    .min(5, "Too Short")
-    .max(12, "Too Long!")
+    .matches(
+      /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+    )
     .required("Password must include 5-12 characters"),
 });
 
 export const userSignUpSchema = yup.object({
   fullName: yup
     .string()
+    .matches(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, "🌚🌚🌚🌚")
     .min(5, "Too Short!")
     .max(30, "Too Long!")
     .required("Field cannot be blank!"),
@@ -42,21 +47,23 @@ export const userSignUpSchema = yup.object({
     .required("Email cannot be blank!"),
   passWord: yup
     .string()
-    .min(5, "Too Short")
-    .max(12, "Too Long!")
+    .matches(
+      /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+    )
     .required("Password must include 5-12 characters"),
   occupation: yup
     .string()
-    .min(3, "Too Short!")
-    .max(20, "Too Long")
+    .matches(/^(\S+\s{0,1}\S+)?$/, "🌚🌚🌚🌚")
     .required("Field cannot be blank!"),
 });
 
 export const businessSignUpSchema = yup.object({
   businessName: yup
     .string()
+    .matches(/^[a-zA-Z0-9\s.'-]{2,100}$/, "🌚🌚🌚🌚")
     .min(3, "Too Short!")
-    .max(20, "Too Long")
+    .max(50, "Too Long")
     .required("Field cannot be blank!"),
   address: yup
     .string()
@@ -69,7 +76,9 @@ export const businessSignUpSchema = yup.object({
     .required("Email cannot be blank!"),
   passWord: yup
     .string()
-    .min(5, "Too Short")
-    .max(12, "Too Long!")
+    .matches(
+      /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      "Password must contain at least 8 characters, one uppercase, one number and one special case character"
+    )
     .required("Password must include 5-12 characters"),
 });

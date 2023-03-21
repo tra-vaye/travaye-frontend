@@ -25,9 +25,8 @@ const SignUp = () => {
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
   };
-  const handleClick = async (e) => {
+  const handleClick = async () => {
     setIsLoading(true);
-    e.preventDefault();
     if (userSignUp) {
       const userSignUpResponse = await fetch(
         "https://travaye-backend.onrender.com/api/user/",
