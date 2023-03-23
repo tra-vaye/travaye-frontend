@@ -44,7 +44,7 @@ const SignUp = () => {
         console.log(userSignUpResponse);
         console.log(savedUser);
         setIsLoading(false);
-        navigate("/login");
+        navigate("/user");
       } else {
         setIsLoading(false);
         console.log(savedUser);
