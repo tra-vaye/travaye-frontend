@@ -5,12 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
-import {
-  Alternate,
-  AppleAuth,
-  FaceBookAuth,
-  GoogleAuth,
-} from "../../components/UI/svgs/svgs";
+// import {
+//   Alternate,
+//   AppleAuth,
+//   FaceBookAuth,
+//   GoogleAuth,
+// } from "../../components/UI/svgs/svgs";
 import { setUser } from "../../state";
 import classes from "./Login.module.css";
 
@@ -177,7 +177,7 @@ const Login = () => {
                   Forgot Password?
                 </p>
               </div>
-              <div className="d-flex justify-content-center">{Alternate}</div>
+              {/* <div className="d-flex justify-content-center">{Alternate}</div> */}
               {/* <SocialsContainer>
                 {FaceBookAuth} {<GoogleAuth onClick={googleSignIn} />}{" "}
                 {AppleAuth}
@@ -236,14 +236,14 @@ export const AuthRoutes = styled.ul`
   }
 `;
 
-const SocialsContainer = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 2rem;
-  svg {
-    transform: scale(0.7);
-  }
-`;
+// const SocialsContainer = styled.div`
+//   display: flex;
+//   justify-content: space-evenly;
+//   margin-top: 2rem;
+//   svg {
+//     transform: scale(0.7);
+//   }
+// `;
 
 export const ErrorText = styled.p`
   color: #f67f7f;

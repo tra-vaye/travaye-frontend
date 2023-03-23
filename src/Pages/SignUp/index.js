@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import { Alternate } from "../../components/UI/svgs/svgs";
+// import { Alternate } from "../../components/UI/svgs/svgs";
 import classes from "./SignUp.module.css";
 
 import { useState } from "react";
@@ -216,9 +216,9 @@ const SignUp = () => {
               {errors.passWord && <ErrorText>{errors.passWord}</ErrorText>}
             </div>
             <br />
-            <div className="d-flex justify-content-center mt-2">
+            {/* <div className="d-flex justify-content-center mt-2">
               {Alternate}
-            </div>
+            </div> */}
             {/* <div className={classes.socials}>
               {FaceBookAuth} {GoogleAuth} {AppleAuth}
             </div> */}
