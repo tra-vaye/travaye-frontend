@@ -25,9 +25,10 @@ import {
 import Carousel from "../../components/UI/Carousel";
 import Footer from "../../components/Layout/Footer/Footer";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <section className={classes.landing}>
@@ -128,7 +129,14 @@ const Home = () => {
               <h2>
                 Explore The World <br /> With Travaye
               </h2>
-              <Button color="orange">Get Started</Button>
+              <Button
+                color="orange"
+                onClick={() => {
+                  navigate("/plan-a-trip");
+                }}
+              >
+                Get Started
+              </Button>
             </div>
           </div>
           <div className="d-none d-md-block col-md-6 ">
@@ -188,6 +196,7 @@ const GetStartedContent = styled.div`
 
 const LandingImagesContainer = styled.div`
   position: relative;
+
   @media (max-width: 991px) {
     transform: translateY(150px);
   }

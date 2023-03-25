@@ -11,9 +11,14 @@ const AddedLocations = lazy(() => {
   return import("./Pages/AddedLocations");
 });
 
-const Locations = lazy(() => {
+const BusinessLocations = lazy(() => {
   return import("./Pages/Business/Locations");
 });
+
+const Locations = lazy(() => {
+  return import("./Pages/Locations");
+});
+
 const Register = lazy(() => {
   return import("./Pages/Business/Register");
 });
@@ -88,7 +93,8 @@ function App() {
             }
           />
           <Route path="/register" element={<Register />} />
-          <Route path="/business-locations" element={<Locations />} />
+          <Route path="/business-locations" element={<BusinessLocations />} />
+          <Route path="/locations" element={<Locations />} />
           <Route path="/verify" element={<Verification />} />
         </Routes>
       </Suspense>

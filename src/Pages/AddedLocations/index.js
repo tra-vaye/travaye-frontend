@@ -166,7 +166,7 @@ const Container = styled.div`
   }
 `;
 
-const Card = styled.div`
+export const Card = styled.div`
   background: #ffffff;
   box-shadow: 4px 8px 40px -2px rgba(0, 0, 0, 0.08);
   border-radius: 15px;
@@ -196,7 +196,7 @@ const Card = styled.div`
   }
 `;
 
-const StarContainer = styled.div`
+export const StarContainer = styled.div`
   i {
     @media (max-width: 767px) {
       transform: translateX(130px);
