@@ -1,11 +1,11 @@
-import { useState, lazy, Suspense } from "react";
+import { Suspense, lazy, useState } from "react";
 import { useSelector } from "react-redux/es";
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import Loader from "./components/UI/Loader";
-import Header from "./components/Layout/Header/Header";
 import Home from "./Pages/Home/Home";
+import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
+import Loader from "./components/UI/Loader";
 
 const AddedLocations = lazy(() => {
   return import("./Pages/AddedLocations");
@@ -56,14 +56,8 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" exact element={<Home />} />
-          <Route
-            path="/login"
-            element={isAuthenticated ? <Navigate to="/" /> : <Login />}
-          />
-          <Route
-            path="/signup"
-            element={isAuthenticated ? <Navigate to="/" /> : <SignUp />}
-          />
+          {!isAuthenticated && <Route path="/login" element={<Login />} />}
+          {!isAuthenticated && <Route path="/signup" element={<SignUp />} />}
           <Route
             path="/user"
             element={
