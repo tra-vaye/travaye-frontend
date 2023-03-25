@@ -4,16 +4,19 @@ import { useNavigate } from "react-router-dom";
 import classes from "./SignUp.module.css";
 
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/signup-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
 import { businessSignUpSchema, userSignUpSchema } from "../../schemas";
+import serverUrl from "../../server";
+import { setUser } from "../../state";
 import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
 
 const SignUp = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [userSignUp, setUserSignUp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,28 +26,26 @@ const SignUp = () => {
   const handleClick = async () => {
     setIsLoading(true);
     if (userSignUp) {
-      const userSignUpResponse = await fetch(
-        "https://travaye-backend.onrender.com/api/user/",
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            fullName: values.fullName,
-            username: values.userName,
-            email: values.email,
-            password: values.passWord,
-          }),
-        }
-      );
+      const userSignUpResponse = await fetch(`${serverUrl}/api/user/`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: values?.fullName,
+          username: values?.userName,
+          email: values?.email,
+          password: values?.passWord,
+        }),
+      });
       const savedUser = await userSignUpResponse.json();
       if (userSignUpResponse.ok) {
         console.log(userSignUpResponse);
         console.log(savedUser);
         setIsLoading(false);
-        navigate("/login");
+        dispatch(setUser({ user: savedUser.user }));
+        navigate("/verify");
       } else {
         setIsLoading(false);
         console.log(savedUser);
@@ -73,7 +74,7 @@ const SignUp = () => {
         console.log(businessSignUpResponse);
         console.log(savedBusiness);
         setIsLoading(false);
-        navigate("/user");
+        navigate("/verify");
       } else {
         setIsLoading(false);
         alert("Error");
@@ -192,6 +193,7 @@ const SignUp = () => {
                   <input
                     placeholder="Occupation"
                     id="occupation"
+                    type="text"
                     name="occupation"
                     value={values.occupation}
                     className={`${
