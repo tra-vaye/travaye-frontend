@@ -33,8 +33,23 @@ const UserProfile = () => {
   };
 
   const user = useSelector((state) => state.user);
+  const locations = useSelector((state) => state.locations);
+
+  const userLocations = locations.filter((location) => {
+    return location.locationAddedBy === user._id;
+  });
 
   const { fullName, username, address, businessName, businessEmail } = user;
+
+  let content;
+
+  if (userLocations.length < 1) {
+    content = <p>No Location Added Yet</p>;
+  } else {
+    content = userLocations.map((location, i) => {
+      return <LocationBox location={location} key={i} />;
+    });
+  }
 
   return (
     <Container>
@@ -104,12 +119,7 @@ const UserProfile = () => {
           )}
           {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />}
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
-          <LocationBox onClick={toggleShowLocationModal} />{" "}
-          <LocationBox onClick={toggleShowLocationModal} />{" "}
-          <LocationBox onClick={toggleShowLocationModal} />
-          <LocationBox onClick={toggleShowLocationModal} />{" "}
-          <LocationBox onClick={toggleShowLocationModal} />{" "}
-          <LocationBox onClick={toggleShowLocationModal} />
+          {content}
         </BoxContainer>
       </Main>
     </Container>

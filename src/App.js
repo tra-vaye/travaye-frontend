@@ -1,11 +1,12 @@
-import { Suspense, lazy, useState } from "react";
-import { useSelector } from "react-redux/es";
+import { Suspense, lazy, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux/es";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import Home from "./Pages/Home/Home";
 import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
 import Loader from "./components/UI/Loader";
+import { fetchLocations } from "./state";
 
 const AddedLocations = lazy(() => {
   return import("./Pages/AddedLocations");
@@ -52,6 +53,12 @@ function App() {
     setShowSideNav((prevState) => !prevState);
   };
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchLocations());
+  }, [dispatch]);
+
   const isAuthenticated = Boolean(useSelector((state) => state.user));
 
   return (
@@ -75,7 +82,7 @@ function App() {
             element={isAuthenticated ? <PlanTrip /> : <Navigate to="/login" />}
           />
           <Route
-            path="/location"
+            path="/location/:id"
             element={
               isAuthenticated ? <LocationDetails /> : <Navigate to="/login" />
             }

@@ -3,15 +3,22 @@ import styled from "styled-components";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { BackDrop } from "../../components/UI/Modal/Modal";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Locations = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeFilter, setActiveFilter] = useState("All");
   const [showSidebar, setShowSidebar] = useState(false);
 
+  const locations = useSelector((state) => state.locations);
+
+  const navigate = useNavigate();
+
   const toggleSidebar = () => {
     setShowSidebar((prevState) => !prevState);
   };
+
   return (
     <Container>
       {showSidebar && (
@@ -43,41 +50,18 @@ const Locations = () => {
           <div>
             <h6 style={{ color: "#e9a009" }}>{activeCategory}</h6>
             <GridContainer>
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-            </GridContainer>
-          </div>
-          <div>
-            <h6 style={{ color: "#e9a009" }}>{activeCategory}</h6>
-            <GridContainer>
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-            </GridContainer>
-          </div>
-          <div>
-            <h6 style={{ color: "#e9a009" }}>{activeCategory}</h6>
-            <GridContainer>
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-            </GridContainer>
-          </div>
-          <div>
-            <h6 style={{ color: "#e9a009" }}>{activeCategory}</h6>
-            <GridContainer>
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
-              <LocationBox search={true} />
+              {locations.map((location, i) => {
+                return (
+                  <LocationBox
+                    search={true}
+                    location={location}
+                    key={i}
+                    onClick={() => {
+                      navigate(`/location/${location._id}`);
+                    }}
+                  />
+                );
+              })}
             </GridContainer>
           </div>
         </div>

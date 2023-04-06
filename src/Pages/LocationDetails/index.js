@@ -4,8 +4,19 @@ import Maryland from "../../assets/mm-ticket-prices.png";
 import Avatar from "../../assets/user-avatar.png";
 
 import { FourStars, FiveStars } from "../../components/UI/svgs/svgs";
+import { useParams } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 
 const LocationDetails = () => {
+  const params = useParams();
+  const { id } = params;
+  const locations = useSelector((state) => state.locations);
+  const location = locations?.filter((location) => location._id === id);
+  console.log(location);
+
+  const { locationName, locationAddress, locationDescription } = location[0];
+
   return (
     <div className={classes.location}>
       <div className="row">
@@ -19,17 +30,11 @@ const LocationDetails = () => {
         </div>
         <div className={`col-md-6 ${classes.details}`}>
           <div>
-            <h4>The Maryland Mall Cinema (Genesis Cinemas)</h4>
-            <h6>Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja</h6>
+            <h4>{locationName}</h4>
+            <h6>{locationAddress}</h6>
           </div>
 
-          <p>
-            Maryland Mall Cinemas is one of Nigeria's leading cinema developers
-            and operators of multiplex cinemas in Nigeria. The Only ScreenX
-            Cinema with a state of the art spund system and 3D viewing pleaseure
-            just for you. Come and have a great time while you enjoy your movies
-            at Maryland Mall Cinemas
-          </p>
+          <p>{locationDescription}</p>
           <div className="mb-3">
             <div className="d-flex justify-content-beetween">
               <span
@@ -66,9 +71,6 @@ const LocationDetails = () => {
                 </i>
               </div>
             </div>
-            <h6>
-              <i>(Tickets come along with free 500g popcorn)</i>
-            </h6>
           </div>
 
           <div className="d-flex mb-3">
