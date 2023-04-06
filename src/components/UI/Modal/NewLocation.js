@@ -1,44 +1,130 @@
-import Modal from "./Modal";
+import { Typography } from "@mui/material";
+import { Formik } from "formik";
 import React from "react";
 import Dropzone from "react-dropzone";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { ArrowCloud, BlankStars } from "../svgs/svgs";
+import * as yup from "yup";
+import serverUrl from "../../../server";
 import { Button } from "../Buttons";
+import { ArrowCloud, BlankStars } from "../svgs/svgs";
+import Modal from "./Modal";
 
+const initialValues = {
+  locationName: "",
+  locationAddress: "",
+  locationDescription: "",
+  picture: "",
+};
+
+const schema = yup.object().shape({
+  locationName: yup.string().required("required"),
+  locationAddress: yup.string().required("required"),
+  locationDescription: yup.string().required("required"),
+  picture: yup.string().required("required"),
+});
 const NewLocation = (props) => {
-  return (
-    <Modal onClick={props.onClick}>
-      <h3>Post a New Location</h3>
-      <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
-        {({ getRootProps, getInputProps }) => (
-          <Container>
-            <section {...getRootProps()}>
-              <input {...getInputProps()} />
-              <div>
-                <i>{ArrowCloud}</i>
-                <p>Drag and Drop Pictures here to Upload</p>
-              </div>
-            </section>
-          </Container>
-        )}
-      </Dropzone>
-      <div className="d-flex justify-content-center mt-4">
-        <p>Rating: </p>
-        <i>{BlankStars}</i>
-      </div>
-      <InputContainer>
-        <div className="d-flex justify-content-between mb-4">
-          <input placeholder="Name" />
-          <input placeholder="Address" />
-        </div>
+  const user = useSelector((state) => state.user);
 
-        <textarea
-          placeholder="Please Give a Short Description of your Experience"
-          rows="6"
-        ></textarea>
-        <Button color="green">Post</Button>
-      </InputContainer>
-    </Modal>
+  const handleFormSubmit = async (values, onSubmitProps) => {
+    const formData = new FormData();
+    for (let value in values) {
+      formData.append(value, values[value]);
+    }
+    formData.append("picturePath", values.picture.name);
+    formData.append("locationAddedBy", user._id);
+
+    const newLocationResponse = await fetch(`${serverUrl}/location`, {
+      method: "POST",
+      body: formData,
+    });
+    const savedLocation = await newLocationResponse.json();
+    if (newLocationResponse.ok) {
+      alert("Location Successfully added.");
+      console.log(savedLocation);
+      onSubmitProps.resetForm();
+    } else {
+      alert("Failed to add location :( , Try again.");
+    }
+  };
+  return (
+    <Formik
+      onSubmit={handleFormSubmit}
+      initialValues={initialValues}
+      validationSchema={schema}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        resetForm,
+      }) => (
+        <Modal onClick={props.onClick}>
+          <form action="" onSubmit={handleSubmit}>
+            <h3>Post a New Location</h3>
+            <Dropzone
+              onDrop={(acceptedFiles) =>
+                setFieldValue("picture", acceptedFiles[0])
+              }
+            >
+              {({ getRootProps, getInputProps }) => (
+                <Container>
+                  <section {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    {!values.picture ? (
+                      <div>
+                        <i>{ArrowCloud}</i>
+                        <p>Drag and Drop Pictures here to Upload</p>
+                      </div>
+                    ) : (
+                      <Typography>{values.picture.name}</Typography>
+                    )}
+                  </section>
+                </Container>
+              )}
+            </Dropzone>
+            <div className="d-flex justify-content-center mt-4">
+              <p>Rating: </p>
+              <i>{BlankStars}</i>
+            </div>
+            <InputContainer>
+              <div className="d-flex justify-content-between mb-4">
+                <input
+                  placeholder="Name"
+                  name="locationName"
+                  value={values.locationName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <input
+                  placeholder="Address"
+                  name="locationAddress"
+                  value={values.locationAddress}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </div>
+
+              <textarea
+                placeholder="Please Give a Short Description of your Experience"
+                rows="6"
+                name="locationDescription"
+                value={values.locationDescription}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              ></textarea>
+              <Button color="green" type="submit">
+                Post
+              </Button>
+            </InputContainer>
+          </form>
+        </Modal>
+      )}
+    </Formik>
   );
 };
 export default NewLocation;
