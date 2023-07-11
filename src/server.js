@@ -1,7 +1,7 @@
 let serverUrl;
 
 if (process.env.NODE_ENV === "production") {
-  serverUrl = "https://travaye-backend.onrender.com";
+  serverUrl = "https://nice-red-chameleon-belt.cyclic.app";
 } else {
   serverUrl = "http://localhost:8080";
 }
