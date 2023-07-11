@@ -1,8 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import serverUrl from "../server";
 
 const initialState = {
   user: null,
+  locations: [],
 };
+
+export const fetchLocations = createAsyncThunk(
+  "locations/fetchLocations",
+  async (dispatch, getState) => {
+    const response = await axios.get(`${serverUrl}/api/location`);
+    return response?.data?.locations;
+  }
+);
 
 export const authSlice = createSlice({
   name: "auth",
@@ -13,6 +24,17 @@ export const authSlice = createSlice({
     },
     setLogout: (state) => {
       state.user = null;
+    },
+  },
+  extraReducers: {
+    [fetchLocations.pending]: (state) => {
+      state.locations = [];
+    },
+    [fetchLocations.fulfilled]: (state, action) => {
+      state.locations = action.payload;
+    },
+    [fetchLocations.rejected]: (state) => {
+      state.locations = [];
     },
   },
 });

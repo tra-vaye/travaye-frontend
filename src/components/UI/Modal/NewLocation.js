@@ -41,6 +41,7 @@ const NewLocation = (props) => {
     const savedLocation = await newLocationResponse.json();
     if (newLocationResponse.ok) {
       alert("Location Successfully added.");
+      props.onClick();
       console.log(savedLocation);
       onSubmitProps.resetForm();
     } else {

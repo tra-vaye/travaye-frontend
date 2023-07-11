@@ -1,15 +1,15 @@
 import MaryLandMall from "../../../assets/maryland-mall.png";
-import { LocationBoxStar } from "../svgs/svgs";
+// import { LocationBoxStar } from "../svgs/svgs";
 import styled from "styled-components";
 
 const LocationBox = (props) => {
   return (
     <Box onClick={props.onClick} search={props.search}>
       <img src={MaryLandMall} alt="location" className="img-fluid" />
-      <h6>Maryland Mall Cinema</h6>
+      <h6>{props.location.locationName}</h6>
       <div className="d-flex justify-content-between">
-        <p>Lagos, Nigeria</p>
-        <span>4.5 {LocationBoxStar} </span>
+        <p>{props.location.locationAddress}</p>
+        {/* <span>4.5 {LocationBoxStar} </span> */}
       </div>
     </Box>
   );
@@ -43,5 +43,8 @@ const Box = styled.div`
   svg {
     transform: scale(0.8);
     transform: translateY(-0.1em) scale(0.8);
+  }
+  p {
+    white-space: nowrap;
   }
 `;
