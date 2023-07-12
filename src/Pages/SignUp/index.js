@@ -54,7 +54,7 @@ const SignUp = () => {
       }
     } else if (!userSignUp) {
       const businessSignUpResponse = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/business/`,
+        `${serverUrl}/api/business/`,
         {
           method: "POST",
           mode: "cors",

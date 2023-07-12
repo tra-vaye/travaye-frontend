@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Formik } from "formik";
 import React from "react";
 import Dropzone from "react-dropzone";
@@ -14,14 +14,14 @@ const initialValues = {
   locationName: "",
   locationAddress: "",
   locationDescription: "",
-  picture: "",
+  pictures: [],
 };
 
 const schema = yup.object().shape({
   locationName: yup.string().required("required"),
   locationAddress: yup.string().required("required"),
   locationDescription: yup.string().required("required"),
-  picture: yup.string().required("required"),
+  pictures: yup.array().min(1).required("required"),
 });
 const NewLocation = (props) => {
   const user = useSelector((state) => state.user);
@@ -31,10 +31,12 @@ const NewLocation = (props) => {
     for (let value in values) {
       formData.append(value, values[value]);
     }
-    formData.append("picturePath", values.picture.name);
+    values.pictures.forEach((file) => {
+      formData.append("pictures", file);
+    });
     formData.append("locationAddedBy", user._id);
 
-    const newLocationResponse = await fetch(`${serverUrl}/location`, {
+    const newLocationResponse = await fetch(`${serverUrl}/api/location`, {
       method: "POST",
       body: formData,
     });
@@ -68,21 +70,32 @@ const NewLocation = (props) => {
           <form action="" onSubmit={handleSubmit}>
             <h3>Post a New Location</h3>
             <Dropzone
-              onDrop={(acceptedFiles) =>
-                setFieldValue("picture", acceptedFiles[0])
-              }
+              acceptedFiles=".jpg,.jpeg,.png"
+              multiple={true}
+              onDrop={(acceptedFiles) => {
+                setFieldValue("pictures", [
+                  ...values.pictures,
+                  ...acceptedFiles,
+                ]);
+              }}
             >
               {({ getRootProps, getInputProps }) => (
                 <Container>
                   <section {...getRootProps()}>
                     <input {...getInputProps()} />
-                    {!values.picture ? (
+                    {values.pictures.length === 0 ? (
                       <div>
                         <i>{ArrowCloud}</i>
                         <p>Drag and Drop Pictures here to Upload</p>
                       </div>
                     ) : (
-                      <Typography>{values.picture.name}</Typography>
+                      values.pictures.map((file, index) => (
+                        <FlexBetween key={index}>
+                          <Typography sx={{ marginRight: "5px" }}>
+                            {file.name}
+                          </Typography>
+                        </FlexBetween>
+                      ))
                     )}
                   </section>
                 </Container>
@@ -186,3 +199,9 @@ const InputContainer = styled.div`
     width: 80px;
   }
 `;
+
+const FlexBetween = styled(Box)({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
