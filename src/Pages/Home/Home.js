@@ -29,6 +29,20 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
+
+
+  // const reviews = [{name: “Victor Olawoye”,
+  //   occupation: “Photographer”,
+  //   // review: “Travaye is a fantastic app for photographers like me. It provides location-specific tips and tricks and even suggests the best photography spots. I no longer need to rely on multiple sources for planning my shoots. Travaye has consolidated everything I need into one convenient app”},{name: “Sandra Johnson”,
+  //   // occupation: “Fitness Enthusiast”,
+  //   // review: "Travaye has contributed a lot to my fitness journey. With its extensive database of fitness-friendly locations, healthy dining options, and nearby workout facilities, I can easily access unforgettable fitness experiences”},{name: “Joy Bankole”, occupation: “Influencer”,
+  //   // review: "I really love this app! It's like it was made for me! The app allows me to budget content trips, share my reviews for points, and grow my audience all from one platform. It's a powerful tool that helps me maintain a consistent online presence, even when I'm on a tight budget.”},{name: “Emeka Nzere”,
+  //   // occupation: “Student”,
+  //   // review: "You don't want to go out on dates without this app in your pocket!”},{name: “Gbemisola Peters”,
+  //   // occupation: “Tech Sis”,
+  //   // review: "I didn't even know there were so many coffee shops where i could work till i found this app"},{name: “Dele Ali”,
+  //   // occupation: “Student”,
+  //   // review: "Shoutout to Travaye! This app helps me find top notch locations within my budget"}]
   return (
     <>
       <section className={classes.landing}>
