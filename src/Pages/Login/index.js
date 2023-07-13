@@ -15,6 +15,7 @@ import { setUser } from "../../state";
 import classes from "./Login.module.css";
 
 import { businessLoginSchema, userLoginSchema } from "../../schemas";
+import serverUrl from "../../server";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -33,20 +34,17 @@ const Login = () => {
     setIsLoading(true);
 
     if (userSignUp) {
-      const userLoginResponse = await fetch(
-        "https://travaye-backend.onrender.com/api/user/login",
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: values.userName,
-            password: values.passWord,
-          }),
-        }
-      );
+      const userLoginResponse = await fetch(`${serverUrl}/api/user/login`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: values.userName,
+          password: values.passWord,
+        }),
+      });
       const loggedInUser = await userLoginResponse.json();
       if (userLoginResponse.ok) {
         console.log(loggedInUser);
@@ -62,7 +60,7 @@ const Login = () => {
       }
     } else if (!userSignUp) {
       const businessLoginResponse = await fetch(
-        `https://travaye-backend.onrender.com/api/business/login`,
+        `${serverUrl}/api/business/login`,
         {
           method: "POST",
           mode: "cors",
