@@ -1,16 +1,15 @@
-body {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
   margin: 0;
-  overflow-x: hidden;
+  padding: 0;
   box-sizing: border-box;
-  background-color: rgb(255, 254, 252);
-  /* font-family: "open sans"; */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+body {
+  background-color: rgb(255, 254, 252);
 }
 
 /* Carousel */
