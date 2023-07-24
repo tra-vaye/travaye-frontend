@@ -1,7 +1,7 @@
 import Avatar from "../../assets/user-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import LocationBox from "../../components/UI/Location/LocationBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
 import PointsModal from "../../components/UI/Modal/PointsModal";
@@ -9,7 +9,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
+import { useGetLocationsQuery } from "../../redux/Api/locationApi";
+import { notification } from "antd";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -31,22 +32,42 @@ const UserProfile = () => {
   const toggleDashboard = () => {
     setShowDashboard((prevState) => !prevState);
   };
+  const [locations, setLocations] = useState([]);
 
-  const user = useSelector((state) => state.user);
-  const locations = useSelector((state) => state.locations);
+  const { data, isError, error } = useGetLocationsQuery(1, 10);
+  // const { fullName, username, address, businessName, businessEmail } = user;
 
-  const userLocations = locations.filter((location) => {
-    return location.locationAddedBy === user._id;
+  const [fullName] = useState("John Doe");
+  const [username] = useState("Placeholder");
+  const [address] = useState("Just Here");
+  const [businessName] = useState("Bolu and Sons");
+  const [businessEmail] = useState("placeholder@gmail.com");
+  useEffect(() => {
+    if (data) {
+      setLocations(data?.data);
+    }
+    if (isError) {
+      notification.error({
+        message: error?.error,
+        duration: 3,
+        placement: "bottomRight",
+      });
+    }
+  }, [data, error?.error, isError]);
+  // const user = useSelector((state) => state.user);
+  // const locations = useSelector((state) => state.locations);
+
+  const userId = sessionStorage.getItem("user_id");
+  const userLocations = locations?.filter((location) => {
+    return location.locationAddedBy === userId;
   });
-
-  const { fullName, username, address, businessName, businessEmail } = user;
 
   let content;
 
   if (userLocations.length < 1) {
     content = <p>No Location Added Yet</p>;
   } else {
-    content = userLocations.map((location, i) => {
+    content = userLocations?.map((location, i) => {
       return <LocationBox location={location} key={i} />;
     });
   }

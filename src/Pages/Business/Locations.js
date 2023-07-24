@@ -1,19 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { BackDrop } from "../../components/UI/Modal/Modal";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useGetLocationsQuery } from "../../redux/Api/locationApi";
+import Loader from "../../components/UI/Loader";
+import { notification } from "antd";
 
+const categories = [
+  "All",
+  "Special Events",
+  "Food & Drinks",
+  "Entertainment Venues",
+  "Parks & Relaxation Spots",
+  "History & Arts",
+  "Wildlife Attractions",
+  "Sports & Recreation Centres",
+  "Historical/Tourist Attractions",
+];
+
+const filters = ["All", "Trending", "5-Stars", "Lagos"];
 const Locations = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeFilter, setActiveFilter] = useState("All");
   const [showSidebar, setShowSidebar] = useState(false);
-
-  const locations = useSelector((state) => state.locations);
+  const [locations, setLocations] = useState([]);
+  const { data, isError, error, isLoading } = useGetLocationsQuery(1, 10);
+  // const locations = useSelector((state) => state.locations);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (data) {
+      setLocations(data?.data);
+    }
+    if (isError) {
+      notification.error({
+        message: error?.error,
+        duration: 3,
+        placement: "bottomRight",
+      });
+    }
+  }, [data, error?.error, isError]);
 
   const toggleSidebar = () => {
     setShowSidebar((prevState) => !prevState);
@@ -24,70 +53,76 @@ const Locations = () => {
       {showSidebar && (
         <BackDrop onClick={toggleSidebar} showSidebar={showSidebar} />
       )}
-      <div>
-        <Heading>
-          <h4>Businesses and Locations</h4>
-          <p className="mt-2">Recent Searches</p>
-          <MenuOpenIcon onClick={toggleSidebar} />
-        </Heading>
-
-        <FilterButtonContainer>
-          {filters.map((filter, i) => {
-            return (
-              <FilterButton
-                key={i}
-                active={filter === activeFilter}
-                onClick={() => {
-                  setActiveFilter(filter);
-                }}
-              >
-                {filter}
-              </FilterButton>
-            );
-          })}
-        </FilterButtonContainer>
-        <div className="mt-5">
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
           <div>
-            <h6 style={{ color: "#e9a009" }}>{activeCategory}</h6>
-            <GridContainer>
-              {locations.map((location, i) => {
+            <Heading>
+              <h4>Businesses and Locations</h4>
+              <p className="mt-2">Recent Searches</p>
+              <MenuOpenIcon onClick={toggleSidebar} />
+            </Heading>
+
+            <FilterButtonContainer>
+              {filters.map((filter, i) => {
                 return (
-                  <LocationBox
-                    search={true}
-                    location={location}
+                  <FilterButton
                     key={i}
+                    active={filter === activeFilter}
                     onClick={() => {
-                      navigate(`/location/${location._id}`);
+                      setActiveFilter(filter);
                     }}
-                  />
+                  >
+                    {filter}
+                  </FilterButton>
                 );
               })}
-            </GridContainer>
+            </FilterButtonContainer>
+            <div className="mt-5">
+              <div>
+                <h6 style={{ color: "#e9a009" }}>{activeCategory}</h6>
+                <GridContainer>
+                  {locations?.map((location, i) => {
+                    return (
+                      <LocationBox
+                        search={true}
+                        location={location}
+                        key={i}
+                        onClick={() => {
+                          navigate(`/location/${location?._id}`);
+                        }}
+                      />
+                    );
+                  })}
+                </GridContainer>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <SideBar showSidebar={showSidebar}>
-        <h6>Categories</h6>
-        <ul>
-          {categories.map((category, i) => {
-            return (
-              <CategoryListItem
-                key={i}
-                active={activeCategory === category}
-                onClick={() => {
-                  setActiveCategory(category);
-                  setShowSidebar(false);
-                }}
-              >
-                {category}
-              </CategoryListItem>
-            );
-          })}
-        </ul>
-        <h6>
-          Filter By: <br /> City
-        </h6>
-      </SideBar>
+          <SideBar showSidebar={showSidebar}>
+            <h6>Categories</h6>
+            <ul>
+              {categories.map((category, i) => {
+                return (
+                  <CategoryListItem
+                    key={i}
+                    active={activeCategory === category}
+                    onClick={() => {
+                      setActiveCategory(category);
+                      setShowSidebar(false);
+                    }}
+                  >
+                    {category}
+                  </CategoryListItem>
+                );
+              })}
+            </ul>
+            <h6>
+              Filter By: <br /> City
+            </h6>
+          </SideBar>
+        </>
+      )}
     </Container>
   );
 };
@@ -209,17 +244,3 @@ const GridContainer = styled.div`
     place-items: center;
   }
 `;
-
-const categories = [
-  "All",
-  "Special Events",
-  "Food & Drinks",
-  "Entertainment Venues",
-  "Parks & Relaxation Spots",
-  "History & Arts",
-  "Wildlife Attractions",
-  "Sports & Recreation Centres",
-  "Historical/Tourist Attractions",
-];
-
-const filters = ["All", "Trending", "5-Stars", "Lagos"];

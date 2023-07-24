@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryForAuth } from "../queryInterceptors";
 
 export const AuthApi = createApi({
-  reducerPath: "auth",
+  reducerPath: "profile",
   baseQuery: baseQueryForAuth,
 
   refetchOnReconnect: true,
@@ -10,7 +10,7 @@ export const AuthApi = createApi({
   endpoints: (builder) => ({
     userLogin: builder.mutation({
       query: (body) => ({
-        url: "api/user/login",
+        url: "user/login",
         method: "POST",
         body,
       }),
@@ -18,19 +18,34 @@ export const AuthApi = createApi({
     }),
     businessLogin: builder.mutation({
       query: (body) => ({
-        url: "api/business/login",
+        url: "business/login",
         method: "POST",
         body,
       }),
       invalidatesTags: ["Profile"],
     }),
-    register: builder.mutation({
+    userRegister: builder.mutation({
       query: (body) => ({
-        url: "api/auth/register",
+        url: "user",
         method: "POST",
         body,
       }),
       invalidatesTags: ["Profile"],
+    }),
+    businessRegister: builder.mutation({
+      query: (body) => ({
+        url: "business",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
+    codeVerify: builder.mutation({
+      query: (body) => ({
+        url: "user/verify",
+        method: "POST",
+        body,
+      }),
     }),
     getMe: builder.query({
       query: (id) => `user/${id}`,
@@ -43,5 +58,7 @@ export const {
   useGetMeQuery,
   useUserLoginMutation,
   useBusinessLoginMutation,
-  useRegisterMutation,
+  useUserRegisterMutation,
+  useBusinessRegisterMutation,
+  useCodeVerifyMutation,
 } = AuthApi;

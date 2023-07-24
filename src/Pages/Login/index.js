@@ -1,21 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux/es";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
-// import {
-//   Alternate,
-//   AppleAuth,
-//   FaceBookAuth,
-//   GoogleAuth,
-// } from "../../components/UI/svgs/svgs";
-import { setUser } from "../../state";
+
 import classes from "./Login.module.css";
 
 import { businessLoginSchema, userLoginSchema } from "../../schemas";
-import serverUrl from "../../server";
+
+import {
+  useBusinessLoginMutation,
+  useUserLoginMutation,
+} from "../../redux/Api/authApi";
+import { notification } from "antd";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -24,72 +24,68 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
   };
 
-  const handleClick = async (e) => {
-    setIsLoading(true);
+  useEffect(() => {
+    sessionStorage.clear();
+  }, []);
 
-    if (userSignUp) {
-      const userLoginResponse = await fetch(`${serverUrl}/api/user/login`, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: values.userName,
-          password: values.passWord,
-        }),
+  const [
+    userLogin,
+    {
+      isLoading: loginLoading,
+      error: loginError,
+      isSuccess: loginSuccess,
+      data,
+    },
+  ] = useUserLoginMutation();
+
+  const [
+    businessLogin,
+    {
+      isLoading: businessLoading,
+      error: businessError,
+      isSuccess: businessSuccess,
+      data: businessData,
+    },
+  ] = useBusinessLoginMutation();
+
+  useEffect(() => {
+    if (loginError || businessError) {
+      notification.error({
+        message: loginError?.data?.error || businessError?.data?.error,
+        duration: 3,
+        placement: "bottomRight",
       });
-      const loggedInUser = await userLoginResponse.json();
-      if (userLoginResponse.ok) {
-        console.log(loggedInUser);
-        console.log(loggedInUser.user);
-        dispatch(setUser({ user: loggedInUser.user }));
-        setIsLoading(false);
-        navigate("/user");
-      } else {
-        setIsLoading(false);
-        alert("Error");
-        console.log(loggedInUser);
-        return;
-      }
-    } else if (!userSignUp) {
-      const businessLoginResponse = await fetch(
-        `${serverUrl}/api/business/login`,
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            businessEmail: values.email,
-            password: values.passWord,
-          }),
-        }
-      );
-      const loggedInBusiness = await businessLoginResponse.json();
-      if (businessLoginResponse.ok) {
-        console.log(businessLoginResponse);
-        console.log(loggedInBusiness.user);
-        dispatch(setUser({ user: loggedInBusiness.user }));
-        setIsLoading(false);
-        navigate("/user");
-      } else {
-        console.log(loggedInBusiness);
-        alert("Error");
-        setIsLoading(false);
-        return;
-      }
+    }
+  }, [businessError, loginError]);
+
+  useEffect(() => {
+    if (loginSuccess || businessSuccess) {
+      notification.success({
+        message: "Login Successfully",
+        duration: 3,
+        placement: "bottomRight",
+      });
+
+      sessionStorage.setItem("authToken", data?.token || businessData?.token);
+      navigate("/user");
+    }
+  }, [dispatch, businessSuccess, loginSuccess]);
+
+  const handleClick = async () => {
+    if (userSignUp) {
+      await userLogin({ username: values.userName, password: values.passWord });
+    }
+    if (!userSignUp) {
+      await businessLogin({
+        businessEmail: values.email,
+        password: values.passWord,
+      });
     }
   };
-
-  //formik
 
   const onSubmit = () => {
     console.log(values);
@@ -108,8 +104,7 @@ const Login = () => {
 
   return (
     <>
-      {" "}
-      {isLoading && <Loader />}{" "}
+      {(loginLoading || businessLoading) && <Loader />}
       <section className={classes.login}>
         <div className="row">
           <div
