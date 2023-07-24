@@ -8,7 +8,7 @@ import SideNav from "./components/Layout/SIdeNav";
 import Loader from "./components/UI/Loader";
 import { fetchLocations } from "./state";
 import RequireAuth from "./Layout/RequireAuth";
-import Main from "./Pages/Main";
+// import Main from "./Pages/Main";
 
 const AddedLocations = lazy(() => {
   return import("./Pages/AddedLocations");
