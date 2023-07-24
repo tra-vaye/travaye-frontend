@@ -44,7 +44,6 @@ const Locations = () => {
     }
   }, [data, error?.error, isError]);
 
-  console.log(locations);
   const toggleSidebar = () => {
     setShowSidebar((prevState) => !prevState);
   };
