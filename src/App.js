@@ -7,6 +7,8 @@ import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
 import Loader from "./components/UI/Loader";
 import { fetchLocations } from "./state";
+import RequireAuth from "./Layout/RequireAuth";
+import Main from "./Pages/Main";
 
 const AddedLocations = lazy(() => {
   return import("./Pages/AddedLocations");
@@ -52,51 +54,50 @@ function App() {
   const toggleSideNav = () => {
     setShowSideNav((prevState) => !prevState);
   };
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchLocations());
-  }, [dispatch]);
-
-  const isAuthenticated = Boolean(useSelector((state) => state.user));
-
+  const token = sessionStorage.getItem("authToken");
   return (
     <>
       <Header onToggleSideNav={toggleSideNav} showSideNav={showSideNav} />
       {showSideNav && <SideNav onToggleSideNav={toggleSideNav} />}
       <Suspense fallback={<Loader />}>
         <Routes>
-          <Route path="/" exact element={<Home />} />
-          {!isAuthenticated && <Route path="/login" element={<Login />} />}
-          {!isAuthenticated && <Route path="/signup" element={<SignUp />} />}
-          <Route
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Main />} /> */}
+          {!token && <Route path="/login" element={<Login />} />}
+          {!token && <Route path="/signup" element={<SignUp />} />}
+          <Route path="" element={<RequireAuth />}>
+            <Route path="/user" element={<UserProfile />} />
+            <Route path="/plan-a-trip" element={<PlanTrip />} />
+            <Route path="/location/:id" element={<LocationDetails />} />
+            <Route path="/added" element={<AddedLocations />} />
+          </Route>
+          {/* <Route
             path="/user"
             element={
-              isAuthenticated ? <UserProfile /> : <Navigate to="/login" />
+              token ? <UserProfile /> : <Navigate to="/login" />
             }
           />
-          <Route path="/contact-us" element={<Contact />} />
           <Route
             path="/plan-a-trip"
-            element={isAuthenticated ? <PlanTrip /> : <Navigate to="/login" />}
+            element={token ? <PlanTrip /> : <Navigate to="/login" />}
           />
           <Route
             path="/location/:id"
             element={
-              isAuthenticated ? <LocationDetails /> : <Navigate to="/login" />
+              token ? <LocationDetails /> : <Navigate to="/login" />
             }
           />
           <Route
             path="/added"
             element={
-              isAuthenticated ? <AddedLocations /> : <Navigate to="/login" />
+              token ? <AddedLocations /> : <Navigate to="/login" />
             }
-          />
+          /> */}
           <Route path="/register" element={<Register />} />
           <Route path="/business-locations" element={<BusinessLocations />} />
           <Route path="/locations" element={<Locations />} />
           <Route path="/verify" element={<Verification />} />
+          <Route path="/contact-us" element={<Contact />} />
         </Routes>
       </Suspense>
     </>

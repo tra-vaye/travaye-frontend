@@ -1,90 +1,107 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 // import { Alternate } from "../../components/UI/svgs/svgs";
 import classes from "./SignUp.module.css";
 
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/signup-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
 import { businessSignUpSchema, userSignUpSchema } from "../../schemas";
-import serverUrl from "../../server";
-import { setUser } from "../../state";
+
 import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
+import {
+  useBusinessRegisterMutation,
+  useUserRegisterMutation,
+} from "../../redux/Api/authApi";
+import { notification } from "antd";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const [userSignUp, setUserSignUp] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
   };
-  const handleClick = async () => {
-    setIsLoading(true);
-    if (userSignUp) {
-      const userSignUpResponse = await fetch(`${serverUrl}/api/user/`, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName: values?.fullName,
-          username: values?.userName,
-          email: values?.email,
-          password: values?.passWord,
-        }),
+
+  useEffect(() => {
+    sessionStorage.clear();
+  }, []);
+
+  const [
+    userRegister,
+    {
+      isLoading: userLoading,
+      error: userError,
+      isError: userIsError,
+      isSuccess: userSuccess,
+      data,
+    },
+  ] = useUserRegisterMutation();
+
+  const [
+    businessRegister,
+    {
+      isLoading: businessLoading,
+      error: businessError,
+      isError: businessIsError,
+      isSuccess: businessSuccess,
+      data: businessData,
+    },
+  ] = useBusinessRegisterMutation();
+
+  useEffect(() => {
+    if (userIsError || businessIsError) {
+      notification.error({
+        message: userError?.data?.error || businessError?.data?.error,
+        duration: 3,
+        placement: "bottomRight",
       });
-      const savedUser = await userSignUpResponse.json();
-      if (userSignUpResponse.ok) {
-        console.log(userSignUpResponse);
-        console.log(savedUser);
-        setIsLoading(false);
-        dispatch(setUser({ user: savedUser.user }));
-        navigate("/verify");
-      } else {
-        setIsLoading(false);
-        console.log(savedUser);
-        alert("Error");
-        return;
-      }
-    } else if (!userSignUp) {
-      const businessSignUpResponse = await fetch(
-        `${serverUrl}/api/business/`,
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            businessName: values.businessName,
-            businessEmail: values.email,
-            address: values.address,
-            password: values.passWord,
-          }),
-        }
+    }
+    if (userSuccess || businessSuccess) {
+      notification.success({
+        message: "Login Successfully",
+        duration: 3,
+        placement: "bottomRight",
+      });
+
+      sessionStorage.setItem(
+        "user_id",
+        data?.user?._id || businessData?.business?._id
       );
-      const savedBusiness = await businessSignUpResponse.json();
-      if (businessSignUpResponse.ok) {
-        console.log(businessSignUpResponse);
-        console.log(savedBusiness);
-        setIsLoading(false);
-        navigate("/verify");
-      } else {
-        setIsLoading(false);
-        alert("Error");
-        console.log(savedBusiness);
-        return;
-      }
+      sessionStorage.setItem("authToken", data?.token || businessData?.token);
+      navigate("/user");
+    }
+  }, [
+    businessError,
+    businessIsError,
+    businessSuccess,
+    navigate,
+    userIsError,
+    userSuccess,
+  ]);
+
+  const handleClick = async () => {
+    if (userSignUp) {
+      await userRegister({
+        fullName: values?.fullName,
+        username: values?.userName,
+        email: values?.email,
+        password: values?.passWord,
+      });
+    }
+    if (!userSignUp) {
+      await businessRegister({
+        businessName: values.businessName,
+        businessEmail: values.email,
+        address: values.address,
+        password: values.passWord,
+      });
     }
   };
-
-  //formik
 
   const onSubmit = () => {
     console.log(values);
@@ -107,7 +124,7 @@ const SignUp = () => {
 
   return (
     <section className={classes.signup}>
-      {isLoading && <Loader />}
+      {(userLoading || businessLoading) && <Loader />}
       <div className="row">
         <div
           className={`col-md-6 d-flex flex-column justify-content-center align-items-center order-2 order-md-1 ${classes.intro}`}

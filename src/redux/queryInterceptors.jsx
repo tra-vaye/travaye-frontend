@@ -1,4 +1,5 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query";
+import { message } from "antd";
 
 const baseUrl = process.env.REACT_APP_SERVER_URL;
 export const baseQuery = fetchBaseQuery({
@@ -17,19 +18,23 @@ export const baseQueryWithInterceptor = async (args, api, extraOptions) => {
   // Check if the response has a status code of 401
   if (result.error?.status === 401 || result.error?.originalStatus === 401) {
     sessionStorage.removeItem("authToken");
-    window.location.href = "/notAuthorized";
+    message.error("Session Expired");
+    window.location.href = "/login";
   }
   if (result.error?.status === 404 || result.error?.originalStatus === 404) {
-    window.location.href = "*";
+    // window.location.href = "/*";
+    message.error("Page Not Found");
   }
   if (result.error?.status === 503 || result.error?.originalStatus === 503) {
     sessionStorage.removeItem("authToken");
-    window.location.href = "/underMaintenance";
+    window.location.href = "/";
+    message.error("Server Under Maintenance");
   }
 
   if (result.error?.status === 500 || result.error?.originalStatus === 500) {
-    sessionStorage.removeItem("authToken");
-    window.location.href = "/serverError";
+    // sessionStorage.removeItem("authToken");
+    // window.location.href = "/serverError";
+    message.error("Server Error");
   }
   return result;
 };

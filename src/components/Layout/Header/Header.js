@@ -1,7 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux/es";
+import { useDispatch } from "react-redux/es";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../../assets/logo.png";
@@ -13,7 +13,9 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const [isActive, setIsActive] = useState("");
   const Location = useLocation();
-  const isAuthenticated = Boolean(useSelector((state) => state.user));
+
+  const token = sessionStorage.getItem("authToken");
+
   const handleLogoutClick = () => {
     dispatch(setLogout());
   };
@@ -45,19 +47,19 @@ const Header = (props) => {
             })}
           </ul>
           <div>
-            {!isAuthenticated && (
+            {!token && (
               <Link to="/signup" style={{ textDecoration: "none" }}>
                 <Button header={true} color="green">
                   Sign Up
                 </Button>
               </Link>
             )}
-            {!isAuthenticated && (
+            {!token && (
               <Link to="/login" style={{ textDecoration: "none" }}>
                 <AltButton>Login</AltButton>
               </Link>
             )}
-            {isAuthenticated && (
+            {token && (
               <Link
                 to="/login"
                 style={{ textDecoration: "none" }}
@@ -81,7 +83,7 @@ export default Header;
 export const Links = [
   { name: "Home", path: "/" },
   { name: "Businesses", path: "/business-locations" },
-  { name: "Dashboard", path: "/user" },
+  // { name: "Dashboard", path: "/user" },
   { name: "Contact Us", path: "/contact-us" },
 ];
 

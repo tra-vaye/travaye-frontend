@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { setLogout } from "../../../state";
 import { AltButton, Button } from "../../UI/Buttons";
@@ -10,13 +10,15 @@ const SideNav = (props) => {
   const [isActive, setIsActive] = useState("");
   const Location = useLocation();
   const dispatch = useDispatch();
-  const isAuthenticated = Boolean(useSelector((state) => state.user));
+  // const token = Boolean(useSelector((state) => state.user));
   const handleLogoutClick = () => {
     dispatch(setLogout());
   };
   useEffect(() => {
     setIsActive(Location.pathname);
   }, [Location.pathname]);
+
+  const token = sessionStorage.getItem("authToken");
 
   return (
     <div className={classes.sideNav}>
@@ -37,7 +39,7 @@ const SideNav = (props) => {
         })}
       </ul>
       <div>
-        {!isAuthenticated && (
+        {!token && (
           <Link to="/signup">
             <Button
               color="green"
@@ -49,7 +51,7 @@ const SideNav = (props) => {
             </Button>
           </Link>
         )}
-        {!isAuthenticated && (
+        {!token && (
           <Link to="/login">
             <AltButton
               onClick={() => {
@@ -61,11 +63,12 @@ const SideNav = (props) => {
             </AltButton>
           </Link>
         )}
-        {isAuthenticated && (
+        {token && (
           <Link to="/login" onClick={handleLogoutClick}>
             <AltButton
               onClick={() => {
                 props.onToggleSideNav();
+                sessionStorage.removeItem("authToken");
               }}
               sidenav={true}
             >
