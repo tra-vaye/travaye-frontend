@@ -1,7 +1,7 @@
 import classes from "./Home.module.css";
 import LandingImage from "../../assets/landing.png";
 import StoryButton from "../../assets/story-button.png";
-
+import { Rating } from "react-simple-star-rating";
 import Perks from "../../components/UI/Perks";
 import Instructions from "../../components/UI/Instructions";
 import ReviewImage from "../../assets/review-image.png";

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Rating } from "@mui/material";
 import { Formik } from "formik";
 import React from "react";
 import Dropzone from "react-dropzone";
@@ -7,8 +7,9 @@ import styled from "styled-components";
 import * as yup from "yup";
 import serverUrl from "../../../server";
 import { Button } from "../Buttons";
-import { ArrowCloud, BlankStars } from "../svgs/svgs";
+import { ArrowCloud } from "../svgs/svgs";
 import Modal from "./Modal";
+import { useState } from "react";
 
 const initialValues = {
   locationName: "",
@@ -26,6 +27,8 @@ const schema = yup.object().shape({
 const NewLocation = (props) => {
   const user = useSelector((state) => state.user);
 
+  const [rating, setRating] = useState(2);
+
   const handleFormSubmit = async (values, onSubmitProps) => {
     const formData = new FormData();
     for (let value in values) {
@@ -35,6 +38,7 @@ const NewLocation = (props) => {
       formData.append("pictures", file);
     });
     formData.append("locationAddedBy", user._id);
+    formData.append("rating", rating);
 
     const newLocationResponse = await fetch(`${serverUrl}/api/location`, {
       method: "POST",
@@ -101,9 +105,16 @@ const NewLocation = (props) => {
                 </Container>
               )}
             </Dropzone>
-            <div className="d-flex justify-content-center mt-4">
-              <p>Rating: </p>
-              <i>{BlankStars}</i>
+            <div className="d-flex justify-content-center my-3">
+              <Typography component="legend">Rating</Typography>
+              <Rating
+                name="simple-controlled"
+                value={rating}
+                onChange={(event, newValue) => {
+                  console.log(newValue);
+                  setRating(newValue);
+                }}
+              />
             </div>
             <InputContainer>
               <div className="d-flex justify-content-between mb-4">
@@ -156,6 +167,7 @@ const Container = styled.div`
   p {
     text-align: center;
   }
+
   section {
     width: 100%;
     border: 3px solid #d9d9d9;

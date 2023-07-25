@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 import Loader from "../../components/UI/Loader";
 import { notification } from "antd";
+import axios from "axios";
+import serverUrl from "../../server";
 
 const categories = [
   "All",
@@ -21,28 +23,35 @@ const categories = [
 ];
 
 const filters = ["All", "Trending", "5-Stars", "Lagos"];
+
 const Locations = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeFilter, setActiveFilter] = useState("All");
   const [showSidebar, setShowSidebar] = useState(false);
   const [locations, setLocations] = useState([]);
   const { data, isError, error, isLoading } = useGetLocationsQuery(1, 10);
-  // const locations = useSelector((state) => state.locations);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (data) {
-      setLocations(data?.data);
-    }
-    if (isError) {
-      notification.error({
-        message: error?.error,
-        duration: 3,
-        placement: "bottomRight",
-      });
-    }
-  }, [data, error?.error, isError]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setLocations(data?.data);
+  //   }
+  //   if (isError) {
+  //     notification.error({
+  //       message: error?.error,
+  //       duration: 3,
+  //       placement: "bottomRight",
+  //     });
+  //   }
+  // }, [data, error?.error, isError]);
+
+  const getLocations = async () => {
+    const res = await axios.get(
+      `${serverUrl}/location?filters=wildlife-attractions&location=lagos`
+    );
+    console.log(res);
+  };
 
   const toggleSidebar = () => {
     setShowSidebar((prevState) => !prevState);
@@ -117,9 +126,9 @@ const Locations = () => {
                 );
               })}
             </ul>
-            <h6>
+            {/* <h6>
               Filter By: <br /> City
-            </h6>
+            </h6> */}
           </SideBar>
         </>
       )}

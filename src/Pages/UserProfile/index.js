@@ -54,8 +54,6 @@ const UserProfile = () => {
       });
     }
   }, [data, error?.error, isError]);
-  // const user = useSelector((state) => state.user);
-  // const locations = useSelector((state) => state.locations);
 
   const userId = sessionStorage.getItem("user_id");
   const userLocations = locations?.filter((location) => {

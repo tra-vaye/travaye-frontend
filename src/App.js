@@ -1,14 +1,13 @@
 import { Suspense, lazy, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux/es";
-import { Navigate, Route, Routes } from "react-router-dom";
+
+import { Route, Routes } from "react-router-dom";
 
 import Home from "./Pages/Home/Home";
 import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
 import Loader from "./components/UI/Loader";
-import { fetchLocations } from "./state";
+
 import RequireAuth from "./Layout/RequireAuth";
-// import Main from "./Pages/Main";
 
 const AddedLocations = lazy(() => {
   return import("./Pages/AddedLocations");
