@@ -22,9 +22,12 @@ export const LocationApi = createApi({
       refetchOnUpdate: true,
       refetchOnReconnect: true,
     }),
-    getLocation: builder.query({
-      query: (id) => `location/${id}`,
+
+    filterLocation: builder.query({
+      query: () => `location?filters=wildlife-attractions&location=lagos`,
       providesTags: ["Location"],
+      refetchOnUpdate: true,
+      refetchOnReconnect: true,
     }),
   }),
 });
@@ -33,4 +36,5 @@ export const {
   useCreateLocationMutation,
   useGetLocationsQuery,
   useGetLocationQuery,
+  useFilterLocationQuery,
 } = LocationApi;

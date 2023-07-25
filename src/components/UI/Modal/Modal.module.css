@@ -25,14 +25,6 @@
   line-height: 20px;
 }
 
-.overlay span {
-  cursor: pointer;
-  position: fixed;
-  top: 4%;
-  right: 4%;
-  transform: scale(0.8);
-}
-
 .overlay h3 {
   text-align: center;
   color: #009f57;
