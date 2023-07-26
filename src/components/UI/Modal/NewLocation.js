@@ -38,7 +38,7 @@ const NewLocation = (props) => {
       formData.append("pictures", file);
     });
     formData.append("locationAddedBy", user._id);
-    formData.append("rating", rating);
+    formData.append("locationRating", rating);
 
     const newLocationResponse = await fetch(`${serverUrl}/api/location`, {
       method: "POST",
