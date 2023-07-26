@@ -1,6 +1,5 @@
 import classes from "./Home.module.css";
 import LandingImage from "../../assets/landing.png";
-
 import Perks from "../../components/UI/Perks";
 import Instructions from "../../components/UI/Instructions";
 import ReviewImage from "../../assets/review-image.png";

@@ -17,7 +17,8 @@ export const LocationApi = createApi({
       invalidatesTags: ["Locations"],
     }),
     getLocations: builder.query({
-      query: (page, count) => `location?page=${page}&count=${count}`,
+      query: ({ page, count, category }) =>
+        `location?page=${page}&count=${count}&filters=${category}`,
       providesTags: ["Locations"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
