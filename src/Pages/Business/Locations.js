@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import LocationBox from "../../components/UI/Location/LocationBox";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { BackDrop } from "../../components/UI/Modal/Modal";
-import { useNavigate } from "react-router-dom";
-import { useGetLocationsQuery } from "../../redux/Api/locationApi";
-import Loader from "../../components/UI/Loader";
 import { notification } from "antd";
-import axios from "axios";
-import serverUrl from "../../server";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Loader from "../../components/UI/Loader";
+import LocationBox from "../../components/UI/Location/LocationBox";
+import { BackDrop } from "../../components/UI/Modal/Modal";
+import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 
 const categories = [
   "All",
@@ -29,29 +27,34 @@ const Locations = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [showSidebar, setShowSidebar] = useState(false);
   const [locations, setLocations] = useState([]);
-  const { data, isError, error, isLoading } = useGetLocationsQuery(1, 10);
+  console.log(activeCategory.toLowerCase().replace(/\s+/g, "-"));
+  const { data, isError, error, isLoading } = useGetLocationsQuery({
+    page: 1,
+    count: 10,
+    category: activeCategory.toLowerCase().replace(/\s+/g, "-"),
+  });
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setLocations(data?.data);
-  //   }
-  //   if (isError) {
-  //     notification.error({
-  //       message: error?.error,
-  //       duration: 3,
-  //       placement: "bottomRight",
-  //     });
-  //   }
-  // }, [data, error?.error, isError]);
+  useEffect(() => {
+    if (data) {
+      setLocations(data?.data);
+    }
+    if (isError) {
+      notification.error({
+        message: error?.error,
+        duration: 3,
+        placement: "bottomRight",
+      });
+    }
+  }, [data, error?.error, isError]);
 
-  const getLocations = async () => {
-    const res = await axios.get(
-      `${serverUrl}/location?filters=wildlife-attractions&location=lagos`
-    );
-    console.log(res);
-  };
+  // const getLocations = async () => {
+  //   const res = await axios.get(
+  //     `${serverUrl}/location?filters=wildlife-attractions&location=lagos`
+  //   );
+  //   console.log(res);
+  // };
 
   const toggleSidebar = () => {
     setShowSidebar((prevState) => !prevState);
@@ -118,6 +121,7 @@ const Locations = () => {
                     active={activeCategory === category}
                     onClick={() => {
                       setActiveCategory(category);
+                      console.log(category);
                       setShowSidebar(false);
                     }}
                   >
@@ -126,9 +130,10 @@ const Locations = () => {
                 );
               })}
             </ul>
-            {/* <h6>
+            <h6>
               Filter By: <br /> City
-            </h6> */}
+              {/* Use a select here and map the location cities. onchange and add to the location api to make requests */}
+            </h6>
           </SideBar>
         </>
       )}

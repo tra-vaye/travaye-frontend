@@ -6,7 +6,7 @@ import Avatar from "../../assets/user-avatar.png";
 import { FourStars, FiveStars } from "../../components/UI/svgs/svgs";
 import { useParams } from "react-router-dom";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { notification } from "antd";
 
 const LocationDetails = () => {

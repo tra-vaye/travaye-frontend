@@ -1,17 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
+// import { configureStore } from "@reduxjs/toolkit";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 
-import { PersistGate } from "redux-persist/integration/react";
-import storage from "redux-persist/lib/storage";
+// import { PersistGate } from "redux-persist/integration/react";
+// import storage from "redux-persist/lib/storage";
 import App from "./App";
 import "./index.css";
-import authReducer from "./state";
+// import authReducer from "./state";
 import { store } from "./redux/store";
 
-const persistConfig = { key: "root", storage, version: 1 };
+// const persistConfig = { key: "root", storage, version: 1 };
 // const persistedReducer = persistReducer(persistConfig, authReducer);
 // const store = configureStore({
 //   reducer: persistedReducer,
