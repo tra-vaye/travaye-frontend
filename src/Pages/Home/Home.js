@@ -1,7 +1,5 @@
 import classes from "./Home.module.css";
 import LandingImage from "../../assets/landing.png";
-import StoryButton from "../../assets/story-button.png";
-// import { Rating } from "react-simple-star-rating";
 import Perks from "../../components/UI/Perks";
 import Instructions from "../../components/UI/Instructions";
 import ReviewImage from "../../assets/review-image.png";
@@ -15,6 +13,7 @@ import Maryland from "../../assets/maryland-landing.png";
 import {
   FacebookIcon,
   InstaIcon,
+  PlayStory,
   TwitterIcon,
 } from "../../components/UI/svgs/svgs";
 import {
@@ -47,20 +46,23 @@ const Home = () => {
               <Link to="/plan-a-trip">
                 <button className={classes.btn}>Plan A Trip</button>
               </Link>
-
-              <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
-                <button className={classes["btn--alt"]}>
-                  <img src={StoryButton} alt="play" /> Watch Stories
-                </button>
-              </a>
+              <div>
+                <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
+                  <div className="d-flex">
+                    <i>{PlayStory}</i>
+                    <button className={classes["btn--alt"]}>
+                      Watch Stories
+                    </button>
+                  </div>
+                </a>
+              </div>
             </LandingButtonsContainer>
           </div>
           <LandingImagesContainer className="col-lg-6 d-flex justify-content-center align-self-start">
             <MarylandLink src={Maryland} className="img-fluid " />
 
-            <Link to="/location">
-              <PurpleBistroLink src={PurpleBistro} className="img-fluid " />
-            </Link>
+            <PurpleBistroLink src={PurpleBistro} className="img-fluid " />
+
             <img src={LandingImage} alt="poster" className="img-fluid " />
             <div
               className={`d-flex flex-column justify-content-evenly ${classes.socials}`}
@@ -160,6 +162,7 @@ const GetStartedConainer = styled.section`
     text-align: start;
     color: white;
     margin-bottom: 50px;
+    font-size: 30px;
     @media (max-width: 767px) {
       text-align: center;
     }
@@ -172,8 +175,8 @@ const GetStartedConainer = styled.section`
     bottom: 0;
   }
   button {
-    width: 250px;
     border-radius: 30px;
+    font-size: 20px;
   }
 `;
 
@@ -233,7 +236,7 @@ const LandingButtonsContainer = styled.div`
   @media (max-width: 767px) {
     transform: translatex(-50px);
     button {
-      transform: scale(0.8);
+      transform: scale(0.7);
     }
   }
 `;

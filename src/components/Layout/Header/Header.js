@@ -45,6 +45,16 @@ const Header = (props) => {
                 </Navlink>
               );
             })}
+            {token && (
+              <Navlink
+                active={isActive === "/user"}
+                onClick={() => {
+                  setIsActive("/user");
+                }}
+              >
+                <Link to="/user">My Account</Link>
+              </Navlink>
+            )}
           </ul>
           <div>
             {!token && (
@@ -82,8 +92,7 @@ export default Header;
 
 export const Links = [
   { name: "Home", path: "/" },
-  { name: "Businesses", path: "/business-locations" },
-  // { name: "Dashboard", path: "/user" },
+  { name: "Locations", path: "/business-locations" },
   { name: "Contact Us", path: "/contact-us" },
 ];
 

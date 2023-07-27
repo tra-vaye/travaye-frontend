@@ -1,3 +1,64 @@
+export const PlayStory = (
+  <svg
+    width="88"
+    height="88"
+    viewBox="0 0 88 88"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      x="31.1667"
+      y="27.1667"
+      width="26.8333"
+      height="25.6667"
+      fill="#009F57"
+    />
+    <g filter="url(#filter0_d_18_104)">
+      <path
+        d="M72 40C72 47.4261 69.05 54.548 63.799 59.799C58.548 65.05 51.4261 68 44 68C36.5739 68 29.452 65.05 24.201 59.799C18.95 54.548 16 47.4261 16 40C16 32.5739 18.95 25.452 24.201 20.201C29.452 14.95 36.5739 12 44 12C51.4261 12 58.548 14.95 63.799 20.201C69.05 25.452 72 32.5739 72 40ZM39.765 29.8255C39.5033 29.6392 39.1954 29.5285 38.875 29.5056C38.5546 29.4826 38.2341 29.5483 37.9485 29.6954C37.663 29.8425 37.4234 30.0654 37.2561 30.3396C37.0888 30.6138 37.0002 30.9288 37 31.25V48.75C37.0002 49.0712 37.0888 49.3862 37.2561 49.6604C37.4234 49.9346 37.663 50.1575 37.9485 50.3046C38.2341 50.4517 38.5546 50.5174 38.875 50.4944C39.1954 50.4715 39.5033 50.3608 39.765 50.1745L52.015 41.4245C52.2419 41.2626 52.4268 41.0489 52.5543 40.8011C52.6819 40.5534 52.7485 40.2787 52.7485 40C52.7485 39.7213 52.6819 39.4466 52.5543 39.1989C52.4268 38.9511 52.2419 38.7374 52.015 38.5755L39.765 29.8255Z"
+        fill="white"
+      />
+    </g>
+    <defs>
+      <filter
+        id="filter0_d_18_104"
+        x="0"
+        y="0"
+        width="88"
+        height="88"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy="4" />
+        <feGaussianBlur stdDeviation="8" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0.623529 0 0 0 0 0.341176 0 0 0 0.2 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_18_104"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_18_104"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+);
+
 export const InstaIcon = (
   <svg
     width="48"

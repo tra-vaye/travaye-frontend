@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Links = [
   { name: "My Account", href: "/user" },
-  { name: "View Businesses", href: "/business-locations" },
+  { name: "View Locations", href: "/business-locations" },
 ];
 const Footer = () => {
   return (

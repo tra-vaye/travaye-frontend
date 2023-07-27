@@ -20,19 +20,20 @@ const categories = [
   "Historical/Tourist Attractions",
 ];
 
-const filters = ["All", "Trending", "5-Stars", "Lagos"];
+const filters = ["All", "Abuja", "Ibadan", "Lagos"];
 
 const Locations = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [activeFilter, setActiveFilter] = useState("All");
   const [showSidebar, setShowSidebar] = useState(false);
   const [locations, setLocations] = useState([]);
-  console.log(activeCategory.toLowerCase().replace(/\s+/g, "-"));
+  // console.log(activeCategory.toLowerCase().replace(/\s+/g, "-"));
   const { data, isError, error, isLoading } = useGetLocationsQuery({
     page: 1,
     count: 10,
-    category: activeCategory.toLowerCase().replace(/\s+/g, "-"),
+    // category: {activeCategory.toLowerCase().replace(/\s+/g, "-")},
   });
+
+  const [selectedCategories, updateSelectedCategories] = useState([]);
+  const [selectedFilters, updateSelectedFilters] = useState([]);
 
   const navigate = useNavigate();
 
@@ -48,13 +49,6 @@ const Locations = () => {
       });
     }
   }, [data, error?.error, isError]);
-
-  // const getLocations = async () => {
-  //   const res = await axios.get(
-  //     `${serverUrl}/location?filters=wildlife-attractions&location=lagos`
-  //   );
-  //   console.log(res);
-  // };
 
   const toggleSidebar = () => {
     setShowSidebar((prevState) => !prevState);
@@ -81,9 +75,27 @@ const Locations = () => {
                 return (
                   <FilterButton
                     key={i}
-                    active={filter === activeFilter}
+                    active={selectedFilters.includes(filter)}
                     onClick={() => {
-                      setActiveFilter(filter);
+                      if (filter !== "All") {
+                        if (selectedFilters.includes(filter)) {
+                          updateSelectedFilters((prevState) => {
+                            return prevState.filter(
+                              (value) => value !== filter
+                            );
+                          });
+                        } else {
+                          updateSelectedFilters((prevState) => {
+                            const newArray = prevState.filter(
+                              (value) => value !== "All"
+                            );
+                            return [...newArray, filter];
+                          });
+                        }
+                      } else {
+                        updateSelectedFilters(["All"]);
+                      }
+                      console.log(selectedFilters);
                     }}
                   >
                     {filter}
@@ -93,7 +105,7 @@ const Locations = () => {
             </FilterButtonContainer>
             <div className="mt-5">
               <div>
-                <h6 style={{ color: "#e9a009" }}>{activeCategory}</h6>
+                <h6 style={{ color: "#e9a009" }}>Locations</h6>
                 <GridContainer>
                   {locations?.map((location, i) => {
                     return (
@@ -118,10 +130,27 @@ const Locations = () => {
                 return (
                   <CategoryListItem
                     key={i}
-                    active={activeCategory === category}
+                    active={selectedCategories.includes(category)}
                     onClick={() => {
-                      setActiveCategory(category);
-                      console.log(category);
+                      if (category !== "All") {
+                        if (selectedCategories.includes(category)) {
+                          updateSelectedCategories((prevState) => {
+                            return prevState.filter(
+                              (value) => value !== category
+                            );
+                          });
+                        } else {
+                          updateSelectedCategories((prevState) => {
+                            const newArray = prevState.filter(
+                              (value) => value !== "All"
+                            );
+                            return [...newArray, category];
+                          });
+                        }
+                      } else {
+                        updateSelectedCategories(["All"]);
+                      }
+                      console.log(selectedCategories);
                       setShowSidebar(false);
                     }}
                   >
