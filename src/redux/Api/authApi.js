@@ -6,7 +6,7 @@ export const AuthApi = createApi({
   baseQuery: baseQueryForAuth,
 
   refetchOnReconnect: true,
-  tagTypes: ["Profile"],
+  tagTypes: ["Profile", "User"],
   endpoints: (builder) => ({
     userLogin: builder.mutation({
       query: (body) => ({
@@ -48,8 +48,8 @@ export const AuthApi = createApi({
       }),
     }),
     getMe: builder.query({
-      query: (id) => `user/${id}`,
-      providesTags: ["Profile"],
+      query: () => `user`,
+      providesTags: ["User"],
     }),
   }),
 });
