@@ -25,16 +25,22 @@ const filters = ["All", "Abuja", "Ibadan", "Lagos"];
 const Locations = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [locations, setLocations] = useState([]);
-  // console.log(activeCategory.toLowerCase().replace(/\s+/g, "-"));
-  const { data, isError, error, isLoading } = useGetLocationsQuery({
-    page: 1,
-    count: 10,
-    // category: {activeCategory.toLowerCase().replace(/\s+/g, "-")},
-  });
 
   const [selectedCategories, updateSelectedCategories] = useState([]);
   const [selectedFilters, updateSelectedFilters] = useState([]);
 
+  // Categories and locationCity are queries for the backend and they are in array formats
+  // I am joining every element in the array using .join() to make the request query a single query in a request to avoid server overload
+  // and making replacing spaces with hyphens and making them lowercase
+
+  const { data, isError, error, isLoading } = useGetLocationsQuery({
+    page: 1,
+    count: 10,
+    categories: selectedCategories
+      .map((category) => category.toLowerCase().replace(/\s+/g, "-"))
+      .join(","),
+    locationCity: selectedFilters.join(","),
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
