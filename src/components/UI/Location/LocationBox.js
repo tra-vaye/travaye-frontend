@@ -1,15 +1,16 @@
-import MaryLandMall from "../../../assets/maryland-mall.png";
-// import { LocationBoxStar } from "../svgs/svgs";
 import styled from "styled-components";
 
 const LocationBox = (props) => {
   return (
     <Box onClick={props.onClick} search={props.search}>
-      <img src={MaryLandMall} alt="location" className="img-fluid" />
+      <img
+        src={props.location.locationImagePath[0]}
+        alt="location"
+        className="img-fluid"
+      />
       <h6>{props.location.locationName}</h6>
       <div className="d-flex justify-content-between">
         <p>{props.location.locationAddress}</p>
-        {/* <span>4.5 {LocationBoxStar} </span> */}
       </div>
     </Box>
   );

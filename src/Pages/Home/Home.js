@@ -46,12 +46,16 @@ const Home = () => {
               <Link to="/plan-a-trip">
                 <button className={classes.btn}>Plan A Trip</button>
               </Link>
-
-              <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
-                <button className={classes["btn--alt"]}>
-                  {PlayStory} Watch Stories
-                </button>
-              </a>
+              <div>
+                <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
+                  <div className="d-flex">
+                    <i>{PlayStory}</i>
+                    <button className={classes["btn--alt"]}>
+                      Watch Stories
+                    </button>
+                  </div>
+                </a>
+              </div>
             </LandingButtonsContainer>
           </div>
           <LandingImagesContainer className="col-lg-6 d-flex justify-content-center align-self-start">
@@ -158,6 +162,7 @@ const GetStartedConainer = styled.section`
     text-align: start;
     color: white;
     margin-bottom: 50px;
+    font-size: 30px;
     @media (max-width: 767px) {
       text-align: center;
     }
@@ -170,8 +175,8 @@ const GetStartedConainer = styled.section`
     bottom: 0;
   }
   button {
-    width: 250px;
     border-radius: 30px;
+    font-size: 20px;
   }
 `;
 
@@ -226,10 +231,12 @@ const MarylandLink = styled.img`
 `;
 
 const LandingButtonsContainer = styled.div`
+  display: flex;
+
   @media (max-width: 767px) {
     transform: translatex(-50px);
     button {
-      transform: scale(0.8);
+      transform: scale(0.7);
     }
   }
 `;

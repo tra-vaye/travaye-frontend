@@ -15,6 +15,10 @@ const initialValues = {
   locationName: "",
   locationAddress: "",
   locationDescription: "",
+  locationCity: "",
+  locationCategory: "",
+  locationContact: "",
+  locationSubCategory: "",
   pictures: [],
 };
 
@@ -22,8 +26,13 @@ const schema = yup.object().shape({
   locationName: yup.string().required("required"),
   locationAddress: yup.string().required("required"),
   locationDescription: yup.string().required("required"),
+  locationCity: yup.string().required("true"),
+  locationCategory: yup.string().required("required"),
   pictures: yup.array().min(1).required("required"),
+  locationContact: yup.string().required("required"),
+  // locationSubCategory: yup.string().required("required"),
 });
+
 const NewLocation = (props) => {
   const user = useSelector((state) => state.user);
 
@@ -38,7 +47,6 @@ const NewLocation = (props) => {
       formData.append("pictures", file);
     });
     formData.append("locationAddedBy", user._id);
-    formData.append("locationRating", rating);
 
     const newLocationResponse = await fetch(`${serverUrl}/api/location`, {
       method: "POST",
@@ -106,7 +114,7 @@ const NewLocation = (props) => {
               )}
             </Dropzone>
             <div className="d-flex justify-content-center my-3">
-              <Typography component="legend">Rating</Typography>
+              <Typography component="legend">Experience rating</Typography>
               <Rating
                 name="simple-controlled"
                 value={rating}
@@ -129,6 +137,38 @@ const NewLocation = (props) => {
                   placeholder="Address"
                   name="locationAddress"
                   value={values.locationAddress}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className="d-flex justify-content-between mb-4">
+                <input
+                  placeholder="Category"
+                  name="locationCategory"
+                  value={values.locationCategory}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <input
+                  placeholder="Sub-Category"
+                  name="locationSubCategory"
+                  value={values.locationSubCategory}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </div>
+              <div className="d-flex justify-content-between mb-4">
+                <input
+                  placeholder="City"
+                  name="locationCity"
+                  value={values.locationCity}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                <input
+                  placeholder="Phone Number"
+                  name="locationContact"
+                  value={values.locationContact}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />

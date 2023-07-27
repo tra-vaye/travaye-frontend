@@ -37,6 +37,17 @@ const SideNav = (props) => {
             </Navlink>
           );
         })}
+        {token && (
+          <Navlink
+            active={isActive === "/user"}
+            onClick={() => {
+              setIsActive("/user");
+              props.onToggleSideNav();
+            }}
+          >
+            <Link to="/user">My Account</Link>
+          </Navlink>
+        )}
       </ul>
       <div>
         {!token && (

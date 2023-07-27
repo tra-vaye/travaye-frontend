@@ -17,15 +17,13 @@ export const LocationApi = createApi({
       invalidatesTags: ["Locations"],
     }),
     getLocations: builder.query({
-      query: ({ page, count, category }) =>
-        `location?page=${page}&count=${count}&filters=${category}`,
+      query: (page, count) => `location?page=${page}&count=${count}`,
       providesTags: ["Locations"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
     }),
-
-    filterLocation: builder.query({
-      query: () => `location?filters=wildlife-attractions&location=lagos`,
+    getLocation: builder.query({
+      query: (id) => `location/${id}`,
       providesTags: ["Location"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
@@ -37,5 +35,4 @@ export const {
   useCreateLocationMutation,
   useGetLocationsQuery,
   useGetLocationQuery,
-  useFilterLocationQuery,
 } = LocationApi;
