@@ -6,7 +6,7 @@ export const LocationApi = createApi({
   baseQuery: baseQueryWithInterceptor,
   refetchOnReconnect: true,
   refetchOnUpdateTimeout: 50000,
-  tagTypes: ["Locations", "Location"],
+  tagTypes: ["Locations", "Location", "Trip"],
   endpoints: (builder) => ({
     createLocation: builder.mutation({
       query: (body) => ({
@@ -25,8 +25,14 @@ export const LocationApi = createApi({
       refetchOnUpdate: true,
       refetchOnReconnect: true,
     }),
-    getLocation: builder.query({
-      query: (id) => `location/${id}`,
+    planATrip: builder.query({
+      query: ({ state, city, category, lga, budget }) =>
+        `location/plan?state=${state}&category=${category}&city=${city}&lga=${lga}&budget=${budget}`,
+      providesTags: ["Trip"],
+    }),
+
+    filterLocation: builder.query({
+      query: () => `location?filters=wildlife-attractions&location=lagos`,
       providesTags: ["Location"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
@@ -38,4 +44,6 @@ export const {
   useCreateLocationMutation,
   useGetLocationsQuery,
   useGetLocationQuery,
+  useFilterLocationQuery,
+  usePlanATripQuery,
 } = LocationApi;

@@ -11,6 +11,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 import { notification } from "antd";
+import { useGetMeQuery } from "../../redux/Api/authApi";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -34,17 +35,15 @@ const UserProfile = () => {
   };
   const [locations, setLocations] = useState([]);
 
-  const { data, isError, error } = useGetLocationsQuery(1, 10);
-  // const { fullName, username, address, businessName, businessEmail } = user;
+  const { data, isError, error, isSuccess } = useGetLocationsQuery(1, 10);
 
-  const [fullName] = useState("John Doe");
-  const [username] = useState("Placeholder");
-  const [address] = useState("Just Here");
-  const [businessName] = useState("Bolu and Sons");
-  const [businessEmail] = useState("placeholder@gmail.com");
+  const { data: userData, isSuccess: userSuccess } = useGetMeQuery();
+  const [userInfo, setUserInfo] = useState();
+
   useEffect(() => {
-    if (data) {
+    if (isSuccess || userSuccess) {
       setLocations(data?.data);
+      setUserInfo(userData?.user);
     }
     if (isError) {
       notification.error({
@@ -53,7 +52,7 @@ const UserProfile = () => {
         placement: "bottomRight",
       });
     }
-  }, [data, error?.error, isError]);
+  }, [data, error?.error, isError, isSuccess, userSuccess]);
 
   const userId = sessionStorage.getItem("user_id");
   const userLocations = locations?.filter((location) => {
@@ -62,7 +61,7 @@ const UserProfile = () => {
 
   let content;
 
-  if (userLocations.length < 1) {
+  if (userLocations?.length < 1) {
     content = <p>No Location Added Yet</p>;
   } else {
     content = userLocations?.map((location, i) => {
@@ -79,30 +78,35 @@ const UserProfile = () => {
 
         <img src={Avatar} alt="avatar" />
         <div>
-          <h5 className="mt-1">{fullName || businessName}</h5>
+          <h5 className="mt-1">
+            {`${userInfo?.fullName} | ${userInfo?.username}` ||
+              userInfo?.businessName}
+          </h5>
           <h6 usernamame={true}>
-            {businessEmail ? businessEmail : `@${username}`}
+            {`${userInfo?.email}` || `@${userInfo?.username}`}
           </h6>
           <h6>University Student</h6>
         </div>
         <div>
           <div>
-            <h5>{address ? "Address" : "About"}</h5>
+            <h5>
+              {userInfo?.address ? userInfo?.address : "No Address Provided"}
+            </h5>
             <p>
-              {address
-                ? address
-                : "  Civil Engineer (In View) // <br /> Creative Director at Kaizen  Brand  {' //'} <br /> Chelsea FC Fanatic"}
+              {userInfo?.occupation
+                ? userInfo?.occupation
+                : "  No Occupation Provided"}
             </p>
           </div>
-          {!businessName && (
+          {!userInfo?.businessName && (
             <div>
               <h5>Total Outings</h5>
               <p>27 Outings</p>
             </div>
           )}
           <div>
-            <h5>{fullName ? "Total Posts" : "User Visits"}</h5>
-            <p>{fullName ? "6 Posts" : "null"}</p>
+            <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
+            <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
           </div>
           <div>
             <h5>Average Review</h5>
