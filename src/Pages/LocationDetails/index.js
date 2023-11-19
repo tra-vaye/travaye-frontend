@@ -30,13 +30,13 @@ const LocationDetails = () => {
           placement: "bottomRight",
         })
       )
-      .catch((err) =>
+      .catch((err) => {
         notification.error({
-          message: err.error,
+          message: err.data.error,
           duration: 3,
           placement: "bottomRight",
-        })
-      );
+        });
+      });
   };
   const { data, isError, error, isLoading } = useGetLocationByIdQuery({ id });
   useEffect(() => {
