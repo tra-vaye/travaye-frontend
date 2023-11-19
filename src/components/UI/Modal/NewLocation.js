@@ -32,7 +32,7 @@ const NewLocation = (props) => {
   const user = useSelector((state) => state.user);
   const [rating, setRating] = useState(2);
   const { data, isLoading: isFetchingCategories } = useGetCategoriesQuery();
-  const [values, setValuew] = useState(initialValues);
+  const [values, setValues] = useState(initialValues);
   const handleFormSubmit = async (values, onSubmitProps) => {
     const formData = new FormData();
     for (let value in values) {
