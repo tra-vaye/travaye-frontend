@@ -4,7 +4,6 @@ import { baseQueryForAuth } from "../queryInterceptors";
 export const AuthApi = createApi({
   reducerPath: "profile",
   baseQuery: baseQueryForAuth,
-
   refetchOnReconnect: true,
   tagTypes: ["Profile", "User"],
   endpoints: (builder) => ({

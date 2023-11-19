@@ -5,20 +5,16 @@ import Avatar from "../../assets/user-avatar.png";
 
 import { FourStars, FiveStars } from "../../components/UI/svgs/svgs";
 import { useParams } from "react-router-dom";
-import { useGetLocationQuery } from "../../redux/Api/locationApi";
+import { useGetLocationByIdQuery } from "../../redux/Api/locationApi";
 import { useEffect, useState } from "react";
 import { notification } from "antd";
 import Loader from "../../components/UI/Loader";
 
 const LocationDetails = () => {
-  const params = useParams();
-
+  const { id } = useParams();
   const [location, setLocation] = useState({});
 
-  const { id } = params;
-
-  const { data, isError, error, isLoading } = useGetLocationQuery(id);
-  console.log(data);
+  const { data, isError, error, isLoading } = useGetLocationByIdQuery({ id });
   useEffect(() => {
     if (data) {
       setLocation(data);

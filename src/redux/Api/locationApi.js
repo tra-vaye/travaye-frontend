@@ -25,17 +25,26 @@ export const LocationApi = createApi({
       refetchOnUpdate: true,
       refetchOnReconnect: true,
     }),
+    getLocationById: builder.query({
+      query: ({ id }) => ({
+        url: `location/${id}`,
+      }),
+    }),
     planATrip: builder.query({
       query: ({ state, city, category, lga, budget }) =>
         `location/plan?state=${state}&category=${category}&city=${city}&lga=${lga}&budget=${budget}`,
       providesTags: ["Trip"],
     }),
-
     filterLocation: builder.query({
       query: () => `location?filters=wildlife-attractions&location=lagos`,
       providesTags: ["Location"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
+    }),
+    getCategories: builder.query({
+      query: () => ({
+        url: "categories",
+      }),
     }),
   }),
 });
@@ -43,7 +52,8 @@ export const LocationApi = createApi({
 export const {
   useCreateLocationMutation,
   useGetLocationsQuery,
-  useGetLocationQuery,
+  useGetLocationByIdQuery,
   useFilterLocationQuery,
-  usePlanATripQuery,
+  useLazyPlanATripQuery,
+  useGetCategoriesQuery,
 } = LocationApi;

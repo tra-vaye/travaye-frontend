@@ -1,89 +1,134 @@
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import classes from "./Trip.module.css";
+import {
+  useGetStatesQuery,
+  useLazyGetCityQuery,
+  useLazyGetLgaQuery,
+} from "../../redux/Api/geoApi";
+import { useLazyPlanATripQuery } from "../../redux/Api/locationApi";
+import Loader from "../../components/UI/Loader";
+import { Select } from "antd";
+import { useState } from "react";
 
 const PlanTrip = () => {
+  const { data } = useGetStatesQuery();
+  const [getCity, { data: city }] = useLazyGetCityQuery();
+  const [getLga, { data: lga }] = useLazyGetLgaQuery();
+  const [planTrip, { isLoading }] = useLazyPlanATripQuery();
+  const [queryData, setQueryData] = useState({
+    state: "",
+    city: "",
+    category: "",
+    lga: "",
+    budget: "",
+  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    planTrip(queryData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
-    <div className={classes.trip}>
-      <h4 className="text-center">Plan Your desired Trip with Travaye</h4>
-      <h5 className="text-center">
-        Follow the Steps below to plan your trip in next to no time
-      </h5>
-      <div>
-        <h4 className="mt-3">Step 1</h4>
-        <p>Please Fill in Your City / Address Details </p>
-        <div className="row">
-          <div className="col-md-4">
-            <select required>
-              {States.map((state, i) => {
-                return (
-                  <option
-                    key={i}
-                    value={state}
-                    hidden={state === "State"}
-                    disabled={state === "State"}
-                    selected={state === "State"}
-                  >
-                    {state}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div className="col-md-4">
-            <select>
-              <option>City</option>
-            </select>
-          </div>
-          <div className="col-md-4">
-            <select>
-              <option>LGA</option>
-            </select>
+    <>
+      {isLoading && <Loader />}
+      <form onSubmit={handleSubmit} className={classes.trip}>
+        <h4 className="text-center">Plan Your desired Trip with Travaye</h4>
+        <h5 className="text-center">
+          Follow the Steps below to plan your trip in next to no time
+        </h5>
+        <div>
+          <h4 className="mt-3">Step 1</h4>
+          <p>Please Fill in Your City / Address Details </p>
+          <div className="flex gap-5">
+            <Select
+              onSelect={(value) => {
+                getLga({ state: value });
+                getCity({ state: value });
+                setQueryData((prev) => ({
+                  ...prev,
+                  state: value,
+                  city: "",
+                  lga: "",
+                }));
+              }}
+              value={queryData.state}
+              showSearch
+              className="!w-full"
+              options={data}
+            />
+            <Select
+              showSearch
+              onSelect={(value) => {
+                setQueryData((prev) => ({ ...prev, city: value }));
+              }}
+              value={queryData.city}
+              className="!w-full"
+              options={city}
+            />
+            <Select
+              showSearch
+              onSelect={(value) => {
+                setQueryData((prev) => ({ ...prev, lga: value }));
+              }}
+              value={queryData.lga}
+              className="!w-full"
+              options={lga}
+            />
           </div>
         </div>
-      </div>
-      <div>
-        <h4>Step 2</h4>
-        <p>Please Select a Category of Outing Venues</p>
-        <ul>
-          {categories.map((category, i) => {
-            return (
-              <li key={i}>
-                <input
-                  type="radio"
-                  value={category}
-                  id={category}
-                  name="category"
-                />
-                <label htmlFor={category}>{category}</label>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="mt-3">
-        <h4>Step 3</h4>
-        <p>Please Select a budget for your outing.</p>
-        <select>
-          {Budgets.map((budget, i) => {
-            return (
-              <option
-                key={i}
-                value={budget}
-                hidden={budget === "Select Budget"}
-                disabled={budget === "Select Budget"}
-                selected={budget === "Select Budget"}
-              >
-                {budget}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-      <ButtonContainer>
-        <Button color="green">Continue</Button>
-      </ButtonContainer>
-    </div>
+        <div>
+          <h4>Step 2</h4>
+          <p>Please Select a Category of Outing Venues</p>
+          <ul>
+            {categories.map((category, i) => {
+              return (
+                <li key={i}>
+                  <input
+                    type="radio"
+                    value={category}
+                    id={category}
+                    name="category"
+                    onChange={(e) => {
+                      setQueryData((prev) => ({
+                        ...prev,
+                        category: e.target.value,
+                      }));
+                    }}
+                  />
+                  <label htmlFor={category}>{category}</label>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="mt-3">
+          <h4>Step 3</h4>
+          <p>Please Select a budget for your outing.</p>
+          <Select
+            className="!w-[250px]"
+            options={[
+              { value: "free", label: "free" },
+              { value: "free - 5k", label: "free - 5k" },
+              { value: "5k - 10k", label: "5k - 10k" },
+              { value: "10k - 20k", label: "10k - 20k" },
+            ]}
+            onSelect={(value) => {
+              setQueryData((prev) => ({ ...prev, budget: value }));
+            }}
+          />
+        </div>
+        <ButtonContainer>
+          <Button type="submit" color="green">
+            Continue
+          </Button>
+        </ButtonContainer>
+      </form>
+    </>
   );
 };
 export default PlanTrip;

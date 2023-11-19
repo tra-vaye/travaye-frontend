@@ -10,6 +10,11 @@ import { Button } from "../Buttons";
 import { ArrowCloud } from "../svgs/svgs";
 import Modal from "./Modal";
 import { useState } from "react";
+import {
+  useCreateLocationMutation,
+  useGetCategoriesQuery,
+} from "../../../redux/Api/locationApi";
+import { Select } from "antd";
 
 const initialValues = {
   locationName: "",
@@ -22,22 +27,12 @@ const initialValues = {
   pictures: [],
 };
 
-const schema = yup.object().shape({
-  locationName: yup.string().required("required"),
-  locationAddress: yup.string().required("required"),
-  locationDescription: yup.string().required("required"),
-  locationCity: yup.string().required("true"),
-  locationCategory: yup.string().required("required"),
-  pictures: yup.array().min(1).required("required"),
-  locationContact: yup.string().required("required"),
-  // locationSubCategory: yup.string().required("required"),
-});
-
 const NewLocation = (props) => {
+  const [createLocation, { isLoading }] = useCreateLocationMutation();
   const user = useSelector((state) => state.user);
-
   const [rating, setRating] = useState(2);
-
+  const { data, isLoading: isFetchingCategories } = useGetCategoriesQuery();
+  const [values, setValuew] = useState(initialValues);
   const handleFormSubmit = async (values, onSubmitProps) => {
     const formData = new FormData();
     for (let value in values) {
@@ -47,149 +42,113 @@ const NewLocation = (props) => {
       formData.append("pictures", file);
     });
     formData.append("locationAddedBy", user._id);
-
-    const newLocationResponse = await fetch(`${serverUrl}/api/location`, {
-      method: "POST",
-      body: formData,
-    });
-    const savedLocation = await newLocationResponse.json();
-    if (newLocationResponse.ok) {
-      alert("Location Successfully added.");
-      props.onClick();
-      console.log(savedLocation);
-      onSubmitProps.resetForm();
-    } else {
-      alert("Failed to add location :( , Try again.");
-    }
+    createLocation(formData)
+      .unwrap()
+      .then((res) => {
+        alert("Location Successfully added.");
+        props.onClick();
+        console.log(res);
+        onSubmitProps.resetForm();
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Failed to add location :( , Try again.");
+      });
   };
   return (
-    <Formik
-      onSubmit={handleFormSubmit}
-      initialValues={initialValues}
-      validationSchema={schema}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        setFieldValue,
-        resetForm,
-      }) => (
-        <Modal onClick={props.onClick}>
-          <form action="" onSubmit={handleSubmit}>
-            <h3>Post a New Location</h3>
-            <Dropzone
-              acceptedFiles=".jpg,.jpeg,.png"
-              multiple={true}
-              onDrop={(acceptedFiles) => {
-                setFieldValue("pictures", [
-                  ...values.pictures,
-                  ...acceptedFiles,
-                ]);
-              }}
-            >
-              {({ getRootProps, getInputProps }) => (
-                <Container>
-                  <section {...getRootProps()}>
-                    <input {...getInputProps()} />
-                    {values.pictures.length === 0 ? (
-                      <div>
-                        <i>{ArrowCloud}</i>
-                        <p>Drag and Drop Pictures here to Upload</p>
-                      </div>
-                    ) : (
-                      values.pictures.map((file, index) => (
-                        <FlexBetween key={index}>
-                          <Typography sx={{ marginRight: "5px" }}>
-                            {file.name}
-                          </Typography>
-                        </FlexBetween>
-                      ))
-                    )}
-                  </section>
-                </Container>
-              )}
-            </Dropzone>
-            <div className="d-flex justify-content-center my-3">
-              <Typography component="legend">Experience rating</Typography>
-              <Rating
-                name="simple-controlled"
-                value={rating}
-                onChange={(event, newValue) => {
-                  console.log(newValue);
-                  setRating(newValue);
-                }}
-              />
-            </div>
-            <InputContainer>
-              <div className="d-flex justify-content-between mb-4">
-                <input
-                  placeholder="Name"
-                  name="locationName"
-                  value={values.locationName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <input
-                  placeholder="Address"
-                  name="locationAddress"
-                  value={values.locationAddress}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div className="d-flex justify-content-between mb-4">
-                <input
-                  placeholder="Category"
-                  name="locationCategory"
-                  value={values.locationCategory}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <input
-                  placeholder="Sub-Category"
-                  name="locationSubCategory"
-                  value={values.locationSubCategory}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div className="d-flex justify-content-between mb-4">
-                <input
-                  placeholder="City"
-                  name="locationCity"
-                  value={values.locationCity}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <input
-                  placeholder="Phone Number"
-                  name="locationContact"
-                  value={values.locationContact}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </div>
-
-              <textarea
-                placeholder="Please Give a Short Description of your Experience"
-                rows="6"
-                name="locationDescription"
-                value={values.locationDescription}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              ></textarea>
-              <Button color="green" type="submit">
-                Post
-              </Button>
-            </InputContainer>
-          </form>
-        </Modal>
-      )}
-    </Formik>
+    <Modal onClick={props.onClick}>
+      <form action="" onSubmit={handleFormSubmit}>
+        <h3>Post a New Location</h3>
+        <Dropzone
+          acceptedFiles=".jpg,.jpeg,.png"
+          multiple={true}
+          onDrop={(acceptedFiles) => {
+            // seValue("pictures", [...values.pictures, ...acceptedFiles]);
+          }}
+        >
+          {({ getRootProps, getInputProps }) => (
+            <Container>
+              <section {...getRootProps()}>
+                <input {...getInputProps()} />
+                {values.pictures.length === 0 ? (
+                  <div>
+                    <i>{ArrowCloud}</i>
+                    <p>Drag and Drop Pictures here to Upload</p>
+                  </div>
+                ) : (
+                  values.pictures.map((file, index) => (
+                    <FlexBetween key={index}>
+                      <Typography sx={{ marginRight: "5px" }}>
+                        {file.name}
+                      </Typography>
+                    </FlexBetween>
+                  ))
+                )}
+              </section>
+            </Container>
+          )}
+        </Dropzone>
+        <div className="d-flex justify-content-center my-3">
+          <Typography component="legend">Experience rating</Typography>
+          <Rating
+            name="simple-controlled"
+            value={rating}
+            onChange={(event, newValue) => {
+              console.log(newValue);
+              setRating(newValue);
+            }}
+          />
+        </div>
+        <InputContainer>
+          <div className="d-flex justify-content-between mb-4">
+            <input
+              placeholder="Name"
+              name="locationName"
+              value={values.locationName}
+            />
+            <input
+              placeholder="Address"
+              name="locationAddress"
+              value={values.locationAddress}
+            />
+          </div>
+          <div className="d-flex justify-content-between mb-4">
+            <input
+              placeholder="Category"
+              name="locationCategory"
+              value={values.locationCategory}
+            />
+            <Select />
+            <input
+              placeholder="Sub-Category"
+              name="locationSubCategory"
+              value={values.locationSubCategory}
+            />
+          </div>
+          <div className="d-flex justify-content-between mb-4">
+            <input
+              placeholder="City"
+              name="locationCity"
+              value={values.locationCity}
+            />
+            <input
+              placeholder="Phone Number"
+              name="locationContact"
+              value={values.locationContact}
+            />
+          </div>
+          <textarea
+            placeholder="Please Give a Short Description of your Experience"
+            rows="6"
+            name="locationDescription"
+            value={values.locationDescription}
+          ></textarea>
+          <Button color="green" type="submit">
+            Post
+          </Button>
+        </InputContainer>
+      </form>
+    </Modal>
   );
 };
 export default NewLocation;

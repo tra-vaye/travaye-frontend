@@ -18,6 +18,7 @@ const Header = (props) => {
 
   const handleLogoutClick = () => {
     dispatch(setLogout());
+    sessionStorage.removeItem("authToken");
   };
   useEffect(() => {
     setIsActive(Location.pathname);
