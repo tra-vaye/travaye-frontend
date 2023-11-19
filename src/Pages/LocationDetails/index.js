@@ -32,7 +32,7 @@ const LocationDetails = () => {
       )
       .catch((err) =>
         notification.error({
-          message: "Try again",
+          message: err.error,
           duration: 3,
           placement: "bottomRight",
         })
