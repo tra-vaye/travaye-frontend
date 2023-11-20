@@ -92,7 +92,11 @@ const Login = () => {
         const authToken = businessData?.token;
         sessionStorage.setItem("authToken", authToken);
         sessionStorage.setItem("userType", userType);
-        navigate(`/${userType}`);
+        if (business?.verified) {
+          navigate(`/${userType}`);
+        } else {
+          navigate(`/register`);
+        }
       } else {
         const authToken = businessData?.token;
         sessionStorage.setItem("authToken", authToken);

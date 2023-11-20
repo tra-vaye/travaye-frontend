@@ -99,7 +99,7 @@ const Register = () => {
               )}
             </Dropzone>
           </div>
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <h4>Add Card Information</h4>
             <div>
               <label htmlFor="card-name">Card Name</label>
@@ -119,11 +119,12 @@ const Register = () => {
                 <input id="cvv" type="number" />
               </div>
             </div>
-            <div>
-              <Button color="green" type="submit">
-                Submit
-              </Button>
-            </div>
+            
+          </div> */}
+          <div>
+            <Button color="green" type="submit">
+              Submit
+            </Button>
           </div>
         </div>
       </form>

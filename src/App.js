@@ -74,6 +74,9 @@ function App() {
               <Route path="/user" element={<UserProfile />} />
             )}
             {userType === "business" && (
+              <Route path="/register" element={<Register />} />
+            )}
+            {userType === "business" && (
               <Route path="/business" element={<BusinessProfile />} />
             )}
             {/* Redirect to the appropriate route if user tries to access the wrong route */}
@@ -110,7 +113,6 @@ function App() {
               token ? <AddedLocations /> : <Navigate to="/login" />
             }
           /> */}
-          <Route path="/register" element={<Register />} />
           <Route path="/business-locations" element={<BusinessLocations />} />
           <Route path="/locations" element={<Locations />} />
           <Route path="/verify-email" element={<Verification />} />
