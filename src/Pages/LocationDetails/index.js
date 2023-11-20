@@ -89,7 +89,7 @@ const LocationDetails = () => {
 
               <div className="d-flex mb-3">
                 <Button color="green" location={true} onClick={handleAddClick}>
-                  Add to Locations
+                  Like location
                 </Button>
                 <Button location={true}>View on Google Maps</Button>
               </div>

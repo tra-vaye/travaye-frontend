@@ -2,7 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux/es";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../../assets/logo.png";
 import { setLogout } from "../../../state";
@@ -13,13 +13,19 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const [isActive, setIsActive] = useState("");
   const Location = useLocation();
-
+  const navigate = useNavigate();
   const token = sessionStorage.getItem("authToken");
 
   const handleLogoutClick = () => {
     dispatch(setLogout());
     sessionStorage.removeItem("authToken");
+    navigate("/login");
   };
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
   useEffect(() => {
     setIsActive(Location.pathname);
   }, [Location.pathname]);
@@ -40,9 +46,10 @@ const Header = (props) => {
                   key={i}
                   onClick={() => {
                     setIsActive(path);
+                    navigate(`${path}`);
                   }}
                 >
-                  <Link to={path}>{name}</Link>
+                  <Link>{name}</Link>
                 </Navlink>
               );
             })}
@@ -51,28 +58,31 @@ const Header = (props) => {
                 active={isActive === "/user"}
                 onClick={() => {
                   setIsActive("/user");
+                  navigate("/user");
                 }}
               >
-                <Link to="/user">My Account</Link>
+                <Link>My Account</Link>
               </Navlink>
             )}
           </ul>
           <div>
             {!token && (
-              <Link to="/signup" style={{ textDecoration: "none" }}>
-                <Button header={true} color="green">
+              <Link style={{ textDecoration: "none" }} to={`/signup`}>
+                <Button
+                  // header={true}
+                  color="green"
+                >
                   Sign Up
                 </Button>
               </Link>
             )}
             {!token && (
-              <Link to="/login" style={{ textDecoration: "none" }}>
+              <Link style={{ textDecoration: "none" }} to={`/login`}>
                 <AltButton>Login</AltButton>
               </Link>
             )}
             {token && (
               <Link
-                to="/login"
                 style={{ textDecoration: "none" }}
                 onClick={handleLogoutClick}
               >
