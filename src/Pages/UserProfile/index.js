@@ -1,23 +1,25 @@
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CloseIcon from "@mui/icons-material/Close";
+import { notification } from "antd";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import LocationBox from "../../components/UI/Location/LocationBox";
-import { useEffect, useState } from "react";
 import LocationModal from "../../components/UI/Modal/LocationModal";
-import NewLocation from "../../components/UI/Modal/NewLocation";
 import PointsModal from "../../components/UI/Modal/PointsModal";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CloseIcon from "@mui/icons-material/Close";
-import { useGetLocationsQuery } from "../../redux/Api/locationApi";
-import { notification } from "antd";
 import { useGetMeQuery } from "../../redux/Api/authApi";
+import { useGetLocationsQuery } from "../../redux/Api/locationApi";
+import Loader from "../../components/UI/Loader";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [newLocationModal, setNewLocationModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const userType = useSelector((state) => state.auth.userType);
 
   const toggleShowLocationModal = () => {
     setShowLocationModal((prevState) => !prevState);
@@ -25,25 +27,52 @@ const UserProfile = () => {
   const toggleNewLocationModal = () => {
     setNewLocationModal((prevState) => !prevState);
   };
-
+  const navigate = useNavigate();
   const togglePointsModal = () => {
     setShowPointsModal((prevState) => !prevState);
   };
-
+  const [firstVisit, setFirstVisit] = useState(true);
   const toggleDashboard = () => {
     setShowDashboard((prevState) => !prevState);
   };
   const [locations, setLocations] = useState([]);
 
-  const { data, isError, error, isSuccess } = useGetLocationsQuery(1, 10);
+  const [selectedCategories, updateSelectedCategories] = useState([]);
+  const [selectedFilters, updateSelectedFilters] = useState([]);
 
-  const { data: userData, isSuccess: userSuccess } = useGetMeQuery();
+  // Categories and locationCity are queries for the backend and they are in array formats
+  // I am joining every element in the array using .join() to make the request query a single query in a request to avoid server overload
+  // and making replacing spaces with hyphens and making them lowercase
+
+  const {
+    data,
+    isError,
+    error,
+    isSuccess,
+    refetch: refetchLocations,
+    isLoading,
+  } = useGetLocationsQuery({
+    page: 1,
+    count: 10,
+    categories: selectedCategories
+      .map((category) => category.toLowerCase().replace(/\s+/g, "-"))
+      .join(","),
+    locationCity: selectedFilters.join(","),
+  });
+  const location = useLocation();
+  const {
+    data: userData,
+    isSuccess: userSuccess,
+    refetch: refetchUserData,
+    isLoading: isFetching,
+  } = useGetMeQuery({
+    userType: userType,
+  });
   const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
-    if (isSuccess || userSuccess) {
+    if (isSuccess) {
       setLocations(data?.data);
-      setUserInfo(userData?.user);
     }
     if (isError) {
       notification.error({
@@ -52,100 +81,137 @@ const UserProfile = () => {
         placement: "bottomRight",
       });
     }
-  }, [data, error?.error, isError, isSuccess, userSuccess]);
+  }, [data, error?.error, isError, isSuccess]);
 
-  const userId = sessionStorage.getItem("user_id");
-  const userLocations = locations?.filter((location) => {
-    return location.locationAddedBy === userId;
-  });
+  useEffect(() => {
+    if (userSuccess) {
+      setUserInfo(userData?.user);
+    }
+  }, [userSuccess, userData?.user]);
 
+  useEffect(() => {
+    // Check if it's the first visit
+    if (firstVisit) {
+      // Set firstVisit to false after the initial render
+      setFirstVisit(false);
+    } else {
+      // Fetch data again when the page is revisited
+      refetchLocations();
+      refetchUserData();
+    }
+  }, [location.pathname, firstVisit, refetchLocations, refetchUserData]);
+  const userLikedLocations = userData?.user?.likedLocations?.map(
+    (likedLocationName) =>
+      locations?.find((location) => location.locationName === likedLocationName)
+  );
+
+  // Filter out any undefined values in case a location name doesn't match any location
+  const filteredUserLikedLocations = userLikedLocations?.filter(Boolean) || [];
+
+  console.log(locations);
   let content;
 
-  if (userLocations?.length < 1) {
-    content = <p>No Location Added Yet</p>;
+  if (filteredUserLikedLocations.length < 1) {
+    content = (
+      <p>
+        No Liked Locations Yet,{" "}
+        <Button onClick={() => navigate(`/business-locations`)}>
+          Add some here{" "}
+        </Button>{" "}
+      </p>
+    );
   } else {
-    content = userLocations?.map((location, i) => {
-      return <LocationBox location={location} key={i} />;
+    content = filteredUserLikedLocations.map((location, i) => {
+      return (
+        <LocationBox
+          onClick={() => {
+            navigate(`/location/${location?._id}`);
+          }}
+          location={location}
+          key={i}
+        />
+      );
     });
   }
 
   return (
-    <Container>
-      <Dashboard showDashboard={showDashboard}>
-        <Profile close={true}>
-          <CloseIcon onClick={toggleDashboard} />
-        </Profile>
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Container>
+          <Dashboard showDashboard={showDashboard}>
+            <Profile close={true}>
+              <CloseIcon onClick={toggleDashboard} />
+            </Profile>
 
-        <img src={Avatar} alt="avatar" />
-        <div>
-          <h5 className="mt-1">
-            {`${userInfo?.fullName} | ${userInfo?.username}` ||
-              userInfo?.businessName}
-          </h5>
-          <h6 usernamame={true}>
-            {`${userInfo?.email}` || `@${userInfo?.username}`}
-          </h6>
-          <h6>University Student</h6>
-        </div>
-        <div>
-          <div>
-            <h5>
-              {userInfo?.address ? userInfo?.address : "No Address Provided"}
-            </h5>
-            <p>
-              {userInfo?.occupation
-                ? userInfo?.occupation
-                : "  No Occupation Provided"}
-            </p>
-          </div>
-          {!userInfo?.businessName && (
+            <img src={Avatar} alt="avatar" />
             <div>
-              <h5>Total Outings</h5>
-              <p>27 Outings</p>
+              <h5 className="mt-1">{`${userInfo?.fullName}`}</h5>
+              <h6 usernamame={true}>{`@${userInfo?.username}`}</h6>
+              <h6>University Student</h6>
             </div>
-          )}
-          <div>
-            <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
-            <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
-          </div>
-          <div>
-            <h5>Average Review</h5>
-            <p>4.5 stars</p>
-          </div>
-        </div>
-      </Dashboard>
-      <Main>
-        <div className="d-flex justify-content-between align-items-center mb-5 mt-3">
-          <Profile onClick={toggleDashboard}>
-            <AccountCircleIcon />
-          </Profile>
-          <div className="d-flex justify-content-between">
-            <Button color="green" onClick={toggleNewLocationModal}>
+            <div>
+              <div>
+                <h5>
+                  {userInfo?.address
+                    ? userInfo?.address
+                    : "No Address Provided"}
+                </h5>
+                <p>
+                  {userInfo?.occupation
+                    ? userInfo?.occupation
+                    : "  No Occupation Provided"}
+                </p>
+              </div>
+              <div>
+                <h5>Total Outings</h5>
+                <p>27 Outings</p>
+              </div>
+              <div>
+                <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
+                <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
+              </div>
+              <div>
+                <h5>Average Review</h5>
+                <p>4.5 stars</p>
+              </div>
+            </div>
+          </Dashboard>
+          <Main>
+            <div className="d-flex justify-content-between align-items-center mb-5 mt-3">
+              <Profile onClick={toggleDashboard}>
+                <AccountCircleIcon />
+              </Profile>
+              <div className="d-flex justify-content-between">
+                {/* <Button color="green" onClick={toggleNewLocationModal}>
               Post New
-            </Button>
-            <Link to="/plan-a-trip">
-              <Button>Plan A Trip</Button>
-            </Link>
-          </div>
-          <div
-            style={{ transform: "scale(0.7)", cursor: "pointer" }}
-            className="text-center"
-            onClick={togglePointsModal}
-          >
-            <h3 style={{ color: "#e9a009" }}>Travaye Points</h3>
-            <strong>80 Points</strong>
-          </div>
-        </div>
-        <BoxContainer>
-          {showLocationModal && (
-            <LocationModal onClick={toggleShowLocationModal} />
-          )}
-          <NewLocation open={newLocationModal} setOpen={setNewLocationModal} />
-          {showPointsModal && <PointsModal onClick={togglePointsModal} />}
-          {content}
-        </BoxContainer>
-      </Main>
-    </Container>
+            </Button> */}
+                <Link to="/plan-a-trip">
+                  <Button>Plan A Trip</Button>
+                </Link>
+              </div>
+              <div
+                style={{ transform: "scale(0.7)", cursor: "pointer" }}
+                className="text-center"
+                onClick={togglePointsModal}
+              >
+                <h3 style={{ color: "#e9a009" }}>Travaye Points</h3>
+                <strong>80 Points</strong>
+              </div>
+            </div>
+            <BoxContainer>
+              {showLocationModal && (
+                <LocationModal onClick={toggleShowLocationModal} />
+              )}
+              {/* {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />} */}
+              {showPointsModal && <PointsModal onClick={togglePointsModal} />}
+              {content}
+            </BoxContainer>
+          </Main>
+        </Container>
+      )}
+    </>
   );
 };
 

@@ -1,18 +1,23 @@
-import { AltButton, Button } from "../../components/UI/Buttons";
-import classes from "./LocationDetails.module.css";
 import Maryland from "../../assets/mm-ticket-prices.png";
 import Avatar from "../../assets/user-avatar.png";
+import { AltButton, Button } from "../../components/UI/Buttons";
+import classes from "./LocationDetails.module.css";
 
-import { FourStars, FiveStars } from "../../components/UI/svgs/svgs";
-import { useParams } from "react-router-dom";
-import { useGetLocationByIdQuery } from "../../redux/Api/locationApi";
-import { useEffect, useState } from "react";
 import { notification } from "antd";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Loader from "../../components/UI/Loader";
+import { FiveStars, FourStars } from "../../components/UI/svgs/svgs";
+import {
+  useAddLocationToLikedLocationsMutation,
+  useGetLocationByIdQuery,
+} from "../../redux/Api/locationApi";
 
 const LocationDetails = () => {
   const { id } = useParams();
   const [location, setLocation] = useState({});
+  const [addLocationToLikedLocations] =
+    useAddLocationToLikedLocationsMutation();
 
   const { data, isError, error, isLoading } = useGetLocationByIdQuery({ id });
   useEffect(() => {
@@ -28,6 +33,29 @@ const LocationDetails = () => {
     }
   }, [data, error?.error, isError]);
 
+  const handleAddClick = () => {
+    if (location?.locationName) {
+      addLocationToLikedLocations({ locationName: location.locationName })
+        .unwrap()
+        .then((res) =>
+          notification.success({
+            message: "Liked",
+            duration: 3,
+            placement: "bottomRight",
+          })
+        )
+        .catch((err) => {
+          notification.error({
+            message: err.data.error,
+            duration: 3,
+            placement: "bottomRight",
+          });
+        });
+    } else {
+      // Handle the case where location?.locationName is undefined
+      console.error("Location name is undefined");
+    }
+  };
   return (
     <div className={classes.location}>
       {isLoading ? (
@@ -60,8 +88,8 @@ const LocationDetails = () => {
               <p className="my-3">{location.locationDescription}</p>
 
               <div className="d-flex mb-3">
-                <Button color="green" location={true}>
-                  Add to Locations
+                <Button color="green" location={true} onClick={handleAddClick}>
+                  Like location
                 </Button>
                 <Button location={true}>View on Google Maps</Button>
               </div>

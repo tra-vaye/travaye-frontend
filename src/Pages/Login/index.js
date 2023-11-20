@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux/es";
+import { useDispatch, useSelector } from "react-redux/es";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
@@ -11,21 +11,25 @@ import classes from "./Login.module.css";
 
 import { businessLoginSchema, userLoginSchema } from "../../schemas";
 
+import { notification } from "antd";
 import {
   useBusinessLoginMutation,
   useUserLoginMutation,
 } from "../../redux/Api/authApi";
-import { notification } from "antd";
+import { setUserType } from "../../redux/Slices/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
-
+  const userType = useSelector((state) => state.auth.userType);
+  console.log(userType);
   const [userSignUp, setUserSignUp] = useState(true);
 
   const navigate = useNavigate();
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
+
+    dispatch(setUserType({ userType: userSignUp ? "user" : "business" }));
   };
 
   useEffect(() => {
@@ -53,33 +57,60 @@ const Login = () => {
   ] = useBusinessLoginMutation();
 
   useEffect(() => {
-    if (loginError || businessError) {
-      notification.error({
-        message: loginError?.data?.error || businessError?.data?.error,
-        duration: 3,
-        placement: "bottomRight",
-      });
-    }
-  }, [businessError, loginError]);
+    if (loginSuccess) {
+      const user = data?.user;
 
-  useEffect(() => {
-    if (loginSuccess || businessSuccess) {
-      notification.success({
-        message: "Login Successfully",
-        duration: 3,
-        placement: "bottomRight",
-      });
+      if (user?.emailVerified) {
+        notification.success({
+          message: "Login Successfully",
+          duration: 3,
+          placement: "bottomRight",
+        });
 
-      sessionStorage.setItem("authToken", data?.token || businessData?.token);
-      navigate("/user");
+        const authToken = data?.token;
+        sessionStorage.setItem("userType", userType);
+        sessionStorage.setItem("authToken", authToken);
+        navigate(`/${userType}`);
+      } else {
+        const authToken = data?.token;
+        sessionStorage.setItem("authToken", authToken);
+        sessionStorage.setItem("userType", userType);
+
+        // Navigate to the verification page
+        navigate("/verify-email");
+      }
+    } else if (businessSuccess) {
+      const business = businessData?.user;
+
+      if (business?.emailVerified) {
+        notification.success({
+          message: "Login Successfully",
+          duration: 3,
+          placement: "bottomRight",
+        });
+
+        const authToken = businessData?.token;
+        sessionStorage.setItem("authToken", authToken);
+        sessionStorage.setItem("userType", userType);
+        navigate(`/${userType}`);
+      } else {
+        const authToken = businessData?.token;
+        sessionStorage.setItem("authToken", authToken);
+        sessionStorage.setItem("userType", userType);
+
+        // Navigate to the verification page
+        navigate("/verify-email");
+      }
     }
-  }, [dispatch, businessSuccess, loginSuccess]);
+  }, [dispatch, businessSuccess, loginSuccess, data, businessData, userType]);
 
   const handleClick = async () => {
     if (userSignUp) {
+      dispatch(setUserType({ userType: "user" }));
       await userLogin({ username: values.userName, password: values.passWord });
     }
     if (!userSignUp) {
+      dispatch(setUserType({ userType: "business" }));
       await businessLogin({
         businessEmail: values.email,
         password: values.passWord,

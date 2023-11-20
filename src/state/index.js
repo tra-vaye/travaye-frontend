@@ -4,6 +4,7 @@ import serverUrl from "../server";
 
 const initialState = {
   user: null,
+  userType: "user",
   locations: [],
 };
 
@@ -25,6 +26,10 @@ export const authSlice = createSlice({
     setLogout: (state) => {
       state.user = null;
     },
+    setUserType: (state, action) => {
+      state.userType =
+        action.payload.userType === "user" ? "user" : state.userType;
+    },
   },
   extraReducers: {
     [fetchLocations.pending]: (state) => {
@@ -39,5 +44,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setUser, setLogout } = authSlice.actions;
+export const { setUser, setLogout, setUserType } = authSlice.actions;
 export default authSlice.reducer;

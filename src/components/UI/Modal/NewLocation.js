@@ -22,7 +22,7 @@ const initialValues = {
   locationSubCategory: "",
   pictures: [],
   locationRating: 0,
-  locationAddedBy: "boluwatife",
+  locationAddedBy: "Boluwatife",
 };
 const NewLocation = ({ open, setOpen }) => {
   const [createLocation, { isLoading }] = useCreateLocationMutation();
@@ -33,8 +33,7 @@ const NewLocation = ({ open, setOpen }) => {
     useGetCategoriesQuery();
   const [subCat, setSubCat] = useState([]);
   const [values, setValues] = useState(initialValues);
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
+  const handleFormSubmit = async (values, onSubmitProps) => {
     const formData = new FormData();
     Object.entries(values).forEach(([key, value]) => {
       formData.append(key, value);

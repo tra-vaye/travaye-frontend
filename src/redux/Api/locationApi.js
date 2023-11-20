@@ -6,7 +6,7 @@ export const LocationApi = createApi({
   baseQuery: baseQueryWithInterceptor,
   refetchOnReconnect: true,
   refetchOnUpdateTimeout: 50000,
-  tagTypes: ["Locations", "Location", "Trip"],
+  tagTypes: ["Locations", "Location", "Trip", "LikedLocation"],
   endpoints: (builder) => ({
     createLocation: builder.mutation({
       query: (body) => ({
@@ -54,6 +54,14 @@ export const LocationApi = createApi({
         return result;
       },
     }),
+    addLocationToLikedLocations: builder.mutation({
+      query: (body) => ({
+        url: "location/like",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["LikedLocation"],
+    }),
   }),
 });
 
@@ -64,4 +72,5 @@ export const {
   useFilterLocationQuery,
   useLazyPlanATripQuery,
   useGetCategoriesQuery,
+  useAddLocationToLikedLocationsMutation,
 } = LocationApi;

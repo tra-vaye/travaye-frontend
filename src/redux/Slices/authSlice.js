@@ -5,6 +5,7 @@ const initialState = {
   token: null,
   timeout: false,
   loading: false,
+  userType: sessionStorage.getItem("userType"),
   error: null,
   idleTimeOut: 10000000,
   lastActionTimestamp: null,
@@ -40,6 +41,9 @@ const authSlice = createSlice({
     updateUser: (state, payload) => {
       state.user = payload;
     },
+    setUserType: (state, action) => {
+      state.userType = action.payload.userType;
+    },
   },
 });
 export const {
@@ -49,5 +53,6 @@ export const {
   refreshToken,
   logout,
   updateUser,
+  setUserType,
 } = authSlice.actions;
 export default authSlice.reducer;
