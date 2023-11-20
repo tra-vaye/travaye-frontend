@@ -86,7 +86,7 @@ const SignUp = () => {
         sessionStorage.setItem("authToken", data?.token);
         sessionStorage.setItem("userType", userType);
 
-        navigate("user");
+        navigate(`/${userType}`);
       } else {
         sessionStorage.setItem("user_id", data?.user?._id);
         sessionStorage.setItem("authToken", data?.token);
@@ -107,8 +107,11 @@ const SignUp = () => {
         sessionStorage.setItem("user_id", businessData?.user?._id);
         sessionStorage.setItem("authToken", businessData?.token);
         sessionStorage.setItem("userType", userType);
-
-        navigate("business");
+        if (businessData?.user?.verified) {
+          navigate(`/${userType}`);
+        } else {
+          navigate(`/register`);
+        }
       } else {
         sessionStorage.setItem("user_id", businessData?.user?._id);
         sessionStorage.setItem("authToken", businessData?.token);

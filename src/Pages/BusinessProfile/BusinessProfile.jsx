@@ -19,16 +19,14 @@ const BusinessProfile = () => {
   const [newLocationModal, setNewLocationModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
-  const userType = useSelector((state) => state.userType);
-  const dispatch = useDispatch();
+  const userType = useSelector((state) => state.auth.userType);
 
-  dispatch(setUserType({ userType: "business" }));
-  const toggleShowLocationModal = () => {
-    setShowLocationModal((prevState) => !prevState);
-  };
-  const toggleNewLocationModal = () => {
-    setNewLocationModal((prevState) => !prevState);
-  };
+  //   const toggleShowLocationModal = () => {
+  //     setShowLocationModal((prevState) => !prevState);
+  //   };
+  //   const toggleNewLocationModal = () => {
+  //     setNewLocationModal((prevState) => !prevState);
+  //   };
 
   const togglePointsModal = () => {
     setShowPointsModal((prevState) => !prevState);
@@ -66,6 +64,7 @@ const BusinessProfile = () => {
 
   useEffect(() => {
     if (userSuccess) {
+      console.log(userData);
       setUserInfo(userData?.user);
     }
   }, [userSuccess, userData?.user]);
@@ -108,34 +107,34 @@ const BusinessProfile = () => {
 
         <img src={Avatar} alt="avatar" />
         <div>
-          <h5 className="mt-1">{userInfo?.businessName}</h5>
-          <h6 usernamame={true}>
-            {`${userInfo?.email}` || `@${userInfo?.username}`}
+          <h5 className="mt-5">{userInfo?.businessName}</h5>
+          <h6 className="mt-1" usernamame={true}>
+            {`${userInfo?.businessEmail}`}
           </h6>
-          <h6>University Student</h6>
+          <h6 className="mt-1">{`${userInfo?.businessCategory}`}</h6>
         </div>
         <div>
           <div>
-            <h5>
+            <h5 className="mt-1 px-1">
               {userInfo?.address ? userInfo?.address : "No Address Provided"}
             </h5>
-            <p>
+            <p className="mt-1">
               {userInfo?.occupation
                 ? userInfo?.occupation
                 : "  No Occupation Provided"}
             </p>
           </div>
           {!userInfo?.businessName && (
-            <div>
+            <div className="mt-1">
               <h5>Total Outings</h5>
               <p>27 Outings</p>
             </div>
           )}
-          <div>
+          <div className="mt-1">
             <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
             <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
           </div>
-          <div>
+          <div className="mt-1">
             <h5>Average Review</h5>
             <p>4.5 stars</p>
           </div>
@@ -147,12 +146,12 @@ const BusinessProfile = () => {
             <AccountCircleIcon />
           </Profile>
           <div className="d-flex justify-content-between">
-            <Button color="green" onClick={toggleNewLocationModal}>
+            {/* <Button color="green" onClick={``}>
               Post New
             </Button>
             <Link to="/plan-a-trip">
               <Button>Plan A Trip</Button>
-            </Link>
+            </Link> */}
           </div>
           <div
             style={{ transform: "scale(0.7)", cursor: "pointer" }}
@@ -164,10 +163,8 @@ const BusinessProfile = () => {
           </div>
         </div>
         <BoxContainer>
-          {showLocationModal && (
-            <LocationModal onClick={toggleShowLocationModal} />
-          )}
-          {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />}
+          {showLocationModal && <LocationModal onClick={``} />}
+          {newLocationModal && <NewLocation onClick={``} />}
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
           {/* {content} */}
         </BoxContainer>
