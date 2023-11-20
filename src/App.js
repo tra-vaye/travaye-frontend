@@ -84,6 +84,7 @@ function App() {
               <Route path="/business" element={<Navigate to="/user" />} />
             )}
             <Route path="/plan-a-trip" element={<PlanTrip />} />
+            <Route path="/verify-email" element={<Verification />} />
             <Route path="/location/:id" element={<LocationDetails />} />
             <Route path="/added" element={<AddedLocations />} />
           </Route>
@@ -112,7 +113,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/business-locations" element={<BusinessLocations />} />
           <Route path="/locations" element={<Locations />} />
-          <Route path="/verify" element={<Verification />} />
+          <Route path="/verify-email" element={<Verification />} />
           <Route path="/contact-us" element={<Contact />} />
         </Routes>
       </Suspense>

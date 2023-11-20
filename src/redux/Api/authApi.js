@@ -40,10 +40,10 @@ export const AuthApi = createApi({
       invalidatesTags: ["Profile"],
     }),
     codeVerify: builder.mutation({
-      query: (body) => ({
-        url: "user/verify",
+      query: ({ code, userType }) => ({
+        url: `${userType}/verify`,
         method: "POST",
-        body,
+        body: { code },
       }),
     }),
     getMe: builder.query({

@@ -22,10 +22,6 @@ const Header = (props) => {
     navigate("/login");
   };
 
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
-
   useEffect(() => {
     setIsActive(Location.pathname);
   }, [Location.pathname]);

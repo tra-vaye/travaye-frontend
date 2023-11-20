@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { notification } from "antd";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
-import serverUrl from "../../server";
-import { setUser } from "../../state";
+import { useCodeVerifyMutation } from "../../redux/Api/authApi";
 import { AuthFormWrapper } from "../Login";
 
 const Verification = () => {
@@ -13,9 +13,36 @@ const Verification = () => {
   const dispatch = useDispatch();
   const [codes, setCodes] = useState(["", "", "", ""]);
   const nonEmptyElements = codes.filter((element) => element !== "");
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   let buttonDisabled = Boolean(nonEmptyElements.length < 4);
-  const user = useSelector((state) => state.user);
+  const userType = useSelector((state) => state.auth.userType);
+  console.log(userType);
+  const [codeVerify, { isLoading, error, isError, isSuccess, data }] =
+    useCodeVerifyMutation();
+
+  useEffect(() => {
+    if (isError) {
+      notification.error({
+        message: error?.data?.error,
+        duration: 3,
+        placement: "bottomRight",
+      });
+    }
+    // if (isSuccess) {
+    //   // Handle successful verification,
+    //   notification.success({
+    //     message: "Email Verified Successfully",
+    //     duration: 3,
+    //     placement: "bottomRight",
+    //   });
+    //   const verifiedUserOrBusiness = data?.user;
+    //   const authToken = verifiedUserOrBusiness?.token;
+    //   sessionStorage.setItem("authToken", authToken);
+    //   navigate(`/${userType}`);
+    //   // navigate(`${userType}`);
+    // }
+  }, [isError, isSuccess, error, navigate, userType, data?.user]);
+
   const handleChange = (index, value) => {
     const newCodes = [...codes];
     newCodes[index] = value;
@@ -43,27 +70,27 @@ const Verification = () => {
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    const enteredCode = codes.join("");
-    console.log(codes);
-    const userSignUpResponse = await fetch(`${serverUrl}/api/user/verify`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        verificationCode: enteredCode,
-        _id: user._id,
-      }),
-    });
-    const savedUser = await userSignUpResponse.json();
-    if (userSignUpResponse.ok) {
-      console.log(userSignUpResponse);
-      console.log(savedUser);
-      setIsLoading(false);
-      dispatch(setUser({ user: savedUser.user }));
-      navigate("/user");
+    try {
+      const code = codes.join("");
+      console.log(userType);
+      const response = await codeVerify({ code, userType });
+
+      // Handle the success case
+      if (response.data?.user) {
+        notification.success({
+          message: "Email Verified Successfully",
+          duration: 3,
+          placement: "bottomRight",
+        });
+
+        // const verifiedUserOrBusiness = response.data.user;
+        // const authToken = verifiedUserOrBusiness.token;
+        // sessionStorage.setItem("authToken", authToken);
+        navigate(`/${userType}`);
+      }
+    } catch (error) {
+      // Handle errors (if necessary)
+      console.error("Verification error:", error);
     }
   };
   return (
