@@ -37,6 +37,9 @@ const authSlice = createSlice({
       sessionStorage.removeItem("newtoken");
       sessionStorage.removeItem("profileId");
     },
+    updateUser: (state, payload) => {
+      state.user = payload;
+    },
   },
 });
 export const {
@@ -45,5 +48,6 @@ export const {
   resetTimeout,
   refreshToken,
   logout,
+  updateUser,
 } = authSlice.actions;
 export default authSlice.reducer;

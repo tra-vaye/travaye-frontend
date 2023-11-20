@@ -1,20 +1,17 @@
 import { Box, Typography, Rating } from "@mui/material";
-import { Formik } from "formik";
 import React from "react";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import * as yup from "yup";
-import serverUrl from "../../../server";
 import { Button } from "../Buttons";
 import { ArrowCloud } from "../svgs/svgs";
-import Modal from "./Modal";
 import { useState } from "react";
 import {
   useCreateLocationMutation,
   useGetCategoriesQuery,
 } from "../../../redux/Api/locationApi";
-import { Select } from "antd";
+import { useGetStatesQuery } from "../../../redux/Api/geoApi";
+import { Select, Modal } from "antd";
 
 const initialValues = {
   locationName: "",
@@ -22,33 +19,31 @@ const initialValues = {
   locationDescription: "",
   locationCity: "",
   locationCategory: "",
-  locationContact: "",
   locationSubCategory: "",
   pictures: [],
+  locationRating: 0,
+  locationAddedBy: "boluwatife",
 };
-
-const NewLocation = (props) => {
+const NewLocation = ({ open, setOpen }) => {
   const [createLocation, { isLoading }] = useCreateLocationMutation();
+  const { data: states } = useGetStatesQuery();
   const user = useSelector((state) => state.user);
   const [rating, setRating] = useState(2);
-  const { data, isLoading: isFetchingCategories } = useGetCategoriesQuery();
-  const [values, setValuew] = useState(initialValues);
-  const handleFormSubmit = async (values, onSubmitProps) => {
+  const { data: categories, isLoading: isFetchingCategories } =
+    useGetCategoriesQuery();
+  const [subCat, setSubCat] = useState([]);
+  const [values, setValues] = useState(initialValues);
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
     const formData = new FormData();
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
-    values.pictures.forEach((file) => {
-      formData.append("pictures", file);
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value);
     });
-    formData.append("locationAddedBy", user._id);
     createLocation(formData)
       .unwrap()
       .then((res) => {
         alert("Location Successfully added.");
-        props.onClick();
         console.log(res);
-        onSubmitProps.resetForm();
       })
       .catch((err) => {
         console.log(err);
@@ -56,14 +51,24 @@ const NewLocation = (props) => {
       });
   };
   return (
-    <Modal onClick={props.onClick}>
-      <form action="" onSubmit={handleFormSubmit}>
+    <Modal
+      open={open}
+      footer={null}
+      centered
+      maskClosable={false}
+      onCancel={() => setOpen(false)}
+    >
+      <form onSubmit={handleFormSubmit}>
         <h3>Post a New Location</h3>
         <Dropzone
           acceptedFiles=".jpg,.jpeg,.png"
           multiple={true}
           onDrop={(acceptedFiles) => {
             // seValue("pictures", [...values.pictures, ...acceptedFiles]);
+            setValues((prev) => ({
+              ...prev,
+              pictures: [...values.pictures, ...acceptedFiles],
+            }));
           }}
         >
           {({ getRootProps, getInputProps }) => (
@@ -92,10 +97,11 @@ const NewLocation = (props) => {
           <Typography component="legend">Experience rating</Typography>
           <Rating
             name="simple-controlled"
-            value={rating}
+            value={values.locationRating}
             onChange={(event, newValue) => {
               console.log(newValue);
               setRating(newValue);
+              setValues((prev) => ({ ...prev, locationRating: newValue }));
             }}
           />
         </div>
@@ -105,36 +111,82 @@ const NewLocation = (props) => {
               placeholder="Name"
               name="locationName"
               value={values.locationName}
+              required
+              onChange={(e) => {
+                setValues((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }));
+              }}
             />
             <input
               placeholder="Address"
               name="locationAddress"
               value={values.locationAddress}
+              required
+              onChange={(e) => {
+                setValues((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }));
+              }}
             />
           </div>
-          <div className="d-flex justify-content-between mb-4">
-            <input
+          <div className="flex gap-4 justify-between mb-4">
+            <Select
+              className="!w-full"
               placeholder="Category"
-              name="locationCategory"
+              options={categories}
+              onSelect={(value, Record) => {
+                const sub_cat = Record?.sub.map((e) => ({
+                  value: e?.slug,
+                  label: e?.name,
+                }));
+                setSubCat(sub_cat);
+                setValues((prev) => ({
+                  ...prev,
+                  locationCategory: value,
+                }));
+              }}
               value={values.locationCategory}
             />
-            <Select />
-            <input
+            <Select
+              className="!w-full"
               placeholder="Sub-Category"
-              name="locationSubCategory"
+              onSelect={(value) => {
+                setValues((prev) => ({
+                  ...prev,
+                  locationSubCategory: value,
+                }));
+              }}
+              options={subCat}
               value={values.locationSubCategory}
             />
           </div>
-          <div className="d-flex justify-content-between mb-4">
-            <input
-              placeholder="City"
-              name="locationCity"
-              value={values.locationCity}
+          <div className="flex justify-between mb-4">
+            <Select
+              placeholder="location city"
+              onSelect={(value) => {
+                console.log("clicked");
+                setValues((prev) => ({
+                  ...prev,
+                  locationCity: value,
+                }));
+              }}
+              showSearch
+              options={states}
             />
             <input
               placeholder="Phone Number"
               name="locationContact"
               value={values.locationContact}
+              required
+              onChange={(e) => {
+                setValues((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }));
+              }}
             />
           </div>
           <textarea
@@ -142,6 +194,13 @@ const NewLocation = (props) => {
             rows="6"
             name="locationDescription"
             value={values.locationDescription}
+            required
+            onChange={(e) => {
+              setValues((prev) => ({
+                ...prev,
+                [e.target.name]: e.target.value,
+              }));
+            }}
           ></textarea>
           <Button color="green" type="submit">
             Post

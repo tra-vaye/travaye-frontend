@@ -45,6 +45,14 @@ export const LocationApi = createApi({
       query: () => ({
         url: "categories",
       }),
+      transformResponse: (res) => {
+        const result = res.map((e) => ({
+          value: e.name,
+          label: e.name,
+          sub: e.sub,
+        }));
+        return result;
+      },
     }),
   }),
 });

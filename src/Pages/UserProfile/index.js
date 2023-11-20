@@ -140,7 +140,7 @@ const UserProfile = () => {
           {showLocationModal && (
             <LocationModal onClick={toggleShowLocationModal} />
           )}
-          {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />}
+          <NewLocation open={newLocationModal} setOpen={setNewLocationModal} />
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
           {content}
         </BoxContainer>
