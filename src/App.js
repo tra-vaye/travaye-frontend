@@ -1,12 +1,13 @@
 import { Suspense, lazy, useState } from "react";
 
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import Home from "./Pages/Home/Home";
 import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
 import Loader from "./components/UI/Loader";
 
+import { useSelector } from "react-redux";
 import RequireAuth from "./Layout/RequireAuth";
 
 const AddedLocations = lazy(() => {
@@ -57,6 +58,7 @@ function App() {
     setShowSideNav((prevState) => !prevState);
   };
   const token = sessionStorage.getItem("authToken");
+  const userType = useSelector((state) => state.auth.userType);
   return (
     <>
       <Header onToggleSideNav={toggleSideNav} showSideNav={showSideNav} />
@@ -68,8 +70,19 @@ function App() {
           {!token && <Route path="/login" element={<Login />} />}
           {!token && <Route path="/signup" element={<SignUp />} />}
           <Route path="" element={<RequireAuth />}>
-            <Route path="/user" element={<UserProfile />} />
-            <Route path="/business" element={<BusinessProfile />} />
+            {userType === "user" && (
+              <Route path="/user" element={<UserProfile />} />
+            )}
+            {userType === "business" && (
+              <Route path="/business" element={<BusinessProfile />} />
+            )}
+            {/* Redirect to the appropriate route if user tries to access the wrong route */}
+            {userType === "business" && (
+              <Route path="/user" element={<Navigate to="/business" />} />
+            )}
+            {userType === "user" && (
+              <Route path="/business" element={<Navigate to="/user" />} />
+            )}
             <Route path="/plan-a-trip" element={<PlanTrip />} />
             <Route path="/location/:id" element={<LocationDetails />} />
             <Route path="/added" element={<AddedLocations />} />
