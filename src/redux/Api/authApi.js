@@ -47,7 +47,9 @@ export const AuthApi = createApi({
       }),
     }),
     getMe: builder.query({
-      query: () => `user`,
+      query: ({ userType }) => ({
+        url: userType,
+      }),
       providesTags: ["User"],
     }),
   }),
