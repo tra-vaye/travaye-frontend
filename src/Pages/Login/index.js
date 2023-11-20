@@ -68,11 +68,14 @@ const Login = () => {
         });
 
         const authToken = data?.token;
+        sessionStorage.setItem("userType", userType);
         sessionStorage.setItem("authToken", authToken);
         navigate(`/${userType}`);
       } else {
         const authToken = data?.token;
         sessionStorage.setItem("authToken", authToken);
+        sessionStorage.setItem("userType", userType);
+
         // Navigate to the verification page
         navigate("/verify-email");
       }
@@ -88,10 +91,13 @@ const Login = () => {
 
         const authToken = businessData?.token;
         sessionStorage.setItem("authToken", authToken);
+        sessionStorage.setItem("userType", userType);
         navigate(`/${userType}`);
       } else {
         const authToken = businessData?.token;
         sessionStorage.setItem("authToken", authToken);
+        sessionStorage.setItem("userType", userType);
+
         // Navigate to the verification page
         navigate("/verify-email");
       }

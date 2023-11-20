@@ -11,14 +11,14 @@ import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
 import { businessSignUpSchema, userSignUpSchema } from "../../schemas";
 
-import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
+import { notification } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import {
   useBusinessRegisterMutation,
   useUserRegisterMutation,
 } from "../../redux/Api/authApi";
-import { notification } from "antd";
-import { useDispatch, useSelector } from "react-redux";
 import { setUserType } from "../../state";
+import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -84,10 +84,14 @@ const SignUp = () => {
 
         sessionStorage.setItem("user_id", data?.user?._id);
         sessionStorage.setItem("authToken", data?.token);
+        sessionStorage.setItem("userType", userType);
+
         navigate("user");
       } else {
         sessionStorage.setItem("user_id", data?.user?._id);
         sessionStorage.setItem("authToken", data?.token);
+        sessionStorage.setItem("userType", userType);
+
         navigate("/verify-email"); // Redirect to the email verification page
       }
     } else if (businessSuccess) {
@@ -102,10 +106,14 @@ const SignUp = () => {
 
         sessionStorage.setItem("user_id", businessData?.user?._id);
         sessionStorage.setItem("authToken", businessData?.token);
+        sessionStorage.setItem("userType", userType);
+
         navigate("business");
       } else {
         sessionStorage.setItem("user_id", businessData?.user?._id);
         sessionStorage.setItem("authToken", businessData?.token);
+        sessionStorage.setItem("userType", userType);
+
         navigate("/verify-email"); // Redirect to the email verification page
       }
     }
