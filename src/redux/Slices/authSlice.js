@@ -5,6 +5,7 @@ const initialState = {
   token: null,
   timeout: false,
   loading: false,
+  userType: "user",
   error: null,
   idleTimeOut: 10000000,
   lastActionTimestamp: null,
@@ -37,6 +38,9 @@ const authSlice = createSlice({
       sessionStorage.removeItem("newtoken");
       sessionStorage.removeItem("profileId");
     },
+    setUserType: (state, action) => {
+      state.userType = action.payload.userType;
+    },
   },
 });
 export const {
@@ -45,5 +49,6 @@ export const {
   resetTimeout,
   refreshToken,
   logout,
+  setUserType,
 } = authSlice.actions;
 export default authSlice.reducer;

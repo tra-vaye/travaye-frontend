@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux/es";
+import { useDispatch, useSelector } from "react-redux/es";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
@@ -11,21 +11,25 @@ import classes from "./Login.module.css";
 
 import { businessLoginSchema, userLoginSchema } from "../../schemas";
 
+import { notification } from "antd";
 import {
   useBusinessLoginMutation,
   useUserLoginMutation,
 } from "../../redux/Api/authApi";
-import { notification } from "antd";
+import { setUserType } from "../../redux/Slices/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
-
+  const userType = useSelector((state) => state.auth.userType);
+  console.log(userType);
   const [userSignUp, setUserSignUp] = useState(true);
 
   const navigate = useNavigate();
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
+
+    dispatch(setUserType({ userType: userSignUp ? "user" : "business" }));
   };
 
   useEffect(() => {
@@ -71,15 +75,17 @@ const Login = () => {
       });
 
       sessionStorage.setItem("authToken", data?.token || businessData?.token);
-      navigate("/user");
+      navigate(`/${userType}`);
     }
   }, [dispatch, businessSuccess, loginSuccess]);
 
   const handleClick = async () => {
     if (userSignUp) {
+      dispatch(setUserType({ userType: "user" }));
       await userLogin({ username: values.userName, password: values.passWord });
     }
     if (!userSignUp) {
+      dispatch(setUserType({ userType: "business" }));
       await businessLogin({
         businessEmail: values.email,
         password: values.passWord,

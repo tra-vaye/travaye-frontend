@@ -65,18 +65,15 @@ export const userSignUpSchema = yup.object({
 export const businessSignUpSchema = yup.object({
   businessName: yup
     .string()
-    .matches(
-      /^[A-Z0-9.-]+\.[A-Z]{2,}[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/,
-      "🌚🌚🌚🌚"
-    )
-    .min(8, "Too Short!")
-    .max(50, "Too Long")
+    .matches(/^[a-zA-Z0-9\s.'",()-]+$/, "🌚🌚🌚🌚")
+    .min(3, "Too Short!")
+    .max(50, "Too Long to be the name of a business")
     .required("Field cannot be blank!"),
   address: yup
     .string()
-    .matches(/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, "🌚🌚🌚🌚")
-    .min(8, "Too Short!")
-    .max(50, "Too Long")
+    .matches(/^[a-zA-Z0-9]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/, "🌚🌚🌚🌚")
+    .min(8, "Too Short for an address!")
+    .max(150, "Too Long")
     .required("Field cannot be blank!"),
   email: yup
     .string()

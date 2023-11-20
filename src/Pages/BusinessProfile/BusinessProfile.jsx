@@ -3,30 +3,30 @@ import CloseIcon from "@mui/icons-material/Close";
 import { notification } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import LocationModal from "../../components/UI/Modal/LocationModal";
+import NewLocation from "../../components/UI/Modal/NewLocation";
 import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 
-const UserProfile = () => {
+const BusinessProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [newLocationModal, setNewLocationModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
-  const userType = useSelector((state) => state.auth.userType);
-
+  const userType = useSelector((state) => state.userType);
   const toggleShowLocationModal = () => {
     setShowLocationModal((prevState) => !prevState);
   };
   const toggleNewLocationModal = () => {
     setNewLocationModal((prevState) => !prevState);
   };
-  const navigate = useNavigate();
+
   const togglePointsModal = () => {
     setShowPointsModal((prevState) => !prevState);
   };
@@ -36,21 +36,7 @@ const UserProfile = () => {
   };
   const [locations, setLocations] = useState([]);
 
-  const [selectedCategories, updateSelectedCategories] = useState([]);
-  const [selectedFilters, updateSelectedFilters] = useState([]);
-
-  // Categories and locationCity are queries for the backend and they are in array formats
-  // I am joining every element in the array using .join() to make the request query a single query in a request to avoid server overload
-  // and making replacing spaces with hyphens and making them lowercase
-
-  const { data, isError, error, isSuccess } = useGetLocationsQuery({
-    page: 1,
-    count: 10,
-    categories: selectedCategories
-      .map((category) => category.toLowerCase().replace(/\s+/g, "-"))
-      .join(","),
-    locationCity: selectedFilters.join(","),
-  });
+  const { data, isError, error, isSuccess } = useGetLocationsQuery(1, 10);
 
   const { data: userData, isSuccess: userSuccess } = useGetMeQuery({
     userType: userType,
@@ -60,6 +46,7 @@ const UserProfile = () => {
   useEffect(() => {
     if (isSuccess || userSuccess) {
       setLocations(data?.data);
+      console.log(userData);
       setUserInfo(userData?.user);
     }
     if (isError) {
@@ -71,36 +58,18 @@ const UserProfile = () => {
     }
   }, [data, error?.error, isError, isSuccess, userSuccess]);
 
-  // const userId = sessionStorage.getItem("user_id");
-  // const userLocations = locations?.filter((location) => {
-  //   return location.locationAddedBy === userId;
-  // });
-  console.log(userData?.user?.likedLocations);
-  console.log(locations);
-  const userLikedLocations = userData?.user?.likedLocations?.map(
-    (likedLocationName) =>
-      locations?.find((location) => location.locationName === likedLocationName)
-  );
+  const userId = sessionStorage.getItem("user_id");
+  const userLocations = locations?.filter((location) => {
+    return location.locationAddedBy === userId;
+  });
 
-  // Filter out any undefined values in case a location name doesn't match any location
-  const filteredUserLikedLocations = userLikedLocations?.filter(Boolean) || [];
-
-  console.log(locations);
   let content;
 
-  if (filteredUserLikedLocations.length < 1) {
-    content = <p>No Liked Locations Yet</p>;
+  if (userLocations?.length < 1) {
+    content = <p>No Location Added Yet</p>;
   } else {
-    content = filteredUserLikedLocations.map((location, i) => {
-      return (
-        <LocationBox
-          onClick={() => {
-            navigate(`/location/${location?._id}`);
-          }}
-          location={location}
-          key={i}
-        />
-      );
+    content = userLocations?.map((location, i) => {
+      return <LocationBox location={location} key={i} />;
     });
   }
 
@@ -113,8 +82,13 @@ const UserProfile = () => {
 
         <img src={Avatar} alt="avatar" />
         <div>
-          <h5 className="mt-1">{`${userInfo?.fullName}`}</h5>
-          <h6 usernamame={true}>{`@${userInfo?.username}`}</h6>
+          <h5 className="mt-1">
+            {`${userInfo?.fullName} | ${userInfo?.username}` ||
+              userInfo?.businessName}
+          </h5>
+          <h6 usernamame={true}>
+            {`${userInfo?.email}` || `@${userInfo?.username}`}
+          </h6>
           <h6>University Student</h6>
         </div>
         <div>
@@ -128,10 +102,12 @@ const UserProfile = () => {
                 : "  No Occupation Provided"}
             </p>
           </div>
-          <div>
-            <h5>Total Outings</h5>
-            <p>27 Outings</p>
-          </div>
+          {!userInfo?.businessName && (
+            <div>
+              <h5>Total Outings</h5>
+              <p>27 Outings</p>
+            </div>
+          )}
           <div>
             <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
             <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
@@ -148,9 +124,9 @@ const UserProfile = () => {
             <AccountCircleIcon />
           </Profile>
           <div className="d-flex justify-content-between">
-            {/* <Button color="green" onClick={toggleNewLocationModal}>
+            <Button color="green" onClick={toggleNewLocationModal}>
               Post New
-            </Button> */}
+            </Button>
             <Link to="/plan-a-trip">
               <Button>Plan A Trip</Button>
             </Link>
@@ -168,7 +144,7 @@ const UserProfile = () => {
           {showLocationModal && (
             <LocationModal onClick={toggleShowLocationModal} />
           )}
-          {/* {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />} */}
+          {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />}
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
           {content}
         </BoxContainer>
@@ -177,7 +153,7 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default BusinessProfile;
 
 const Profile = styled.i`
   margin-right: 10px;

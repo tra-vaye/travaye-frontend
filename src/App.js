@@ -46,6 +46,9 @@ const Verification = lazy(() => {
 const UserProfile = lazy(() => {
   return import("./Pages/UserProfile");
 });
+const BusinessProfile = lazy(() => {
+  return import("./Pages/BusinessProfile/BusinessProfile");
+});
 
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
@@ -66,6 +69,7 @@ function App() {
           {!token && <Route path="/signup" element={<SignUp />} />}
           <Route path="" element={<RequireAuth />}>
             <Route path="/user" element={<UserProfile />} />
+            <Route path="/business" element={<BusinessProfile />} />
             <Route path="/plan-a-trip" element={<PlanTrip />} />
             <Route path="/location/:id" element={<LocationDetails />} />
             <Route path="/added" element={<AddedLocations />} />

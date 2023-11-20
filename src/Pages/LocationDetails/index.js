@@ -18,26 +18,7 @@ const LocationDetails = () => {
   const [location, setLocation] = useState({});
   const [addLocationToLikedLocations] =
     useAddLocationToLikedLocationsMutation();
-  const formData = new FormData();
-  formData.append("locationName", location.locationName);
-  const handleAddClick = () => {
-    addLocationToLikedLocations(formData)
-      .unwrap()
-      .then((res) =>
-        notification.success({
-          message: "Liked",
-          duration: 3,
-          placement: "bottomRight",
-        })
-      )
-      .catch((err) => {
-        notification.error({
-          message: err.data.error,
-          duration: 3,
-          placement: "bottomRight",
-        });
-      });
-  };
+
   const { data, isError, error, isLoading } = useGetLocationByIdQuery({ id });
   useEffect(() => {
     if (data) {
@@ -52,6 +33,29 @@ const LocationDetails = () => {
     }
   }, [data, error?.error, isError]);
 
+  const handleAddClick = () => {
+    if (location?.locationName) {
+      addLocationToLikedLocations({ locationName: location.locationName })
+        .unwrap()
+        .then((res) =>
+          notification.success({
+            message: "Liked",
+            duration: 3,
+            placement: "bottomRight",
+          })
+        )
+        .catch((err) => {
+          notification.error({
+            message: err.data.error,
+            duration: 3,
+            placement: "bottomRight",
+          });
+        });
+    } else {
+      // Handle the case where location?.locationName is undefined
+      console.error("Location name is undefined");
+    }
+  };
   return (
     <div className={classes.location}>
       {isLoading ? (
