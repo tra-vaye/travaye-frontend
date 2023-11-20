@@ -5,7 +5,7 @@ const initialState = {
   token: null,
   timeout: false,
   loading: false,
-  userType: "user",
+  userType: sessionStorage.getItem("userType"),
   error: null,
   idleTimeOut: 10000000,
   lastActionTimestamp: null,

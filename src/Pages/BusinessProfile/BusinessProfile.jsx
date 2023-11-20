@@ -2,17 +2,17 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
 import { notification } from "antd";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
 import { Button } from "../../components/UI/Buttons";
-import LocationBox from "../../components/UI/Location/LocationBox";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
 import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
+import { setUserType } from "../../redux/Slices/authSlice";
 
 const BusinessProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -20,6 +20,9 @@ const BusinessProfile = () => {
   const [showPointsModal, setShowPointsModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const userType = useSelector((state) => state.userType);
+  const dispatch = useDispatch();
+
+  dispatch(setUserType({ userType: "business" }));
   const toggleShowLocationModal = () => {
     setShowLocationModal((prevState) => !prevState);
   };
@@ -30,24 +33,27 @@ const BusinessProfile = () => {
   const togglePointsModal = () => {
     setShowPointsModal((prevState) => !prevState);
   };
+  const [firstVisit, setFirstVisit] = useState(true);
 
   const toggleDashboard = () => {
     setShowDashboard((prevState) => !prevState);
   };
   const [locations, setLocations] = useState([]);
-
+  const location = useLocation();
   const { data, isError, error, isSuccess } = useGetLocationsQuery(1, 10);
 
-  const { data: userData, isSuccess: userSuccess } = useGetMeQuery({
+  const {
+    data: userData,
+    isSuccess: userSuccess,
+    refetch: refetchUserData,
+  } = useGetMeQuery({
     userType: userType,
   });
   const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
-    if (isSuccess || userSuccess) {
+    if (isSuccess) {
       setLocations(data?.data);
-      console.log(userData);
-      setUserInfo(userData?.user);
     }
     if (isError) {
       notification.error({
@@ -56,22 +62,42 @@ const BusinessProfile = () => {
         placement: "bottomRight",
       });
     }
-  }, [data, error?.error, isError, isSuccess, userSuccess]);
+  }, [data, error?.error, isError, isSuccess]);
 
-  const userId = sessionStorage.getItem("user_id");
-  const userLocations = locations?.filter((location) => {
-    return location.locationAddedBy === userId;
-  });
+  useEffect(() => {
+    if (userSuccess) {
+      setUserInfo(userData?.user);
+    }
+  }, [userSuccess, userData?.user]);
+  useEffect(() => {
+    // Check if it's the first visit
+    if (firstVisit) {
+      // Set firstVisit to false after the initial render
+      setFirstVisit(false);
+    } else {
+      // Fetch data again when the page is revisited
+      refetchUserData();
+    }
+  }, [location.pathname, firstVisit, refetchUserData]);
+  //   const userLikedLocations = userData?.user?.likedLocations?.map(
+  //     (likedLocationName) =>
+  //       locations?.find((location) => location.locationName === likedLocationName)
+  //   );
 
-  let content;
+  //   const userId = sessionStorage.getItem("user_id");
+  //   const userLocations = locations?.filter((location) => {
+  //     return location.locationAddedBy === userId;
+  //   });
 
-  if (userLocations?.length < 1) {
-    content = <p>No Location Added Yet</p>;
-  } else {
-    content = userLocations?.map((location, i) => {
-      return <LocationBox location={location} key={i} />;
-    });
-  }
+  //   let content;
+
+  //   if (userLocations?.length < 1) {
+  //     content = <p>No Location Added Yet</p>;
+  //   } else {
+  //     content = userLocations?.map((location, i) => {
+  //       return <LocationBox location={location} key={i} />;
+  //     });
+  //   }
 
   return (
     <Container>
@@ -82,10 +108,7 @@ const BusinessProfile = () => {
 
         <img src={Avatar} alt="avatar" />
         <div>
-          <h5 className="mt-1">
-            {`${userInfo?.fullName} | ${userInfo?.username}` ||
-              userInfo?.businessName}
-          </h5>
+          <h5 className="mt-1">{userInfo?.businessName}</h5>
           <h6 usernamame={true}>
             {`${userInfo?.email}` || `@${userInfo?.username}`}
           </h6>
@@ -146,7 +169,7 @@ const BusinessProfile = () => {
           )}
           {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />}
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
-          {content}
+          {/* {content} */}
         </BoxContainer>
       </Main>
     </Container>
