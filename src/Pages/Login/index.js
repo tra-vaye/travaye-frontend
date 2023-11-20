@@ -57,27 +57,46 @@ const Login = () => {
   ] = useBusinessLoginMutation();
 
   useEffect(() => {
-    if (loginError || businessError) {
-      notification.error({
-        message: loginError?.data?.error || businessError?.data?.error,
-        duration: 3,
-        placement: "bottomRight",
-      });
-    }
-  }, [businessError, loginError]);
+    if (loginSuccess) {
+      const user = data?.user;
 
-  useEffect(() => {
-    if (loginSuccess || businessSuccess) {
-      notification.success({
-        message: "Login Successfully",
-        duration: 3,
-        placement: "bottomRight",
-      });
+      if (user?.emailVerified) {
+        notification.success({
+          message: "Login Successfully",
+          duration: 3,
+          placement: "bottomRight",
+        });
 
-      sessionStorage.setItem("authToken", data?.token || businessData?.token);
-      navigate(`/${userType}`);
+        const authToken = data?.token;
+        sessionStorage.setItem("authToken", authToken);
+        navigate(`/${userType}`);
+      } else {
+        const authToken = data?.token;
+        sessionStorage.setItem("authToken", authToken);
+        // Navigate to the verification page
+        navigate("/verify-email");
+      }
+    } else if (businessSuccess) {
+      const business = businessData?.user;
+
+      if (business?.emailVerified) {
+        notification.success({
+          message: "Login Successfully",
+          duration: 3,
+          placement: "bottomRight",
+        });
+
+        const authToken = businessData?.token;
+        sessionStorage.setItem("authToken", authToken);
+        navigate(`/${userType}`);
+      } else {
+        const authToken = businessData?.token;
+        sessionStorage.setItem("authToken", authToken);
+        // Navigate to the verification page
+        navigate("/verify-email");
+      }
     }
-  }, [dispatch, businessSuccess, loginSuccess]);
+  }, [dispatch, businessSuccess, loginSuccess, data, businessData, userType]);
 
   const handleClick = async () => {
     if (userSignUp) {

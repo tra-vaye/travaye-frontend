@@ -17,14 +17,18 @@ import {
   useUserRegisterMutation,
 } from "../../redux/Api/authApi";
 import { notification } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserType } from "../../state";
 
 const SignUp = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const userType = useSelector((state) => state.auth.userType);
   const [userSignUp, setUserSignUp] = useState(true);
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
+    dispatch(setUserType({ userType: userSignUp ? "user" : "business" }));
   };
 
   useEffect(() => {
@@ -54,26 +58,56 @@ const SignUp = () => {
   ] = useBusinessRegisterMutation();
 
   useEffect(() => {
-    if (userIsError || businessIsError) {
+    if (userIsError) {
       notification.error({
-        message: userError?.data?.error || businessError?.data?.error,
+        message: userError?.data?.error,
+        duration: 3,
+        placement: "bottomRight",
+      });
+    } else if (businessIsError) {
+      notification.error({
+        message: businessError?.data?.error,
         duration: 3,
         placement: "bottomRight",
       });
     }
-    if (userSuccess || businessSuccess) {
-      notification.success({
-        message: "Login Successfully",
-        duration: 3,
-        placement: "bottomRight",
-      });
 
-      sessionStorage.setItem(
-        "user_id",
-        data?.user?._id || businessData?.business?._id
-      );
-      sessionStorage.setItem("authToken", data?.token || businessData?.token);
-      navigate("/user");
+    if (userSuccess) {
+      const userEmailVerified = data?.user?.emailVerified;
+
+      if (userEmailVerified) {
+        notification.success({
+          message: "Login Successfully",
+          duration: 3,
+          placement: "bottomRight",
+        });
+
+        sessionStorage.setItem("user_id", data?.user?._id);
+        sessionStorage.setItem("authToken", data?.token);
+        navigate("user");
+      } else {
+        sessionStorage.setItem("user_id", data?.user?._id);
+        sessionStorage.setItem("authToken", data?.token);
+        navigate("/verify-email"); // Redirect to the email verification page
+      }
+    } else if (businessSuccess) {
+      const businessEmailVerified = businessData?.user?.emailVerified;
+
+      if (businessEmailVerified) {
+        notification.success({
+          message: "Login Successfully",
+          duration: 3,
+          placement: "bottomRight",
+        });
+
+        sessionStorage.setItem("user_id", businessData?.user?._id);
+        sessionStorage.setItem("authToken", businessData?.token);
+        navigate("business");
+      } else {
+        sessionStorage.setItem("user_id", businessData?.user?._id);
+        sessionStorage.setItem("authToken", businessData?.token);
+        navigate("/verify-email"); // Redirect to the email verification page
+      }
     }
   }, [
     businessError,
@@ -86,6 +120,7 @@ const SignUp = () => {
 
   const handleClick = async () => {
     if (userSignUp) {
+      dispatch(setUserType({ userType: "user" }));
       await userRegister({
         fullName: values?.fullName,
         username: values?.userName,
@@ -94,6 +129,7 @@ const SignUp = () => {
       });
     }
     if (!userSignUp) {
+      dispatch(setUserType({ userType: "business" }));
       await businessRegister({
         businessName: values.businessName,
         businessEmail: values.email,
