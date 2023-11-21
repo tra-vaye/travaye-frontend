@@ -85,7 +85,7 @@ const PlanTrip = () => {
           <h4>Step 2</h4>
           <p>Please Select a Category of Outing Venues</p>
           <ul>
-            {categoriess.map((category, i) => {
+            {categories.map((category, i) => {
               return (
                 <li key={i}>
                   <input

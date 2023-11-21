@@ -157,7 +157,7 @@ const NewLocation = ({ open, setOpen }) => {
                   locationCategory: value,
                 }));
               }}
-              value={values.locationCategory}
+              value={values?.locationCategory}
             />
             <Select
               className="!w-full"
@@ -188,7 +188,7 @@ const NewLocation = ({ open, setOpen }) => {
             <input
               placeholder="Phone Number"
               name="locationContact"
-              value={values.locationContact}
+              value={values?.locationContact}
               required
               onChange={(e) => {
                 setValues((prev) => ({
@@ -202,7 +202,7 @@ const NewLocation = ({ open, setOpen }) => {
             placeholder="Please Give a Short Description of your Experience"
             rows="6"
             name="locationDescription"
-            value={values.locationDescription}
+            value={values?.locationDescription}
             required
             onChange={(e) => {
               setValues((prev) => ({
