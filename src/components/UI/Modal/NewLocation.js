@@ -143,6 +143,10 @@ const NewLocation = ({ open, setOpen }) => {
               options={categories}
               onSelect={(value, Record) => {
                 setSubCat("");
+                setValues((prev) => ({
+                  ...prev,
+                  locationSubCategory: "",
+                }));
                 const sub_cat = Record?.sub?.map((e) => ({
                   value: e?.slug,
                   label: e?.name,
