@@ -142,7 +142,8 @@ const NewLocation = ({ open, setOpen }) => {
               placeholder="Category"
               options={categories}
               onSelect={(value, Record) => {
-                const sub_cat = Record?.sub.map((e) => ({
+                setSubCat("");
+                const sub_cat = Record?.sub?.map((e) => ({
                   value: e?.slug,
                   label: e?.name,
                 }));
@@ -164,7 +165,7 @@ const NewLocation = ({ open, setOpen }) => {
                 }));
               }}
               options={subCat}
-              value={values.locationSubCategory}
+              value={values?.locationSubCategory}
             />
           </div>
           <div className="flex justify-between mb-4">

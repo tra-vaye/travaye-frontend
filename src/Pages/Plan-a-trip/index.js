@@ -32,13 +32,6 @@ const PlanTrip = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate("/locations", { state: queryData });
-    // planTrip(queryData)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
   return (
     <>
@@ -92,13 +85,13 @@ const PlanTrip = () => {
           <h4>Step 2</h4>
           <p>Please Select a Category of Outing Venues</p>
           <ul>
-            {categories.map((category, i) => {
+            {categoriess.map((category, i) => {
               return (
                 <li key={i}>
                   <input
                     type="radio"
-                    value={category}
-                    id={category}
+                    value={category.name}
+                    id={category.name}
                     name="category"
                     onChange={(e) => {
                       setQueryData((prev) => ({
@@ -108,6 +101,7 @@ const PlanTrip = () => {
                     }}
                   />
                   <label htmlFor={category}>{category}</label>
+                  <span></span>
                 </li>
               );
             })}
