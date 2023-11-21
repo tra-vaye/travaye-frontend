@@ -6,13 +6,19 @@ import {
   useLazyGetCityQuery,
   useLazyGetLgaQuery,
 } from "../../redux/Api/geoApi";
-import { useLazyPlanATripQuery } from "../../redux/Api/locationApi";
+import {
+  useLazyPlanATripQuery,
+  useGetCategoriesQuery,
+} from "../../redux/Api/locationApi";
 import Loader from "../../components/UI/Loader";
 import { Select } from "antd";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PlanTrip = () => {
+  const navigate = useNavigate();
   const { data } = useGetStatesQuery();
+  const { data: categoriess } = useGetCategoriesQuery();
   const [getCity, { data: city }] = useLazyGetCityQuery();
   const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [planTrip, { isLoading }] = useLazyPlanATripQuery();
@@ -25,13 +31,14 @@ const PlanTrip = () => {
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-    planTrip(queryData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    navigate("/locations", { state: queryData });
+    // planTrip(queryData)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
   return (
     <>

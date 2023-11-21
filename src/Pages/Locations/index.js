@@ -3,38 +3,65 @@ import { Button } from "../../components/UI/Buttons";
 import { Card, StarContainer } from "../AddedLocations";
 import MaryLandImg from "../../assets/maryland-mall.png";
 import { FourStars } from "../../components/UI/svgs/svgs";
-
+import { useLocation, useNavigate } from "react-router-dom";
+import { useLazyPlanATripQuery } from "../../redux/Api/locationApi";
+import { useEffect } from "react";
+import Loader from "../../components/UI/Loader";
 const Locations = () => {
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const [planATrip, { isLoading, data }] = useLazyPlanATripQuery();
+  useEffect(() => {
+    planATrip(state)
+      .unwrap()
+      .then((res) => {
+        console.log(res, data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [state]);
   return (
-    <Container>
-      <div className="d-flex justify-content-between mt-5 align-items-center ">
-        <h3>Locations</h3>
-        <Button>View Added Locations</Button>
-      </div>
-      <div>
-        <Card>
-          <div className="row">
-            <div className="d-flex col-md-6">
-              <img src={MaryLandImg} alt="" className="img-fluid" />
-              <div>
-                <p>The Maryland Mall Cinema (Genesis Cinemas)</p>
-                <h5>Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja</h5>
-                <h6>Movie Theatre</h6>
-              </div>
-            </div>
-            <StarContainer className="d-flex  align-items-center col-md-3">
-              <i>{FourStars}</i>
-            </StarContainer>
+    <>
+      {isLoading && <Loader />}
+      <Container>
+        <div className="d-flex justify-content-between mt-5 align-items-center ">
+          <h3>Locations</h3>
+          <Button>View Added Locations</Button>
+        </div>
+        <div>
+          {data?.data.map((e, i) => (
+            <Card key={i}>
+              <div className="row">
+                <div className="d-flex col-md-6">
+                  <img
+                    src={e?.locationImagePath[0]}
+                    alt=""
+                    className="img-fluid"
+                  />
+                  <div>
+                    <p>{e?.locationName}</p>
+                    <h5>{e?.locationDescription}</h5>
+                    <h6>{e?.locationCategory}</h6>
+                  </div>
+                </div>
+                <StarContainer className="d-flex  align-items-center col-md-3">
+                  <i>{FourStars}</i>
+                </StarContainer>
 
-            <div className="d-flex col-md-3 align-items-center">
-              <p className="me-3">#500</p>
-              <Button color="green">Add Location</Button>
-              <Button>Preview</Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </Container>
+                <div className="d-flex col-md-3 align-items-center">
+                  <p className="me-3">#500</p>
+                  <Button color="green">Add Location</Button>
+                  <Button onClick={() => navigate(`/location/${e?._id}`)}>
+                    Preview
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </Container>
+    </>
   );
 };
 

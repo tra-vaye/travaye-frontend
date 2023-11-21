@@ -73,4 +73,5 @@ export const {
   useLazyPlanATripQuery,
   useGetCategoriesQuery,
   useAddLocationToLikedLocationsMutation,
+  useGetPlanATripQuery,
 } = LocationApi;
