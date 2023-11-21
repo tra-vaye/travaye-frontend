@@ -49,8 +49,29 @@ const Register = () => {
   useEffect(() => {
     if (isSuccess && businessData?.user) {
       setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData.user }));
+      if (businessData?.user?.businessVerified === "verified") {
+        navigate(`/${userType}`);
+      } else if (businessData?.user?.businessVerified === "pending") {
+        notification.warning({
+          message: " Business Verification Pending",
+          duration: 3,
+          placement: "bottomRight",
+        });
+        navigate(`/${userType}`);
+        refetch();
+      } else if (businessData?.user?.businessVerified === "false") {
+        notification.error({
+          message: " Business not Verified ",
+          duration: 3,
+          placement: "bottomRight",
+        });
+        refetch();
+
+        // Navigate to the verification page
+        navigate("/register");
+      }
     }
-  }, [isSuccess, businessData?.user]);
+  }, [isSuccess, businessData?.user, navigate, refetch, userType]);
 
   const handleChange = (field, value) => {
     setBusinessInfo((prevInfo) => ({
@@ -137,8 +158,8 @@ const Register = () => {
                 Business Category <span>*</span>
               </label>
               <select
+                required={true}
                 id="category"
-                value={businessInfo?.businessCategory}
                 onChange={(e) =>
                   handleChange("businessCategory", e.target.value)
                 }
@@ -146,10 +167,8 @@ const Register = () => {
                 {categories.map((category, i) => (
                   <option
                     value={category}
+                    selected={i === 0 ? true : false}
                     key={i}
-                    hidden={category === "Please select a category"}
-                    disabled={category === "Please select a category"}
-                    selected={category === "Please select a category"}
                   >
                     {category}
                   </option>

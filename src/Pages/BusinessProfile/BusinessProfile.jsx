@@ -2,9 +2,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { notification } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
+import { Button } from "../../components/UI/Buttons";
+import LocationBox from "../../components/UI/Location/LocationBox";
+import LocationModal from "../../components/UI/Modal/LocationModal";
+import NewLocation from "../../components/UI/Modal/NewLocation";
+import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 
@@ -14,13 +19,13 @@ const BusinessProfile = () => {
   const [showPointsModal, setShowPointsModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const userType = useSelector((state) => state.auth.userType);
-
-  //   const toggleShowLocationModal = () => {
-  //     setShowLocationModal((prevState) => !prevState);
-  //   };
-  //   const toggleNewLocationModal = () => {
-  //     setNewLocationModal((prevState) => !prevState);
-  //   };
+  const navigate = useNavigate();
+  const toggleShowLocationModal = () => {
+    setShowLocationModal((prevState) => !prevState);
+  };
+  const toggleNewLocationModal = () => {
+    setNewLocationModal((prevState) => !prevState);
+  };
 
   const togglePointsModal = () => {
     setShowPointsModal((prevState) => !prevState);
@@ -55,42 +60,56 @@ const BusinessProfile = () => {
       });
     }
   }, [data, error?.error, isError, isSuccess]);
-
+  useEffect(() => {
+    // Fetch data again when the page is revisited
+    refetchUserData();
+  }, [location.pathname, refetchUserData]);
   useEffect(() => {
     if (userSuccess) {
-      console.log(userData);
       setUserInfo(userData?.user);
-    }
-  }, [userSuccess, userData?.user]);
-  useEffect(() => {
-    // Check if it's the first visit
-    if (firstVisit) {
-      // Set firstVisit to false after the initial render
-      setFirstVisit(false);
-    } else {
-      // Fetch data again when the page is revisited
-      refetchUserData();
-    }
-  }, [location.pathname, firstVisit, refetchUserData]);
-  //   const userLikedLocations = userData?.user?.likedLocations?.map(
-  //     (likedLocationName) =>
-  //       locations?.find((location) => location.locationName === likedLocationName)
-  //   );
+      if (userData?.user?.businessVerified === "verified") {
+        navigate(`/${userType}`);
+      } else if (userData?.user?.businessVerified === "pending") {
+        notification.warning({
+          message: " Business Verification Pending",
+          duration: 3,
+          placement: "bottomRight",
+        });
+        navigate(`/${userType}`);
+        refetchUserData();
+      } else if (userData?.user?.businessVerified === "false") {
+        notification.error({
+          message: " Business not Verified ",
+          duration: 3,
+          placement: "bottomRight",
+        });
+        refetchUserData();
 
-  //   const userId = sessionStorage.getItem("user_id");
-  //   const userLocations = locations?.filter((location) => {
-  //     return location.locationAddedBy === userId;
+        // Navigate to the verification page
+        navigate("/register");
+      }
+    }
+  }, [userSuccess, userData?.user, navigate, userType, refetchUserData]);
+
+  // const userLikedLocations = userData?.user?.likedLocations?.map(
+  //   (likedLocationName) =>
+  //     locations?.find((location) => location.locationName === likedLocationName)
+  // );
+
+  // const userId = sessionStorage.getItem("user_id");
+  // const userLocations = locations?.filter((location) => {
+  //   return location.locationAddedBy === userId;
+  // });
+
+  // let content;
+
+  // if (userLocations?.length < 1) {
+  //   content = <p>No Location Added Yet</p>;
+  // } else {
+  //   content = userLocations?.map((location, i) => {
+  //     return <LocationBox location={location} key={i} />;
   //   });
-
-  //   let content;
-
-  //   if (userLocations?.length < 1) {
-  //     content = <p>No Location Added Yet</p>;
-  //   } else {
-  //     content = userLocations?.map((location, i) => {
-  //       return <LocationBox location={location} key={i} />;
-  //     });
-  //   }
+  // }
 
   return (
     <Container>
@@ -135,12 +154,56 @@ const BusinessProfile = () => {
         </div>
       </Dashboard>
       <Main>
-        {/* <BoxContainer>
-          {showLocationModal && <LocationModal onClick={``} />}
-          {newLocationModal && <NewLocation onClick={``} />}
-          {showPointsModal && <PointsModal onClick={togglePointsModal} />}
-          {/* {content} */}
-        {/* </BoxContainer>  */}
+        <div className="">
+          <div>
+            <H3 color="#009f57" fontSize="30" fontWeight="700">
+              Your Profile
+            </H3>
+          </div>
+          {/* Check the length of businessLocationImages array */}
+          {userInfo?.businessLocationImages &&
+            userInfo?.businessLocationImages.length > 0 && (
+              <div className="grid grid-cols-3 grid-rows-2 gap-4 h-auto p-3">
+                {userInfo?.businessLocationImages.length === 1 ? (
+                  // If there is only one image, render a single image
+                  <img
+                    src={userInfo?.businessLocationImages[0]}
+                    alt="Location"
+                    class="col-span-2 object-contain w-[100%]"
+                  />
+                ) : (
+                  // If there are more than one images, render a grid of three images
+                  userInfo?.businessLocationImages
+                    .slice(0, 3)
+                    .map((image, index) => (
+                      <img
+                        class={`${
+                          index === 0
+                            ? `col-start-1 col-end-3 `
+                            : `col-start-3 col-end-4 row-start-2 w-full`
+                        } object-contain`}
+                        key={index}
+                        src={image}
+                        alt={`Location ${index + 1}`}
+                      />
+                    ))
+                )}
+              </div>
+            )}
+
+          <div>
+            {" "}
+            <Button color="green" onClick={toggleNewLocationModal}>
+              Post New Location
+            </Button>
+          </div>
+        </div>
+        <BoxContainer>
+          {showLocationModal && (
+            <LocationModal onClick={toggleShowLocationModal} />
+          )}
+          <NewLocation open={newLocationModal} setOpen={setNewLocationModal} />
+        </BoxContainer>
       </Main>
     </Container>
   );
@@ -170,6 +233,8 @@ const BoxContainer = styled.div`
 const Container = styled.div`
   display: flex;
   background-color: #c4c5c72d;
+
+  height: calc(100vh - 95px);
   a {
     text-decoration: none;
   }
@@ -183,17 +248,15 @@ const Dashboard = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 320px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
+  width: 30%;
+  height: 100%;
+
+  overflow-y: hidden;
   background-color: rgb(255, 254, 252);
   border-top: 0;
   border-right: 2px solid transparent;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-  padding-top: 120px;
-
+  padding-top: 70px;
   z-index: 10;
   &:nth-child(5) div {
     margin-top: 1rem;
@@ -206,6 +269,7 @@ const Dashboard = styled.div`
     color: #009f57;
     font-weight: 700;
   }
+
   svg {
     display: none;
   }
@@ -217,10 +281,18 @@ const Dashboard = styled.div`
     }
   }
 `;
-
+const H3 = styled.h3`
+  color: ${(props) => props.color};
+  font-weight: ${(props) => `${props.fontWeight}`};
+  font-size: ${(props) => `${props.fontSize}px`};
+`;
 const Main = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: auto;
+  margin-left: 0;
+  padding: 20px 40px;
+  overflow: scroll;
+
   @media (max-width: 1150px) {
     margin-left: 0;
     width: 100%;

@@ -27,16 +27,21 @@ const initialValues = {
 const NewLocation = ({ open, setOpen }) => {
   const [createLocation, { isLoading }] = useCreateLocationMutation();
   const { data: states } = useGetStatesQuery();
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.authuser);
   const [rating, setRating] = useState(2);
   const { data: categories, isLoading: isFetchingCategories } =
     useGetCategoriesQuery();
   const [subCat, setSubCat] = useState([]);
   const [values, setValues] = useState(initialValues);
-  const handleFormSubmit = async (values, onSubmitProps) => {
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    console.log(values);
     const formData = new FormData();
     Object.entries(values).forEach(([key, value]) => {
       formData.append(key, value);
+    });
+    values.pictures.forEach((file) => {
+      formData.append("pictures", file);
     });
     createLocation(formData)
       .unwrap()
@@ -54,7 +59,7 @@ const NewLocation = ({ open, setOpen }) => {
       open={open}
       footer={null}
       centered
-      maskClosable={false}
+      maskClosable={true}
       onCancel={() => setOpen(false)}
     >
       <form onSubmit={handleFormSubmit}>
@@ -209,6 +214,7 @@ const NewLocation = ({ open, setOpen }) => {
     </Modal>
   );
 };
+
 export default NewLocation;
 
 const Container = styled.div`
