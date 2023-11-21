@@ -1,9 +1,11 @@
 .header {
-  position: relative;
+  /* position: fixed; */
   z-index: 5000;
   background-color: rgb(255, 254, 252);
   border-bottom: 1px solid transparent;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
+  width: 100%;
+  height: auto;
 }
 
 .nav {
@@ -13,7 +15,9 @@
   padding: 20px 5%;
   border: transparent;
   border-bottom: 1px solid transparent;
-  z-index: 11000;
+  background-color: rgb(255, 254, 252);
+  height: 95px;
+  z-index: 10001000;
   position: relative;
 }
 .nav div {
