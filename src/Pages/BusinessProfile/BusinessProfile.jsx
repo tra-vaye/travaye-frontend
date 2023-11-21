@@ -1,18 +1,12 @@
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
 import { notification } from "antd";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
-import { Button } from "../../components/UI/Buttons";
-import LocationModal from "../../components/UI/Modal/LocationModal";
-import NewLocation from "../../components/UI/Modal/NewLocation";
-import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
-import { setUserType } from "../../redux/Slices/authSlice";
 
 const BusinessProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -141,33 +135,12 @@ const BusinessProfile = () => {
         </div>
       </Dashboard>
       <Main>
-        <div className="d-flex justify-content-between align-items-center mb-5 mt-3">
-          <Profile onClick={toggleDashboard}>
-            <AccountCircleIcon />
-          </Profile>
-          <div className="d-flex justify-content-between">
-            {/* <Button color="green" onClick={``}>
-              Post New
-            </Button>
-            <Link to="/plan-a-trip">
-              <Button>Plan A Trip</Button>
-            </Link> */}
-          </div>
-          <div
-            style={{ transform: "scale(0.7)", cursor: "pointer" }}
-            className="text-center"
-            onClick={togglePointsModal}
-          >
-            <h3 style={{ color: "#e9a009" }}>Travaye Points</h3>
-            <strong>80 Points</strong>
-          </div>
-        </div>
-        <BoxContainer>
+        {/* <BoxContainer>
           {showLocationModal && <LocationModal onClick={``} />}
           {newLocationModal && <NewLocation onClick={``} />}
           {showPointsModal && <PointsModal onClick={togglePointsModal} />}
           {/* {content} */}
-        </BoxContainer>
+        {/* </BoxContainer>  */}
       </Main>
     </Container>
   );
@@ -246,8 +219,7 @@ const Dashboard = styled.div`
 `;
 
 const Main = styled.div`
-  width: 70%;
-  margin-left: 30%;
+  width: 100%;
   min-height: 100vh;
   @media (max-width: 1150px) {
     margin-left: 0;

@@ -1,10 +1,20 @@
+import { Box, Typography } from "@mui/material";
+import { notification } from "antd";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import { CloudUpload } from "../../components/UI/svgs/svgs";
 import { useGetMeQuery } from "../../redux/Api/authApi";
+import { useCompleteBusinessRegistrationMutation } from "../../redux/Api/locationApi";
+const Flex = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  gap: "1px",
+  flexWrap: "wrap",
+});
 
 const Register = () => {
   const [businessInfo, setBusinessInfo] = useState({
@@ -13,9 +23,11 @@ const Register = () => {
     businessEmail: "",
     address: "",
     businessTelephone: "",
-    locationPictures: [],
+    businessLocationImages: [],
+    cacRegistrationProof: [],
+    proofOfAddress: [],
   });
-
+  const navigate = useNavigate();
   const userType = useSelector((state) => state.auth.userType);
   const {
     data: businessData,
@@ -23,10 +35,20 @@ const Register = () => {
     isLoading,
     refetch,
   } = useGetMeQuery({ userType });
+  const [
+    completeBusiness,
+    {
+      isLoading: completeBusinessLoading,
+      isSuccess: completeBusinessSuccess,
+      data,
+      error,
+      isError,
+    },
+  ] = useCompleteBusinessRegistrationMutation();
 
   useEffect(() => {
-    if (isSuccess) {
-      setBusinessInfo(businessData?.user);
+    if (isSuccess && businessData?.user) {
+      setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData.user }));
     }
   }, [isSuccess, businessData?.user]);
 
@@ -35,26 +57,59 @@ const Register = () => {
       ...prevInfo,
       [field]: value,
     }));
-    console.log(businessInfo);
   };
+  console.log(businessInfo);
 
   const handleFileDrop = (acceptedFiles, field) => {
     console.log(acceptedFiles);
     setBusinessInfo((prevInfo) => ({
       ...prevInfo,
-      [field]: acceptedFiles,
+      [field]: [...acceptedFiles],
     }));
   };
   const handleLocationImagesFileDrop = (acceptedFiles, field) => {
     console.log(acceptedFiles);
     setBusinessInfo((prevInfo) => ({
       ...prevInfo,
-      [field]: [...businessInfo.locationPictures, ...acceptedFiles],
+      [field]: [...businessInfo.businessLocationImages, ...acceptedFiles],
     }));
   };
-  const handleSubmit = (e) => {
+
+  useEffect(() => {
+    if (isError) {
+      notification.error({
+        message: error?.data?.error,
+        duration: 3,
+        placement: "bottomRight",
+      });
+    }
+    if (completeBusinessSuccess) {
+      notification.success({
+        message: "Business Verification Pending",
+        duration: 3,
+        placement: "bottomRight",
+      });
+      navigate(`/${userType}`);
+    }
+  }, [isError, error, completeBusinessSuccess, userType, navigate]);
+
+  const handleSubmit = async (e) => {
+    const formData = new FormData();
+    Object.entries(businessInfo).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    businessInfo.businessLocationImages.forEach((file) => {
+      formData.append("businessLocationImages", file);
+    });
+    businessInfo.cacRegistrationProof.forEach((file) => {
+      formData.append("cacRegistrationProof", file);
+    });
+    businessInfo.proofOfAddress.forEach((file) => {
+      formData.append("proofOfAddress", file);
+    });
+    console.log(formData);
     e.preventDefault();
-    // Handle form submission logic here
+    await completeBusiness(formData);
   };
 
   return (
@@ -156,7 +211,22 @@ const Register = () => {
                 <section {...getRootProps()}>
                   <input {...getInputProps()} />
                   <FileUpload>
-                    CAC Registration Proof <i>{CloudUpload}</i>
+                    {businessInfo.cacRegistrationProof.length === 0 ? (
+                      `CAC Registration Proof`
+                    ) : (
+                      <div className="flex gap-3 flex-wrap">
+                        {businessInfo.cacRegistrationProof.map(
+                          (file, index) => (
+                            <Flex key={index}>
+                              <Typography sx={{ marginRight: "1px" }}>
+                                {file.name}
+                              </Typography>
+                            </Flex>
+                          )
+                        )}
+                      </div>
+                    )}{" "}
+                    <i>{CloudUpload}</i>
                   </FileUpload>
                 </section>
               )}
@@ -172,7 +242,20 @@ const Register = () => {
                 <section {...getRootProps()}>
                   <input {...getInputProps()} />
                   <FileUpload>
-                    Proof Of Address (e.g Utility Bill) <i>{CloudUpload}</i>
+                    {businessInfo.proofOfAddress.length === 0 ? (
+                      ` Proof Of Address (e.g Utility Bill)`
+                    ) : (
+                      <div className="flex gap-3 flex-wrap">
+                        {businessInfo.proofOfAddress.map((file, index) => (
+                          <Flex key={index}>
+                            <Typography sx={{ marginRight: "1px" }}>
+                              {file.name}
+                            </Typography>
+                          </Flex>
+                        ))}
+                      </div>
+                    )}
+                    <i>{CloudUpload}</i>
                   </FileUpload>
                 </section>
               )}
@@ -181,14 +264,32 @@ const Register = () => {
               acceptedFiles=".jpg,.jpeg,.png"
               multiple={true}
               onDrop={(acceptedFiles) =>
-                handleLocationImagesFileDrop(acceptedFiles, "locationPictures")
+                handleLocationImagesFileDrop(
+                  acceptedFiles,
+                  "businessLocationImages"
+                )
               }
             >
               {({ getRootProps, getInputProps }) => (
                 <section {...getRootProps()}>
                   <input {...getInputProps()} />
                   <FileUpload>
-                    Pictures of Location <i>{CloudUpload}</i>
+                    {businessInfo.businessLocationImages.length === 0 ? (
+                      `Pictures of Location`
+                    ) : (
+                      <div className="flex gap-3 flex-wrap">
+                        {businessInfo.businessLocationImages.map(
+                          (file, index) => (
+                            <Flex key={index}>
+                              <Typography sx={{ marginRight: "1px" }}>
+                                {file.name}
+                              </Typography>
+                            </Flex>
+                          )
+                        )}
+                      </div>
+                    )}
+                    <i>{CloudUpload}</i>
                   </FileUpload>
                 </section>
               )}
@@ -259,6 +360,7 @@ const FileUpload = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: auto;
 `;
 
 const categories = [

@@ -92,7 +92,14 @@ const Login = () => {
         const authToken = businessData?.token;
         sessionStorage.setItem("authToken", authToken);
         sessionStorage.setItem("userType", userType);
-        if (business?.verified) {
+        if (businessData?.user?.businessVerified === "verified") {
+          navigate(`/${userType}`);
+        } else if (businessData?.user?.businessVerified === "pending") {
+          notification.warning({
+            message: " Business Verification Pending",
+            duration: 3,
+            placement: "bottomRight",
+          });
           navigate(`/${userType}`);
         } else {
           navigate(`/register`);
