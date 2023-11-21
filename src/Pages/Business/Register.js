@@ -1,9 +1,62 @@
+import { useEffect, useState } from "react";
+import Dropzone from "react-dropzone";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import { CloudUpload } from "../../components/UI/svgs/svgs";
-import Dropzone from "react-dropzone";
+import { useGetMeQuery } from "../../redux/Api/authApi";
 
 const Register = () => {
+  const [businessInfo, setBusinessInfo] = useState({
+    businessName: "",
+    businessCategory: "",
+    businessEmail: "",
+    address: "",
+    businessTelephone: "",
+    locationPictures: [],
+  });
+
+  const userType = useSelector((state) => state.auth.userType);
+  const {
+    data: businessData,
+    isSuccess,
+    isLoading,
+    refetch,
+  } = useGetMeQuery({ userType });
+
+  useEffect(() => {
+    if (isSuccess) {
+      setBusinessInfo(businessData?.user);
+    }
+  }, [isSuccess, businessData?.user]);
+
+  const handleChange = (field, value) => {
+    setBusinessInfo((prevInfo) => ({
+      ...prevInfo,
+      [field]: value,
+    }));
+    console.log(businessInfo);
+  };
+
+  const handleFileDrop = (acceptedFiles, field) => {
+    console.log(acceptedFiles);
+    setBusinessInfo((prevInfo) => ({
+      ...prevInfo,
+      [field]: acceptedFiles,
+    }));
+  };
+  const handleLocationImagesFileDrop = (acceptedFiles, field) => {
+    console.log(acceptedFiles);
+    setBusinessInfo((prevInfo) => ({
+      ...prevInfo,
+      [field]: [...businessInfo.locationPictures, ...acceptedFiles],
+    }));
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+  };
+
   return (
     <Container>
       <h4>Complete Registration</h4>
@@ -11,40 +64,53 @@ const Register = () => {
         Please Complete Your Registration to gain full access to your Travaye
         Business Page
       </h6>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="row mt-3">
           <div className="col-md-6">
             <div>
               <label htmlFor="name">
                 Business Name <span>*</span>
               </label>
-              <input id="name" />
+              <input
+                id="name"
+                value={businessInfo?.businessName}
+                onChange={(e) => handleChange("businessName", e.target.value)}
+              />
             </div>
             <div>
               <label htmlFor="category">
                 Business Category <span>*</span>
-                <select id="category">
-                  {categories.map((category, i) => {
-                    return (
-                      <option
-                        value={category}
-                        key={i}
-                        hidden={category === "Please select a category"}
-                        disabled={category === "Please select a category"}
-                        selected={category === "Please select a category"}
-                      >
-                        {category}
-                      </option>
-                    );
-                  })}
-                </select>
               </label>
+              <select
+                id="category"
+                value={businessInfo?.businessCategory}
+                onChange={(e) =>
+                  handleChange("businessCategory", e.target.value)
+                }
+              >
+                {categories.map((category, i) => (
+                  <option
+                    value={category}
+                    key={i}
+                    hidden={category === "Please select a category"}
+                    disabled={category === "Please select a category"}
+                    selected={category === "Please select a category"}
+                  >
+                    {category}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label htmlFor="email">
                 Business Email <span>*</span>
               </label>
-              <input id="email" type="email" />
+              <input
+                id="email"
+                type="email"
+                value={businessInfo?.businessEmail}
+                onChange={(e) => handleChange("businessEmail", e.target.value)}
+              />
             </div>
           </div>
           <div className="col-md-6">
@@ -52,13 +118,24 @@ const Register = () => {
               <label htmlFor="address">
                 Business Address <span>*</span>
               </label>
-              <input id="address" />
+              <input
+                id="address"
+                value={businessInfo?.address}
+                onChange={(e) => handleChange("address", e.target.value)}
+              />
             </div>
             <div>
               <label htmlFor="phone">
                 Business Telephone <span>*</span>
               </label>
-              <input id="phone" />
+              <input
+                id="phone"
+                type="number"
+                value={businessInfo?.businessTelephone}
+                onChange={(e) =>
+                  handleChange("businessTelephone", e.target.value)
+                }
+              />
             </div>
           </div>
         </div>
@@ -68,7 +145,13 @@ const Register = () => {
             <h6>
               Please ensure to upload clear, concise and correct documents.
             </h6>
-            <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+            <Dropzone
+              acceptedFiles=".jpg,.jpeg,.png"
+              multiple={false}
+              onDrop={(acceptedFiles) =>
+                handleFileDrop(acceptedFiles, "cacRegistrationProof")
+              }
+            >
               {({ getRootProps, getInputProps }) => (
                 <section {...getRootProps()}>
                   <input {...getInputProps()} />
@@ -78,7 +161,13 @@ const Register = () => {
                 </section>
               )}
             </Dropzone>
-            <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+            <Dropzone
+              acceptedFiles=".jpg,.jpeg,.png"
+              multiple={false}
+              onDrop={(acceptedFiles) =>
+                handleFileDrop(acceptedFiles, "proofOfAddress")
+              }
+            >
               {({ getRootProps, getInputProps }) => (
                 <section {...getRootProps()}>
                   <input {...getInputProps()} />
@@ -88,7 +177,13 @@ const Register = () => {
                 </section>
               )}
             </Dropzone>
-            <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+            <Dropzone
+              acceptedFiles=".jpg,.jpeg,.png"
+              multiple={true}
+              onDrop={(acceptedFiles) =>
+                handleLocationImagesFileDrop(acceptedFiles, "locationPictures")
+              }
+            >
               {({ getRootProps, getInputProps }) => (
                 <section {...getRootProps()}>
                   <input {...getInputProps()} />
@@ -99,28 +194,6 @@ const Register = () => {
               )}
             </Dropzone>
           </div>
-          {/* <div className="col-md-6">
-            <h4>Add Card Information</h4>
-            <div>
-              <label htmlFor="card-name">Card Name</label>
-              <input id="card-name" />
-            </div>
-            <div>
-              <label htmlFor="card-number">Card Number</label>
-              <input id="card-number" />
-            </div>
-            <div className="d-flex justify-content-between">
-              <div>
-                <label htmlFor="card-expiry">Expiry Date</label>
-                <input id="card-expiry" />
-              </div>
-              <div>
-                <label htmlFor="cvv">Cvv</label>
-                <input id="cvv" type="number" />
-              </div>
-            </div>
-            
-          </div> */}
           <div>
             <Button color="green" type="submit">
               Submit
@@ -159,10 +232,6 @@ const Container = styled.div`
 
     margin-bottom: 16px;
     padding: 4px 8px;
-
-    /* @media (max-width: 767px) {
-      width: 90%;
-    } */
   }
 
   h4 {
@@ -173,9 +242,6 @@ const Container = styled.div`
   button {
     margin-left: auto;
     border-radius: 5px;
-    @media (max-width: 767px) {
-      width: 100%;
-    }
   }
 `;
 
