@@ -17,7 +17,8 @@ import {
   useBusinessRegisterMutation,
   useUserRegisterMutation,
 } from "../../redux/Api/authApi";
-import { setUserType } from "../../state";
+import { setUserType } from "../../redux/Slices/authSlice";
+
 import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
 
 const SignUp = () => {
@@ -28,6 +29,7 @@ const SignUp = () => {
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
+
     dispatch(setUserType({ userType: userSignUp ? "user" : "business" }));
   };
 

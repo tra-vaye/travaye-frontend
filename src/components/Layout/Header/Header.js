@@ -5,9 +5,9 @@ import { useDispatch } from "react-redux/es";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../../../assets/logo.png";
-import { setLogout } from "../../../state";
 import { AltButton, Button } from "../../UI/Buttons";
 import classes from "./Header.module.css";
+import { logout } from "../../../redux/Slices/authSlice";
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ const Header = (props) => {
   const token = sessionStorage.getItem("authToken");
 
   const handleLogoutClick = () => {
-    dispatch(setLogout());
+    dispatch(logout());
     sessionStorage.removeItem("authToken");
     navigate("/login");
   };
