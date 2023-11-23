@@ -37,8 +37,8 @@ export const LocationApi = createApi({
       }),
     }),
     planATrip: builder.query({
-      query: ({ state, city, category, lga, budget }) =>
-        `location/plan?state=${state}&category=${category}&city=${city}&lga=${lga}&budget=${budget}`,
+      query: ({ state, city, category, lga, budget, subcategory }) =>
+        `location/plan?state=${state}&category=${category}&subcategory=${subcategory}&city=${city}&lga=${lga}&budget=${budget}`,
       providesTags: ["Trip"],
     }),
     filterLocation: builder.query({

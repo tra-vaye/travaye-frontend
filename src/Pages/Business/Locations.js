@@ -156,7 +156,6 @@ const Locations = () => {
                       } else {
                         updateSelectedCategories(["All"]);
                       }
-                      console.log(selectedCategories);
                       setShowSidebar(false);
                     }}
                   >
