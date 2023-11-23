@@ -1,11 +1,14 @@
 import { Box, Rating, Typography } from "@mui/material";
-import { Modal, Select, notification } from "antd";
+import { Input, Modal, Select, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useGetStatesQuery } from "../../../redux/Api/geoApi";
+import {
+  useGetStatesQuery,
+  useLazyGetCityQuery,
+} from "../../../redux/Api/geoApi";
 import {
   useCreateLocationMutation,
   useGetCategoriesQuery,
@@ -13,7 +16,7 @@ import {
 import { Button } from "../Buttons";
 import Loader from "../Loader";
 import { ArrowCloud } from "../svgs/svgs";
-
+const { TextArea } = Input;
 const initialValues = {
   locationName: "",
   locationAddress: "",
@@ -30,7 +33,8 @@ const NewLocation = ({ open, setOpen }) => {
   const userType = useSelector((state) => state.auth.userType);
   const [createLocation, { isLoading, isError, isSuccess, error }] =
     useCreateLocationMutation();
-  const { data: states } = useGetStatesQuery();
+  const [getCity, { data: cities }] = useLazyGetCityQuery();
+
   // const user = useSelector((state) => state.authuser);
   const [rating, setRating] = useState(2);
   const { data: categories, isLoading: isFetchingCategories } =
@@ -133,8 +137,8 @@ const NewLocation = ({ open, setOpen }) => {
             />
           </div>
           <InputContainer>
-            <div className="d-flex justify-content-between mb-4">
-              <input
+            <div className="d-flex justify-content-between gap-4 mb-4">
+              <Input
                 placeholder="Name"
                 name="locationName"
                 value={values.locationName}
@@ -146,7 +150,8 @@ const NewLocation = ({ open, setOpen }) => {
                   }));
                 }}
               />
-              <input
+
+              <Input
                 placeholder="Address"
                 name="locationAddress"
                 value={values.locationAddress}
@@ -162,8 +167,7 @@ const NewLocation = ({ open, setOpen }) => {
             <div className="flex gap-4 justify-between mb-4">
               <Select
                 className="!w-full"
-                placeholder="Category"
-                options={categories}
+                placeholder="Location Category"
                 onSelect={(value, Record) => {
                   setSubCat("");
                   const sub_cat = Record?.sub?.map((e) => ({
@@ -176,11 +180,12 @@ const NewLocation = ({ open, setOpen }) => {
                     locationCategory: value,
                   }));
                 }}
-                value={values.locationCategory}
+                options={categories}
               />
+
               <Select
                 className="!w-full"
-                placeholder="Sub-Category"
+                placeholder="Location Sub-Category"
                 onSelect={(value) => {
                   setValues((prev) => ({
                     ...prev,
@@ -188,24 +193,26 @@ const NewLocation = ({ open, setOpen }) => {
                   }));
                 }}
                 options={subCat}
-                value={values?.locationSubCategory}
               />
             </div>
-            <div className="flex justify-between mb-4">
+            <div className="flex justify-between gap-4 mb-4">
               <Select
-                placeholder="location city"
+                className="!w-[50%]"
+                placeholder="Location City"
                 onSelect={(value) => {
                   console.log("clicked");
+                  console.log(value);
                   setValues((prev) => ({
                     ...prev,
                     locationCity: value,
                   }));
                 }}
-                showSearch
-                options={states}
+                // showSearch
+                options={cities}
               />
-              <input
+              <Input
                 placeholder="Phone Number"
+                className="w-[50%]"
                 name="locationContact"
                 value={values.locationContact}
                 required
@@ -217,7 +224,7 @@ const NewLocation = ({ open, setOpen }) => {
                 }}
               />
             </div>
-            <textarea
+            <TextArea
               placeholder="Please Give a Short Description of your Experience"
               rows="6"
               name="locationDescription"
@@ -229,7 +236,7 @@ const NewLocation = ({ open, setOpen }) => {
                   [e.target.name]: e.target.value,
                 }));
               }}
-            ></textarea>
+            ></TextArea>
             <Button color="green" type="submit">
               Post
             </Button>
@@ -275,25 +282,8 @@ const Container = styled.div`
 
 const InputContainer = styled.div`
   * {
-    &::placeholder {
-      color: #d9d9d9;
-      font-weight: 600;
-    }
-  }
-  input {
-    border: 3px solid #d9d9d9;
-    border-radius: 6px;
-    outline: none;
-    width: 45%;
-    padding: 5px;
   }
 
-  textarea {
-    width: 100%;
-    border: 3px solid #d9d9d9;
-    border-radius: 6px;
-    padding: 5px;
-  }
   button {
     margin: 5px auto;
     width: 80px;
@@ -305,3 +295,21 @@ const FlexBetween = styled(Box)({
   justifyContent: "space-between",
   alignItems: "center",
 });
+// input {
+//   border: 3px solid #d9d9d9;
+//   border-radius: 6px;
+//   outline: none;
+//   width: 45%;
+//   padding: 5px;
+// }
+
+// textarea {
+//   width: 100%;
+//   border: 3px solid #d9d9d9;
+//   border-radius: 6px;
+//   padding: 5px;
+// }
+// &::placeholder {
+//   color: #d9d9d9;
+//   font-weight: 600;
+// }
