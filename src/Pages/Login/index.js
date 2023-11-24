@@ -70,11 +70,14 @@ const Login = () => {
         const authToken = data?.token;
         sessionStorage.setItem("userType", userType);
         sessionStorage.setItem("authToken", authToken);
+        sessionStorage.setItem("user_id", data?.user?._id);
+
         navigate(`/${userType}`);
       } else {
         const authToken = data?.token;
         sessionStorage.setItem("authToken", authToken);
         sessionStorage.setItem("userType", userType);
+        sessionStorage.setItem("user_id", data?.user?._id);
 
         // Navigate to the verification page
         navigate("/verify-email");
@@ -92,6 +95,7 @@ const Login = () => {
         const authToken = businessData?.token;
         sessionStorage.setItem("authToken", authToken);
         sessionStorage.setItem("userType", userType);
+        sessionStorage.setItem("user_id", businessData?.user?._id);
         if (businessData?.user?.businessVerified === "verified") {
           navigate(`/${userType}`);
         } else if (businessData?.user?.businessVerified === "pending") {
@@ -108,6 +112,7 @@ const Login = () => {
         const authToken = businessData?.token;
         sessionStorage.setItem("authToken", authToken);
         sessionStorage.setItem("userType", userType);
+        sessionStorage.setItem("user_id", businessData?.user?._id);
 
         // Navigate to the verification page
         navigate("/verify-email");

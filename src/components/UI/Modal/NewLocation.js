@@ -8,6 +8,8 @@ import styled from "styled-components";
 import {
   useGetStatesQuery,
   useLazyGetCityQuery,
+  useLazyGetLandmarksQuery,
+  useLazyGetLgaQuery,
 } from "../../../redux/Api/geoApi";
 import {
   useCreateLocationMutation,
@@ -21,12 +23,15 @@ const initialValues = {
   locationName: "",
   locationAddress: "",
   locationDescription: "",
+  locationState: "",
   locationCity: "",
+  locationLGA: "",
+  locationLandmark: "",
   locationCategory: "",
   locationSubCategory: "",
   pictures: [],
   locationRating: 0,
-  locationAddedBy: "Boluwatife",
+  locationAddedBy: sessionStorage.getItem("user_id"),
 };
 const NewLocation = ({ open, setOpen }) => {
   const navigate = useNavigate();
@@ -34,6 +39,9 @@ const NewLocation = ({ open, setOpen }) => {
   const [createLocation, { isLoading, isError, isSuccess, error }] =
     useCreateLocationMutation();
   const [getCity, { data: cities }] = useLazyGetCityQuery();
+  const { data } = useGetStatesQuery();
+  const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
+  const [getLga, { data: lga }] = useLazyGetLgaQuery();
 
   // const user = useSelector((state) => state.authuser);
   const [rating, setRating] = useState(2);
@@ -170,11 +178,8 @@ const NewLocation = ({ open, setOpen }) => {
                 placeholder="Location Category"
                 onSelect={(value, Record) => {
                   setSubCat("");
-                  const sub_cat = Record?.sub?.map((e) => ({
-                    value: e?.slug,
-                    label: e?.name,
-                  }));
-                  setSubCat(sub_cat);
+
+                  setSubCat(Record?.sub);
                   setValues((prev) => ({
                     ...prev,
                     locationCategory: value,
@@ -185,7 +190,8 @@ const NewLocation = ({ open, setOpen }) => {
 
               <Select
                 className="!w-full"
-                placeholder="Location Sub-Category"
+                placeholder="
+                Sub-Category"
                 onSelect={(value) => {
                   setValues((prev) => ({
                     ...prev,
@@ -196,6 +202,24 @@ const NewLocation = ({ open, setOpen }) => {
               />
             </div>
             <div className="flex justify-between gap-4 mb-4">
+              <Select
+                className="!w-[50%]"
+                placeholder="Location State"
+                onSelect={(value) => {
+                  console.log("clicked");
+                  console.log(value);
+
+                  getLga({ state: value.toUpperCase() });
+                  getCity({ state: value.toUpperCase() });
+                  getLandMarks({ state: value.toUpperCase() });
+                  setValues((prev) => ({
+                    ...prev,
+                    locationState: value,
+                  }));
+                }}
+                // showSearch
+                options={data}
+              />
               <Select
                 className="!w-[50%]"
                 placeholder="Location City"
@@ -210,6 +234,38 @@ const NewLocation = ({ open, setOpen }) => {
                 // showSearch
                 options={cities}
               />
+            </div>
+            <div className="flex justify-between gap-4 mb-4">
+              <Select
+                className="!w-[50%]"
+                placeholder="Location LGA"
+                onSelect={(value) => {
+                  console.log("clicked");
+                  console.log(value);
+                  setValues((prev) => ({
+                    ...prev,
+                    locationLGA: value,
+                  }));
+                }}
+                // showSearch
+                options={lga}
+              />
+              <Select
+                className="!w-[50%]"
+                placeholder="Location Landmarks"
+                onSelect={(value) => {
+                  console.log("clicked");
+                  console.log(value);
+                  setValues((prev) => ({
+                    ...prev,
+                    locationLandmark: value,
+                  }));
+                }}
+                // showSearch
+                options={landmarks}
+              />
+            </div>
+            <div className="flex justify-between gap-4 mb-4">
               <Input
                 placeholder="Phone Number"
                 className="w-[50%]"
@@ -257,6 +313,7 @@ const Container = styled.div`
   box-shadow: 4px 4px 32px 2px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
   height: 20vh;
+  z-index: 1000200000;
   padding: 15px;
   margin-top: 5%;
   p {

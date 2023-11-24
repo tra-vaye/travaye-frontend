@@ -23,7 +23,7 @@ import classes from "./Trip.module.css";
 const PlanTrip = () => {
   const navigate = useNavigate();
   const { data } = useGetStatesQuery();
-  const { data: categoriess } = useGetCategoriesQuery();
+  const { data: categories } = useGetCategoriesQuery();
   const [getCity, { data: city }] = useLazyGetCityQuery();
   const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
@@ -71,7 +71,7 @@ const PlanTrip = () => {
               }}
               // value={queryData.state}
               showSearch
-              className="!w-full"
+              className="!w-[250px]"
               options={data}
             />
             <Select
@@ -81,7 +81,7 @@ const PlanTrip = () => {
                 setQueryData((prev) => ({ ...prev, city: value }));
               }}
               // value={queryData.city}
-              className="!w-full"
+              className="!w-[250px]"
               options={city}
             />
             <Select
@@ -91,7 +91,7 @@ const PlanTrip = () => {
                 setQueryData((prev) => ({ ...prev, lga: value }));
               }}
               // value={queryData.lga}
-              className="!w-full"
+              className="!w-[250px]"
               options={lga}
             />
             <Select
@@ -101,7 +101,7 @@ const PlanTrip = () => {
                 setQueryData((prev) => ({ ...prev, landmarks: value }));
               }}
               // value={queryData.lga}
-              className="!w-full"
+              className="!w-[250px]"
               options={landmarks}
             />
           </div>
@@ -109,51 +109,35 @@ const PlanTrip = () => {
         <div className="mt-3">
           <h4 className="mb-2">Step 2</h4>
           <p className="mb-2">Please Select a Category of Outing Venues</p>
-          <ul>
-            {categoriess?.map((category, i) => {
-              return (
-                <li key={i}>
-                  <input
-                    type="radio"
-                    value={category?.value}
-                    id={category?.value}
-                    name="category"
-                    onChange={(e) => {
-                      setSubData([]);
-                      setQueryData((prev) => ({
-                        ...prev,
-                        category: e.target.value,
-                      }));
-                      setSubData(categoriess[i]?.sub);
-                    }}
-                  />
-                  <label htmlFor={category?.value}>{category?.value}</label>
-                </li>
-              );
-            })}
-          </ul>
-          <>
-            {subData?.length > 0 && <p>Select Sub-Category</p>}
-            <ul>
-              {subData?.map((e, i) => (
-                <li key={i}>
-                  <input
-                    type="radio"
-                    value={e?.name}
-                    id={e?.name}
-                    name="subcategory"
-                    onChange={(e) => {
-                      setQueryData((prev) => ({
-                        ...prev,
-                        subcategory: e.target.value,
-                      }));
-                    }}
-                  />
-                  <label htmlFor={e?.name}>{e?.name}</label>
-                </li>
-              ))}
-            </ul>
-          </>
+          <div className="mt-2 flex flex-wrap md:flex-nowrap md:flex-row gap-3 md:gap-5">
+            <Select
+              placeholder="Category"
+              showSearch
+              onSelect={(value) => {
+                setSubData([]);
+                setQueryData((prev) => ({ ...prev, category: value }));
+                setSubData(
+                  categories.find((cat) => cat.value === value)?.sub || []
+                );
+              }}
+              // className="w-full md:w-[50%]"
+              className="!w-[250px]"
+              options={categories}
+            />
+            <Select
+              placeholder="Sub Category"
+              showSearch
+              onSelect={(value) => {
+                setQueryData((prev) => ({
+                  ...prev,
+                  subcategory: value,
+                }));
+              }}
+              // className="w-full md:w-[50%]"
+              className="!w-[250px]"
+              options={subData}
+            />
+          </div>
         </div>
         <div className="mt-3">
           <h4>Step 3</h4>
