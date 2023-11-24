@@ -15,17 +15,15 @@ import {
   useLazyPlanATripQuery,
 } from "../../redux/Api/locationApi";
 import classes from "./Trip.module.css";
-import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
-import Loader from "../../components/UI/Loader";
-import { Select } from "antd";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import Loader from "../../components/UI/Loader";
+// import { Select } from "antd";
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
 
 const PlanTrip = () => {
   const navigate = useNavigate();
   const { data } = useGetStatesQuery();
-  const { data: categoriess, isLoading: isFetchingCat } =
-    useGetCategoriesQuery();
+  const { data: categoriess } = useGetCategoriesQuery();
   const [getCity, { data: city }] = useLazyGetCityQuery();
   const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
@@ -48,18 +46,22 @@ const PlanTrip = () => {
     <>
       {isLoading && <Loader />}
       <form onSubmit={handleSubmit} className={classes.trip}>
-        <h4 className="text-center">Plan Your desired Trip with Travaye</h4>
+        <h1 className="text-center text-[2rem] font-extrabold mb-2">
+          Plan Your desired Trip with Travaye
+        </h1>
         <h5 className="text-center">
           Follow the Steps below to plan your trip in next to no time
         </h5>
-        <div>
-          <h4 className="mt-3">Step 1</h4>
+        <div className="pt-4">
+          <h4 className="mt-3 mb-2">Step 1</h4>
           <p>Please Fill in Your City / Address Details </p>
-          <div className="flex gap-5">
+          <div className="mt-2 flex flex-wrap md:flex-nowrap md:flex-row gap-3 md:gap-5">
             <Select
+              placeholder="State"
               onSelect={(value) => {
-                getLga({ state: value });
-                getCity({ state: value });
+                getLga({ state: value.toUpperCase() });
+                getCity({ state: value.toUpperCase() });
+                getLandMarks({ state: value.toUpperCase() });
                 setQueryData((prev) => ({
                   ...prev,
                   state: value,
@@ -67,52 +69,65 @@ const PlanTrip = () => {
                   lga: "",
                 }));
               }}
-              value={queryData.state}
+              // value={queryData.state}
               showSearch
               className="!w-full"
               options={data}
             />
             <Select
+              placeholder="City"
               showSearch
               onSelect={(value) => {
                 setQueryData((prev) => ({ ...prev, city: value }));
               }}
-              value={queryData.city}
+              // value={queryData.city}
               className="!w-full"
               options={city}
             />
             <Select
+              placeholder="Local Government Area"
               showSearch
               onSelect={(value) => {
                 setQueryData((prev) => ({ ...prev, lga: value }));
               }}
-              value={queryData.lga}
+              // value={queryData.lga}
               className="!w-full"
               options={lga}
             />
+            <Select
+              placeholder="Landmark Areas"
+              showSearch
+              onSelect={(value) => {
+                setQueryData((prev) => ({ ...prev, landmarks: value }));
+              }}
+              // value={queryData.lga}
+              className="!w-full"
+              options={landmarks}
+            />
           </div>
         </div>
-        <div>
-          <h4>Step 2</h4>
-          <p>Please Select a Category of Outing Venues</p>
+        <div className="mt-3">
+          <h4 className="mb-2">Step 2</h4>
+          <p className="mb-2">Please Select a Category of Outing Venues</p>
           <ul>
-            {categories.map((category, i) => {
+            {categoriess?.map((category, i) => {
               return (
                 <li key={i}>
                   <input
                     type="radio"
-                    value={category.name}
-                    id={category.name}
+                    value={category?.value}
+                    id={category?.value}
                     name="category"
                     onChange={(e) => {
+                      setSubData([]);
                       setQueryData((prev) => ({
                         ...prev,
                         category: e.target.value,
                       }));
+                      setSubData(categoriess[i]?.sub);
                     }}
                   />
-                  <label htmlFor={category}>{category}</label>
-                  <span></span>
+                  <label htmlFor={category?.value}>{category?.value}</label>
                 </li>
               );
             })}
@@ -142,8 +157,9 @@ const PlanTrip = () => {
         </div>
         <div className="mt-3">
           <h4>Step 3</h4>
-          <p>Please Select a budget for your outing.</p>
+          <p className="mb-2">Please Select a budget for your outing.</p>
           <Select
+            placeholder="Select Your Budget "
             className="!w-[250px]"
             options={[
               { value: "free", label: "free" },
