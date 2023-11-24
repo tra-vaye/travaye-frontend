@@ -55,7 +55,10 @@ export const LocationApi = createApi({
         const result = res.map((e) => ({
           value: e.name,
           label: e.name,
-          sub: e.sub,
+          sub: e?.sub?.map((e) => ({
+            value: e.slug,
+            label: e.name,
+          })),
         }));
         return result;
       },

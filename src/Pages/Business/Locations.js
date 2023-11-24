@@ -234,7 +234,7 @@ const SideBar = styled.div`
   height: 100%;
   padding: 3%;
   padding-top: 140px;
-  z-index: 300;
+  z-index: -300;
   h6 {
     margin-bottom: 20px;
     font-weight: 700;
@@ -242,6 +242,7 @@ const SideBar = styled.div`
   @media (max-width: 840px) {
     display: none;
     display: ${(props) => props.showSidebar && "block"};
+    z-index: 300;
   }
 `;
 

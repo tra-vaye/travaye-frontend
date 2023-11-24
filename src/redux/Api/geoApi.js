@@ -1,5 +1,4 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const GeoApi = createApi({
   reducerPath: "GeoApi",
@@ -16,13 +15,37 @@ export const GeoApi = createApi({
       }),
       transformResponse: (res) => {
         const newList = res?.map((e) => ({
-          value: e?.state_code,
+          value: e?.name,
           label: e?.name,
         }));
         return newList;
       },
     }),
     getCity: builder.query({
+      query: (body) => {
+        const stateName = body.state ?? undefined; // Checks for stateName in body object
+        return {
+          url: `states`,
+          stateName,
+        };
+      },
+      transformResponse: (res, meta, args) => {
+        const stateName = args.state.toLowerCase();
+        if (!stateName) {
+          return []; // Returns an empty array if stateName is not provided
+        }
+        const filteredResults = res.filter(
+          (item) => item.name.toLowerCase() === stateName
+        );
+
+        return filteredResults.map((item) => ({
+          value: item.capital,
+          label: item.capital,
+        }));
+      },
+    }),
+
+    getLandmarks: builder.query({
       query: (body) => ({
         url: `${body?.state}/towns`,
       }),
@@ -49,5 +72,9 @@ export const GeoApi = createApi({
   }),
 });
 
-export const { useLazyGetCityQuery, useLazyGetLgaQuery, useGetStatesQuery } =
-  GeoApi;
+export const {
+  useLazyGetCityQuery,
+  useLazyGetLandmarksQuery,
+  useLazyGetLgaQuery,
+  useGetStatesQuery,
+} = GeoApi;

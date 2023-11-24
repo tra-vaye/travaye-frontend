@@ -163,7 +163,7 @@ const BusinessProfile = () => {
           {/* Check the length of businessLocationImages array */}
           {userInfo?.businessLocationImages &&
             userInfo?.businessLocationImages.length > 0 && (
-              <div className="grid grid-cols-3 grid-rows-2 gap-4 h-auto p-3">
+              <div className="md:grid md:grid-cols-3  gap-4 flex flex-wrap flex-auto h-auto p-3">
                 {userInfo?.businessLocationImages.length === 1 ? (
                   // If there is only one image, render a single image
                   <img
@@ -174,13 +174,11 @@ const BusinessProfile = () => {
                 ) : (
                   // If there are more than one images, render a grid of three images
                   userInfo?.businessLocationImages
-                    .slice(0, 3)
+                    .slice(0, 4)
                     .map((image, index) => (
                       <img
                         class={`${
-                          index === 0
-                            ? `col-start-1 col-end-3 `
-                            : `col-start-3 col-end-4 row-start-2 w-full`
+                          index === 0 ? `col-span-1 ` : `col-span-1 w-full`
                         } object-contain`}
                         key={index}
                         src={image}
