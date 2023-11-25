@@ -1,5 +1,5 @@
 .header {
-  /* position: fixed; */
+  position: relative;
   z-index: 5000;
   background-color: rgb(255, 254, 252);
   border-bottom: 1px solid transparent;

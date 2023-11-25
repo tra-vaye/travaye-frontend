@@ -1,15 +1,16 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { notification } from "antd";
 import { useEffect, useState } from "react";
+import { FiveStars, FourStars } from "../../components/UI/svgs/svgs";
+// import classes from "";
+
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
 import { Button } from "../../components/UI/Buttons";
-import LocationBox from "../../components/UI/Location/LocationBox";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
-import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 
@@ -156,14 +157,14 @@ const BusinessProfile = () => {
       <Main>
         <div className="">
           <div>
-            <H3 color="#009f57" fontSize="30" fontWeight="700">
+            <H3 color="#009f57" fontSize="30" fontWeight="700" className="mb-2">
               Your Profile
             </H3>
           </div>
           {/* Check the length of businessLocationImages array */}
           {userInfo?.businessLocationImages &&
             userInfo?.businessLocationImages.length > 0 && (
-              <div className="md:grid md:grid-cols-3  gap-4 flex flex-wrap flex-auto h-auto p-3">
+              <div className="md:grid md:grid-cols-3  gap-3 flex flex-wrap flex-auto h-auto">
                 {userInfo?.businessLocationImages.length === 1 ? (
                   // If there is only one image, render a single image
                   <img
@@ -177,10 +178,12 @@ const BusinessProfile = () => {
                     .slice(0, 4)
                     .map((image, index) => (
                       <img
-                        class={`${
-                          index === 0 ? `col-span-1 ` : `col-span-1 w-full`
-                        } object-contain`}
                         key={index}
+                        className={`${
+                          index === 0
+                            ? "col-span-2 md:row-span-2"
+                            : "col-span-1 w-full"
+                        } object-contain rounded-lg`}
                         src={image}
                         alt={`Location ${index + 1}`}
                       />
@@ -191,6 +194,65 @@ const BusinessProfile = () => {
 
           <div>
             {" "}
+            <ReviewContainer className="col-md-6 px-3 my-4">
+              <div className="d-flex justify-content-between mb-4 items-center mt-3">
+                <ReviewH4 className="text-2xl font-bold">Reviews</ReviewH4>
+                <div className="flex gap-0 md:gap-4 flex-col md:flex-row">
+                  <p className="text-black font-medium">Average Rating</p>{" "}
+                  <i>{FourStars}</i>
+                </div>
+              </div>
+              <Review>
+                <ReviewCard>
+                  <div>
+                    <div className="d-flex justify-content-between">
+                      <h5>
+                        <b>Awesome Sound Experience!!!</b>
+                      </h5>
+                      <i>{FiveStars}</i>
+                    </div>
+
+                    <p>
+                      Awesome Sound Experience!!! Best Cinema Experience I have
+                      experienced in my life. Sound was so amazing and the 3d
+                      viewing was ecstatic. Fantastic Popcorns as well!
+                    </p>
+                    <ReviewUser
+                    // className={classes.user}
+                    >
+                      <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
+                      <p className="mt-1" style={{ color: "#009f57" }}>
+                        Kehinde Olu-Onifade
+                      </p>
+                    </ReviewUser>
+                  </div>
+                </ReviewCard>
+                <ReviewCard>
+                  <div>
+                    <div className="d-flex justify-content-between">
+                      <h5>
+                        <b>Awesome Sound Experience!!!</b>
+                      </h5>
+                      <i>{FiveStars}</i>
+                    </div>
+
+                    <p>
+                      Awesome Sound Experience!!! Best Cinema Experience I have
+                      experienced in my life. Sound was so amazing and the 3d
+                      viewing was ecstatic. Fantastic Popcorns as well!
+                    </p>
+                    <ReviewUser
+                    // className={classes.user}
+                    >
+                      <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
+                      <p className="mt-1" style={{ color: "#009f57" }}>
+                        Kehinde Olu-Onifade
+                      </p>
+                    </ReviewUser>
+                  </div>
+                </ReviewCard>
+              </Review>
+            </ReviewContainer>
             <Button color="green" onClick={toggleNewLocationModal}>
               Post New Location
             </Button>
@@ -233,6 +295,19 @@ const Container = styled.div`
   background-color: #c4c5c72d;
 
   height: calc(100vh - 95px);
+  overflow: auto;
+  ::-webkit-scrollbar {
+    width: 12px; /* Set the width of the scrollbar */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #9d9d9d;
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #d9d9d9;
+  }
   a {
     text-decoration: none;
   }
@@ -247,15 +322,27 @@ const Dashboard = styled.div`
   align-items: center;
   text-align: center;
   width: 30%;
-  height: 100%;
+  height: calc(100vh - 95px);
 
-  overflow-y: hidden;
+  overflow: auto;
   background-color: rgb(255, 254, 252);
   border-top: 0;
   border-right: 2px solid transparent;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
   padding-top: 70px;
   z-index: 10;
+  ::-webkit-scrollbar {
+    width: 12px; /* Set the width of the scrollbar */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #9d9d9d;
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #d9d9d9;
+  }
   &:nth-child(5) div {
     margin-top: 1rem;
   }
@@ -289,10 +376,62 @@ const Main = styled.div`
   min-height: auto;
   margin-left: 0;
   padding: 20px 40px;
-  overflow: scroll;
+  overflow: auto;
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #9d9d9d;
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #d9d9d9;
+  }
 
   @media (max-width: 1150px) {
     margin-left: 0;
     width: 100%;
+  }
+`;
+const ReviewContainer = styled.div`
+  max-height: 50vh;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #9d9d9d;
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #d9d9d9;
+  }
+`;
+const ReviewH4 = styled.h4`
+  color: #009f57;
+`;
+const Review = styled.div``;
+const ReviewCard = styled.div`
+  background: #ffffff;
+  border: 2px solid rgba(0, 159, 87, 0.5);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  p {
+    color: #9d9d9d;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 24px;
+  }
+`;
+const ReviewUser = styled.div`
+  display: flex;
+  img {
+    width: 40px;
+    height: 40px;
   }
 `;

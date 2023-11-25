@@ -43,7 +43,7 @@ const PlanTrip = () => {
     navigate("/locations", { state: queryData });
   };
   return (
-    <>
+    <div className=" ">
       {isLoading && <Loader />}
       <form onSubmit={handleSubmit} className={classes.trip}>
         <h1 className="text-center text-[2rem] font-extrabold mb-2">
@@ -162,7 +162,7 @@ const PlanTrip = () => {
           </Button>
         </ButtonContainer>
       </form>
-    </>
+    </div>
   );
 };
 export default PlanTrip;
