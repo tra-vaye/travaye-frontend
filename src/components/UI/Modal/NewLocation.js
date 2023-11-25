@@ -87,10 +87,11 @@ const NewLocation = ({ open, setOpen }) => {
     await createLocation(formData);
   };
   return (
-    <>
+    <div className=" relative">
       {" "}
       {isLoading && <Loader />}
       <Modal
+        className=" mt-[7rem]"
         open={open}
         footer={null}
         centered
@@ -299,7 +300,7 @@ const NewLocation = ({ open, setOpen }) => {
           </InputContainer>
         </form>
       </Modal>
-    </>
+    </div>
   );
 };
 

@@ -178,6 +178,8 @@ const Locations = () => {
 export default Locations;
 
 const Container = styled.div`
+  position: relative;
+  z-index: 30;
   padding: 2% 5%;
   display: flex;
   p {
@@ -199,6 +201,7 @@ const Container = styled.div`
 `;
 
 const Heading = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   svg {
@@ -234,7 +237,7 @@ const SideBar = styled.div`
   height: 100%;
   padding: 3%;
   padding-top: 140px;
-  z-index: -300;
+  z-index: 20;
   h6 {
     margin-bottom: 20px;
     font-weight: 700;
@@ -255,6 +258,7 @@ const FilterButton = styled.button`
   padding: 4px 12px;
   font-size: 14px;
   width: 100px;
+
   background-color: ${(props) => props.active && "#009f57"};
   @media (min-width: 520px) {
     margin: 10px;
