@@ -346,10 +346,7 @@ const Dashboard = styled.div`
   &:nth-child(5) div {
     margin-top: 1rem;
   }
-  img {
-    width: 150px;
-    height: 150px;
-  }
+
   h5 {
     color: #009f57;
     font-weight: 700;
@@ -395,7 +392,11 @@ const Main = styled.div`
     width: 100%;
   }
 `;
-const ReviewContainer = styled.div`
+const ReviewContainer = styled.div``;
+const ReviewH4 = styled.h4`
+  color: #009f57;
+`;
+const Review = styled.div`
   max-height: 50vh;
   overflow-y: auto;
   ::-webkit-scrollbar {
@@ -411,10 +412,6 @@ const ReviewContainer = styled.div`
     background-color: #d9d9d9;
   }
 `;
-const ReviewH4 = styled.h4`
-  color: #009f57;
-`;
-const Review = styled.div``;
 const ReviewCard = styled.div`
   background: #ffffff;
   border: 2px solid rgba(0, 159, 87, 0.5);

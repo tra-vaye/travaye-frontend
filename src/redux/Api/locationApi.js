@@ -6,13 +6,7 @@ export const LocationApi = createApi({
   baseQuery: baseQueryWithInterceptor,
   refetchOnReconnect: true,
   refetchOnUpdateTimeout: 50000,
-  tagTypes: [
-    "Locations",
-    "Location",
-    "Trip",
-    "LikedLocation",
-    "CompleteRegistration",
-  ],
+  tagTypes: ["Locations", "Location", "Trip", "LikedLocation"],
   endpoints: (builder) => ({
     createLocation: builder.mutation({
       query: (body) => ({
@@ -35,6 +29,7 @@ export const LocationApi = createApi({
       query: ({ id }) => ({
         url: `location/${id}`,
       }),
+      providesTags: ["Location"],
     }),
     planATrip: builder.query({
       query: ({ state, city, category, lga, budget, subcategory }) =>
@@ -71,13 +66,13 @@ export const LocationApi = createApi({
       }),
       invalidatesTags: ["LikedLocation"],
     }),
-    completeBusinessRegistration: builder.mutation({
+    reviewLocation: builder.mutation({
       query: (body) => ({
-        url: "business/complete",
+        url: "location/review",
         method: "POST",
         body,
       }),
-      invalidatesTags: ["CompleteRegistration"],
+      invalidatesTags: ["Location"],
     }),
   }),
 });
@@ -91,5 +86,5 @@ export const {
   useGetCategoriesQuery,
   useAddLocationToLikedLocationsMutation,
   useGetPlanATripQuery,
-  useCompleteBusinessRegistrationMutation,
+  useReviewLocationMutation,
 } = LocationApi;
