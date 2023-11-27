@@ -1,19 +1,44 @@
+import { Box, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
 import Maryland from "../../assets/mm-ticket-prices.png";
 import Avatar from "../../assets/user-avatar.png";
 import { AltButton, Button } from "../../components/UI/Buttons";
-import classes from "./LocationDetails.module.css";
-
-import { notification } from "antd";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Loader from "../../components/UI/Loader";
-import { FiveStars, FourStars } from "../../components/UI/svgs/svgs";
+import {
+  ArrowCloud,
+  FiveStars,
+  FourStars,
+} from "../../components/UI/svgs/svgs";
 import {
   useAddLocationToLikedLocationsMutation,
   useGetLocationByIdQuery,
 } from "../../redux/Api/locationApi";
+import classes from "./LocationDetails.module.css";
 
+import { Input, notification } from "antd";
+import Dropzone from "react-dropzone";
+const { TextArea } = Input;
+
+const initialValues = {
+  locationName: "",
+  locationAddress: "",
+  locationDescription: "",
+  locationState: "",
+  locationCity: "",
+  locationLGA: "",
+  locationLandmark: "",
+  locationCategory: "",
+  locationSubCategory: "",
+  pictures: [],
+  locationRating: 0,
+  locationAddedBy: sessionStorage.getItem("user_id"),
+  locationContact: "",
+};
 const LocationDetails = () => {
+  const [values, setValues] = useState(initialValues);
+
   const { id } = useParams();
   const [location, setLocation] = useState({});
   const [addLocationToLikedLocations] =
@@ -95,16 +120,56 @@ const LocationDetails = () => {
               </div>
             </div>
           </div>
-          <div className="row mt-5">
+          <div
+            className={`${classes.reviewContainer} 
+            row mt-5 px-4 py-3`}
+          >
             <div className="col-md-6">
-              <form>
-                <textarea
-                  rows="13"
-                  placeholder="Share your experience here...."
-                ></textarea>
-                <AltButton location={true} className="ms-auto mt-3 mb-5">
-                  Post Experience
-                </AltButton>
+              <form className="gap-4">
+                <div className="flex flex-col gap-3 bg-white py-2 px-4 rounded-xl border-brandGreen border-[1px]">
+                  <Dropzone
+                    acceptedFiles=".jpg,.jpeg,.png"
+                    multiple={true}
+                    onDrop={(acceptedFiles) => {
+                      // seValue("pictures", [...values.pictures, ...acceptedFiles]);
+                      setValues((prev) => ({
+                        ...prev,
+                        pictures: [...values.pictures, ...acceptedFiles],
+                      }));
+                    }}
+                  >
+                    {({ getRootProps, getInputProps }) => (
+                      <Container>
+                        <section {...getRootProps()}>
+                          <input {...getInputProps()} />
+                          {values.pictures.length === 0 ? (
+                            <div>
+                              <i>{ArrowCloud}</i>
+                              <p>Drag and Drop Pictures here to Upload</p>
+                            </div>
+                          ) : (
+                            values.pictures.map((file, index) => (
+                              <FlexBetween key={index}>
+                                <Typography sx={{ marginRight: "5px" }}>
+                                  {file.name}
+                                </Typography>
+                              </FlexBetween>
+                            ))
+                          )}
+                        </section>
+                      </Container>
+                    )}
+                  </Dropzone>
+                  <TextArea
+                    rows="6"
+                    required
+                    className="mt-3"
+                    placeholder="Share your experience here...."
+                  ></TextArea>
+                  <AltButton location={true} className="mb-4">
+                    Post Experience
+                  </AltButton>
+                </div>
               </form>
             </div>
             <div className="col-md-6">
@@ -169,3 +234,39 @@ const LocationDetails = () => {
 };
 
 export default LocationDetails;
+const FlexBetween = styled(Box)({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 4px 4px 32px 2px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  height: 20vh;
+  z-index: 1000200000;
+  padding: 15px;
+  margin-top: 5%;
+  p {
+    text-align: center;
+  }
+
+  section {
+    width: 100%;
+    border: 3px solid #d9d9d9;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 5%;
+    }
+  }
+`;

@@ -32,6 +32,7 @@ const initialValues = {
   pictures: [],
   locationRating: 0,
   locationAddedBy: sessionStorage.getItem("user_id"),
+  locationContact: "",
 };
 const NewLocation = ({ open, setOpen }) => {
   const navigate = useNavigate();
@@ -282,7 +283,7 @@ const NewLocation = ({ open, setOpen }) => {
               />
             </div>
             <TextArea
-              placeholder="Please Give a Short Description of your Experience"
+              placeholder="Please Give a detailed venturesome Description of your Location"
               rows="6"
               name="locationDescription"
               value={values.locationDescription}
