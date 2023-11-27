@@ -47,7 +47,7 @@ const BusinessProfile = () => {
   // } = useGetMeQuery({
   //   userType: userType,
   // });
-  const userData = useSelector((store) => store.auth.user);
+  const userData = useSelector((store) => store.auth.user).payload;
   const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
@@ -122,32 +122,32 @@ const BusinessProfile = () => {
 
         <img src={Avatar} alt="avatar" />
         <div>
-          <h5 className="mt-5">{userInfo?.businessName}</h5>
+          <h5 className="mt-5">{userData?.businessName}</h5>
           <h6 className="mt-1" usernamame={true}>
-            {`${userInfo?.businessEmail}`}
+            {`${userData?.businessEmail}`}
           </h6>
-          <h6 className="mt-1">{`${userInfo?.businessCategory}`}</h6>
+          <h6 className="mt-1">{`${userData?.businessCategory}`}</h6>
         </div>
         <div>
           <div>
             <h5 className="mt-1 px-1">
-              {userInfo?.address ? userInfo?.address : "No Address Provided"}
+              {userData?.address ? userData?.address : "No Address Provided"}
             </h5>
             <p className="mt-1">
-              {userInfo?.occupation
-                ? userInfo?.occupation
+              {userData?.occupation
+                ? userData?.occupation
                 : "  No Occupation Provided"}
             </p>
           </div>
-          {!userInfo?.businessName && (
+          {!userData?.businessName && (
             <div className="mt-1">
               <h5>Total Outings</h5>
               <p>27 Outings</p>
             </div>
           )}
           <div className="mt-1">
-            <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
-            <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
+            <h5>{userData?.fullName ? "Total Posts" : "User Visits"}</h5>
+            <p>{userData?.fullName ? "6 Posts" : "null"}</p>
           </div>
           <div className="mt-1">
             <h5>Average Review</h5>
@@ -163,19 +163,19 @@ const BusinessProfile = () => {
             </H3>
           </div>
           {/* Check the length of businessLocationImages array */}
-          {userInfo?.businessLocationImages &&
-            userInfo?.businessLocationImages.length > 0 && (
+          {userData?.businessLocationImages &&
+            userData?.businessLocationImages.length > 0 && (
               <div className="md:grid md:grid-cols-3  gap-3 flex flex-wrap flex-auto h-auto">
-                {userInfo?.businessLocationImages.length === 1 ? (
+                {userData?.businessLocationImages.length === 1 ? (
                   // If there is only one image, render a single image
                   <img
-                    src={userInfo?.businessLocationImages[0]}
+                    src={userData?.businessLocationImages[0]}
                     alt="Location"
                     class="col-span-2 object-contain w-[100%]"
                   />
                 ) : (
                   // If there are more than one images, render a grid of three images
-                  userInfo?.businessLocationImages
+                  userData?.businessLocationImages
                     .slice(0, 4)
                     .map((image, index) => (
                       <img

@@ -68,7 +68,7 @@ const UserProfile = () => {
   // } = useGetMeQuery({
   //   userType: userType,
   // });
-  const userData = useSelector((store) => store.auth.user);
+  const userData = useSelector((store) => store.auth.user).payload;
   const [userInfo, setUserInfo] = useState();
 
   // useEffect(() => {
@@ -144,18 +144,18 @@ const UserProfile = () => {
 
         <img src={Avatar} alt="avatar" />
         <div>
-          <h5 className="mt-1">{`${userInfo?.fullName}`}</h5>
-          <h6 usernamame={true}>{`@${userInfo?.username}`}</h6>
+          <h5 className="mt-1">{`${userData?.fullName}`}</h5>
+          <h6 usernamame={true}>{`@${userData?.username}`}</h6>
           <h6>University Student</h6>
         </div>
         <div>
           <div>
             <h5>
-              {userInfo?.address ? userInfo?.address : "No Address Provided"}
+              {userData?.address ? userData?.address : "No Address Provided"}
             </h5>
             <p>
-              {userInfo?.occupation
-                ? userInfo?.occupation
+              {userData?.occupation
+                ? userData?.occupation
                 : "  No Occupation Provided"}
             </p>
           </div>
@@ -164,8 +164,8 @@ const UserProfile = () => {
             <p>27 Outings</p>
           </div>
           <div>
-            <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
-            <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
+            <h5>{userData?.fullName ? "Total Posts" : "User Visits"}</h5>
+            <p>{userData?.fullName ? "6 Posts" : "null"}</p>
           </div>
           <div>
             <h5>Average Review</h5>
