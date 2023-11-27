@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import { CloudUpload } from "../../components/UI/svgs/svgs";
 import { useGetMeQuery } from "../../redux/Api/authApi";
-import { useCompleteBusinessRegistrationMutation } from "../../redux/Api/locationApi";
+import { useCompleteBusinessRegistrationMutation } from "../../redux/Api/authApi";
 const Flex = styled(Box)({
   display: "flex",
   alignItems: "center",

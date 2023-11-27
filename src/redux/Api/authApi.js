@@ -62,6 +62,14 @@ export const AuthApi = createApi({
           });
       },
     }),
+    completeBusinessRegistration: builder.mutation({
+      query: (body) => ({
+        url: "business/complete",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
   }),
 });
 
@@ -72,4 +80,5 @@ export const {
   useUserRegisterMutation,
   useBusinessRegisterMutation,
   useCodeVerifyMutation,
+  useCompleteBusinessRegistrationMutation,
 } = AuthApi;

@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
 }
-.location img {
+.location figure img {
   width: 100%;
 }
 .location a {
@@ -81,10 +81,10 @@
 .location .user {
   display: flex;
 }
-.location .user img {
+/* .location .user img {
   width: 40px;
   height: 40px;
-}
+} */
 .reviewContainer {
   gap: 0;
 }
