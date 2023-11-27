@@ -64,8 +64,8 @@ const BusinessProfile = () => {
   }, [data, error?.error, isError, isSuccess]);
   useEffect(() => {
     // Fetch data again when the page is revisited
-    refetchUserData();
-  }, [location.pathname, refetchUserData]);
+    // refetchUserData();
+  }, [location.pathname]);
   useEffect(() => {
     // if (userSuccess) {
     setUserInfo(userData?.user);
@@ -78,20 +78,20 @@ const BusinessProfile = () => {
         placement: "bottomRight",
       });
       navigate(`/${userType}`);
-      refetchUserData();
+      // refetchUserData();
     } else if (userData?.user?.businessVerified === "false") {
       notification.error({
         message: " Business not Verified ",
         duration: 3,
         placement: "bottomRight",
       });
-      refetchUserData();
+      // refetchUserData();
 
       // Navigate to the verification page
       navigate("/register");
     }
     // }
-  }, [userData?.user, navigate, userType, refetchUserData]);
+  }, [userData?.user, navigate, userType]);
 
   // const userLikedLocations = userData?.user?.likedLocations?.map(
   //   (likedLocationName) =>

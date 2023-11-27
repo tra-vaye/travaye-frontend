@@ -13,7 +13,6 @@ import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 import Loader from "../../components/UI/Loader";
-import { useSelector } from "react-redux";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -99,9 +98,9 @@ const UserProfile = () => {
     } else {
       // Fetch data again when the page is revisited
       refetchLocations();
-      refetchUserData();
+      // refetchUserData();
     }
-  }, [location.pathname, firstVisit, refetchLocations, refetchUserData]);
+  }, [location.pathname, firstVisit, refetchLocations]);
   const userLikedLocations = userData?.user?.likedLocations?.map(
     (likedLocationName) =>
       locations?.find((location) => location.locationName === likedLocationName)
