@@ -1,5 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryForAuth } from "../queryInterceptors";
+import { updateUser, logout } from "../Slices/authSlice";
 
 export const AuthApi = createApi({
   reducerPath: "profile",
@@ -51,6 +52,15 @@ export const AuthApi = createApi({
         url: userType,
       }),
       providesTags: ["User"],
+      onQueryStarted(id, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((apiResponse) => {
+            dispatch(updateUser(apiResponse.data?.user));
+          })
+          .catch(() => {
+            dispatch(logout());
+          });
+      },
     }),
     completeBusinessRegistration: builder.mutation({
       query: (body) => ({
