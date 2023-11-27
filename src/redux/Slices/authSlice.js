@@ -37,6 +37,7 @@ const authSlice = createSlice({
       state.user = null;
       sessionStorage.removeItem("newtoken");
       sessionStorage.removeItem("profileId");
+      window.location.replace("/login");
     },
     updateUser: (state, payload) => {
       state.user = payload;

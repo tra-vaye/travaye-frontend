@@ -60,34 +60,35 @@ const UserProfile = () => {
     locationCity: selectedFilters.join(","),
   });
   const location = useLocation();
-  const {
-    data: userData,
-    isSuccess: userSuccess,
-    refetch: refetchUserData,
-    isLoading: isFetching,
-  } = useGetMeQuery({
-    userType: userType,
-  });
+  // const {
+  //   data: userData,
+  //   isSuccess: userSuccess,
+  //   refetch: refetchUserData,
+  //   isLoading: isFetching,
+  // } = useGetMeQuery({
+  //   userType: userType,
+  // });
+  const userData = useSelector((store) => store.auth.user);
   const [userInfo, setUserInfo] = useState();
 
-  useEffect(() => {
-    if (isSuccess) {
-      setLocations(data?.data);
-    }
-    if (isError) {
-      notification.error({
-        message: error?.error,
-        duration: 3,
-        placement: "bottomRight",
-      });
-    }
-  }, [data, error?.error, isError, isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setLocations(data?.data);
+  //   }
+  //   if (isError) {
+  //     notification.error({
+  //       message: error?.error,
+  //       duration: 3,
+  //       placement: "bottomRight",
+  //     });
+  //   }
+  // }, [data, error?.error, isError, isSuccess]);
 
   useEffect(() => {
-    if (userSuccess) {
-      setUserInfo(userData?.user);
-    }
-  }, [userSuccess, userData?.user]);
+    // if (userSuccess) {
+    setUserInfo(userData?.user);
+    // }
+  }, [userData?.user]);
 
   useEffect(() => {
     // Check if it's the first visit
@@ -97,9 +98,9 @@ const UserProfile = () => {
     } else {
       // Fetch data again when the page is revisited
       refetchLocations();
-      refetchUserData();
+      // refetchUserData();
     }
-  }, [location.pathname, firstVisit, refetchLocations, refetchUserData]);
+  }, [location.pathname, firstVisit, refetchLocations]);
   const userLikedLocations = userData?.user?.likedLocations?.map(
     (likedLocationName) =>
       locations?.find((location) => location.locationName === likedLocationName)
@@ -135,83 +136,75 @@ const UserProfile = () => {
   }
 
   return (
-    <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Container>
-          <Dashboard showDashboard={showDashboard}>
-            <Profile close={true}>
-              <CloseIcon onClick={toggleDashboard} />
-            </Profile>
+    <Container>
+      <Dashboard showDashboard={showDashboard}>
+        <Profile close={true}>
+          <CloseIcon onClick={toggleDashboard} />
+        </Profile>
 
-            <img src={Avatar} alt="avatar" />
-            <div>
-              <h5 className="mt-1">{`${userInfo?.fullName}`}</h5>
-              <h6 usernamame={true}>{`@${userInfo?.username}`}</h6>
-              <h6>University Student</h6>
-            </div>
-            <div>
-              <div>
-                <h5>
-                  {userInfo?.address
-                    ? userInfo?.address
-                    : "No Address Provided"}
-                </h5>
-                <p>
-                  {userInfo?.occupation
-                    ? userInfo?.occupation
-                    : "  No Occupation Provided"}
-                </p>
-              </div>
-              <div>
-                <h5>Total Outings</h5>
-                <p>27 Outings</p>
-              </div>
-              <div>
-                <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
-                <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
-              </div>
-              <div>
-                <h5>Average Review</h5>
-                <p>4.5 stars</p>
-              </div>
-            </div>
-          </Dashboard>
-          <Main>
-            <div className="d-flex justify-content-between align-items-center mb-5 mt-3">
-              <Profile onClick={toggleDashboard}>
-                <AccountCircleIcon />
-              </Profile>
-              <div className="d-flex justify-content-between">
-                {/* <Button color="green" onClick={toggleNewLocationModal}>
+        <img src={Avatar} alt="avatar" />
+        <div>
+          <h5 className="mt-1">{`${userInfo?.fullName}`}</h5>
+          <h6 usernamame={true}>{`@${userInfo?.username}`}</h6>
+          <h6>University Student</h6>
+        </div>
+        <div>
+          <div>
+            <h5>
+              {userInfo?.address ? userInfo?.address : "No Address Provided"}
+            </h5>
+            <p>
+              {userInfo?.occupation
+                ? userInfo?.occupation
+                : "  No Occupation Provided"}
+            </p>
+          </div>
+          <div>
+            <h5>Total Outings</h5>
+            <p>27 Outings</p>
+          </div>
+          <div>
+            <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
+            <p>{userInfo?.fullName ? "6 Posts" : "null"}</p>
+          </div>
+          <div>
+            <h5>Average Review</h5>
+            <p>4.5 stars</p>
+          </div>
+        </div>
+      </Dashboard>
+      <Main>
+        <div className="d-flex justify-content-between align-items-center mb-5 mt-3">
+          <Profile onClick={toggleDashboard}>
+            <AccountCircleIcon />
+          </Profile>
+          <div className="d-flex justify-content-between">
+            {/* <Button color="green" onClick={toggleNewLocationModal}>
               Post New
             </Button> */}
-                <Link to="/plan-a-trip">
-                  <Button>Plan A Trip</Button>
-                </Link>
-              </div>
-              <div
-                style={{ transform: "scale(0.7)", cursor: "pointer" }}
-                className="text-center"
-                onClick={togglePointsModal}
-              >
-                <h3 style={{ color: "#e9a009" }}>Travaye Points</h3>
-                <strong>80 Points</strong>
-              </div>
-            </div>
-            <BoxContainer>
-              {showLocationModal && (
-                <LocationModal onClick={toggleShowLocationModal} />
-              )}
-              {/* {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />} */}
-              {showPointsModal && <PointsModal onClick={togglePointsModal} />}
-              {content}
-            </BoxContainer>
-          </Main>
-        </Container>
-      )}
-    </>
+            <Link to="/plan-a-trip">
+              <Button>Plan A Trip</Button>
+            </Link>
+          </div>
+          <div
+            style={{ transform: "scale(0.7)", cursor: "pointer" }}
+            className="text-center"
+            onClick={togglePointsModal}
+          >
+            <h3 style={{ color: "#e9a009" }}>Travaye Points</h3>
+            <strong>80 Points</strong>
+          </div>
+        </div>
+        <BoxContainer>
+          {showLocationModal && (
+            <LocationModal onClick={toggleShowLocationModal} />
+          )}
+          {/* {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />} */}
+          {showPointsModal && <PointsModal onClick={togglePointsModal} />}
+          {content}
+        </BoxContainer>
+      </Main>
+    </Container>
   );
 };
 

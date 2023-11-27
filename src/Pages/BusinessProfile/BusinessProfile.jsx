@@ -40,13 +40,14 @@ const BusinessProfile = () => {
   const location = useLocation();
   const { data, isError, error, isSuccess } = useGetLocationsQuery(1, 10);
 
-  const {
-    data: userData,
-    isSuccess: userSuccess,
-    refetch: refetchUserData,
-  } = useGetMeQuery({
-    userType: userType,
-  });
+  // const {
+  //   data: userData,
+  //   isSuccess: userSuccess,
+  //   refetch: refetchUserData,
+  // } = useGetMeQuery({
+  //   userType: userType,
+  // });
+  const userData = useSelector((store) => store.auth.user);
   const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
@@ -63,34 +64,34 @@ const BusinessProfile = () => {
   }, [data, error?.error, isError, isSuccess]);
   useEffect(() => {
     // Fetch data again when the page is revisited
-    refetchUserData();
-  }, [location.pathname, refetchUserData]);
+    // refetchUserData();
+  }, [location.pathname]);
   useEffect(() => {
-    if (userSuccess) {
-      setUserInfo(userData?.user);
-      if (userData?.user?.businessVerified === "verified") {
-        navigate(`/${userType}`);
-      } else if (userData?.user?.businessVerified === "pending") {
-        notification.warning({
-          message: " Business Verification Pending",
-          duration: 3,
-          placement: "bottomRight",
-        });
-        navigate(`/${userType}`);
-        refetchUserData();
-      } else if (userData?.user?.businessVerified === "false") {
-        notification.error({
-          message: " Business not Verified ",
-          duration: 3,
-          placement: "bottomRight",
-        });
-        refetchUserData();
+    // if (userSuccess) {
+    setUserInfo(userData?.user);
+    if (userData?.user?.businessVerified === "verified") {
+      navigate(`/${userType}`);
+    } else if (userData?.user?.businessVerified === "pending") {
+      notification.warning({
+        message: " Business Verification Pending",
+        duration: 3,
+        placement: "bottomRight",
+      });
+      navigate(`/${userType}`);
+      // refetchUserData();
+    } else if (userData?.user?.businessVerified === "false") {
+      notification.error({
+        message: " Business not Verified ",
+        duration: 3,
+        placement: "bottomRight",
+      });
+      // refetchUserData();
 
-        // Navigate to the verification page
-        navigate("/register");
-      }
+      // Navigate to the verification page
+      navigate("/register");
     }
-  }, [userSuccess, userData?.user, navigate, userType, refetchUserData]);
+    // }
+  }, [userData?.user, navigate, userType]);
 
   // const userLikedLocations = userData?.user?.likedLocations?.map(
   //   (likedLocationName) =>
