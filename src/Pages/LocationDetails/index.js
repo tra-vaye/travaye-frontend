@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Rating, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -14,50 +14,84 @@ import {
 import {
   useAddLocationToLikedLocationsMutation,
   useGetLocationByIdQuery,
+  useReviewLocationMutation,
 } from "../../redux/Api/locationApi";
 import classes from "./LocationDetails.module.css";
 
 import { Input, notification } from "antd";
 import Dropzone from "react-dropzone";
+import { useSelector } from "react-redux";
 const { TextArea } = Input;
 
-const initialValues = {
-  locationName: "",
-  locationAddress: "",
-  locationDescription: "",
-  locationState: "",
-  locationCity: "",
-  locationLGA: "",
-  locationLandmark: "",
-  locationCategory: "",
-  locationSubCategory: "",
-  pictures: [],
-  locationRating: 0,
-  locationAddedBy: sessionStorage.getItem("user_id"),
-  locationContact: "",
-};
 const LocationDetails = () => {
-  const [values, setValues] = useState(initialValues);
-
   const { id } = useParams();
+
+  const initialValues = {
+    reviewDescription: "",
+    pictures: [],
+    reviewRating: 0,
+    reviewerID: sessionStorage.getItem("user_id"),
+    locationID: id,
+  };
+  const [values, setValues] = useState(initialValues);
+  const [rating, setRating] = useState(2);
+
   const [location, setLocation] = useState({});
   const [addLocationToLikedLocations] =
     useAddLocationToLikedLocationsMutation();
-
+  const [
+    reviewLocation,
+    {
+      isLoading: reviewLoading,
+      isError: reviewIsError,
+      isSuccess,
+      error: reviewError,
+    },
+  ] = useReviewLocationMutation();
+  const userType = sessionStorage.getItem("userType");
+  console.log(userType);
   const { data, isError, error, isLoading } = useGetLocationByIdQuery({ id });
   useEffect(() => {
     if (data) {
       setLocation(data);
     }
-    if (isError) {
+    if (isError || reviewIsError) {
       notification.error({
-        message: error?.error,
+        message: error?.error || reviewError?.error,
         duration: 3,
         placement: "bottomRight",
       });
     }
-  }, [data, error?.error, isError]);
-
+    if (isSuccess) {
+      notification.success({
+        message: "Review submitted successfully",
+        duration: 3,
+        placement: "bottomRight",
+      });
+      setValues(initialValues);
+    }
+  }, [
+    data,
+    error?.error,
+    isError,
+    reviewError?.error,
+    reviewIsError,
+    isSuccess,
+    setValues,
+  ]);
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    console.log(values);
+    const formData = new FormData();
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    values.pictures.forEach((file) => {
+      formData.append("pictures", file);
+    });
+    await reviewLocation(formData);
+  };
+  console.log(location);
   const handleAddClick = () => {
     if (location?.locationName) {
       addLocationToLikedLocations({ locationName: location.locationName })
@@ -83,7 +117,7 @@ const LocationDetails = () => {
   };
   return (
     <div className={classes.location}>
-      {isLoading ? (
+      {isLoading || reviewLoading ? (
         <Loader />
       ) : (
         <>
@@ -124,63 +158,118 @@ const LocationDetails = () => {
             className={`${classes.reviewContainer} 
             row mt-5 px-4 py-3`}
           >
-            <div className="col-md-6">
-              <form className="gap-4">
-                <div className="flex flex-col gap-3 bg-white py-2 px-4 rounded-xl border-brandGreen border-[1px]">
-                  <Dropzone
-                    acceptedFiles=".jpg,.jpeg,.png"
-                    multiple={true}
-                    onDrop={(acceptedFiles) => {
-                      // seValue("pictures", [...values.pictures, ...acceptedFiles]);
-                      setValues((prev) => ({
-                        ...prev,
-                        pictures: [...values.pictures, ...acceptedFiles],
-                      }));
-                    }}
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <Container>
-                        <section {...getRootProps()}>
-                          <input {...getInputProps()} />
-                          {values.pictures.length === 0 ? (
-                            <div>
-                              <i>{ArrowCloud}</i>
-                              <p>Drag and Drop Pictures here to Upload</p>
-                            </div>
-                          ) : (
-                            values.pictures.map((file, index) => (
-                              <FlexBetween key={index}>
-                                <Typography sx={{ marginRight: "5px" }}>
-                                  {file.name}
-                                </Typography>
-                              </FlexBetween>
-                            ))
-                          )}
-                        </section>
-                      </Container>
-                    )}
-                  </Dropzone>
-                  <TextArea
-                    rows="6"
-                    required
-                    className="mt-3"
-                    placeholder="Share your experience here...."
-                  ></TextArea>
-                  <AltButton location={true} className="mb-4">
-                    Post Experience
-                  </AltButton>
-                </div>
-              </form>
-            </div>
-            <div className="col-md-6">
-              <div className="d-flex justify-content-between">
-                <h4>Reviews</h4>
-                <div>
-                  Average Rating <i>{FourStars}</i>
+            {userType === "user" && (
+              <div className="col-md-6">
+                <form className="gap-4" onSubmit={handleFormSubmit}>
+                  <div className="flex flex-col gap-3 bg-white py-2 px-4 rounded-xl border-brandGreen border-[1px]">
+                    <Dropzone
+                      acceptedFiles=".jpg,.jpeg,.png"
+                      multiple={true}
+                      onDrop={(acceptedFiles) => {
+                        // seValue("pictures", [...values.pictures, ...acceptedFiles]);
+                        setValues((prev) => ({
+                          ...prev,
+                          pictures: [...values.pictures, ...acceptedFiles],
+                        }));
+                      }}
+                    >
+                      {({ getRootProps, getInputProps }) => (
+                        <Container>
+                          <section {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            {values.pictures.length === 0 ? (
+                              <div>
+                                <i>{ArrowCloud}</i>
+                                <p>Drag and Drop Pictures here to Upload</p>
+                              </div>
+                            ) : (
+                              values.pictures.map((file, index) => (
+                                <FlexBetween key={index}>
+                                  <Typography sx={{ marginRight: "5px" }}>
+                                    {file.name}
+                                  </Typography>
+                                </FlexBetween>
+                              ))
+                            )}
+                          </section>
+                        </Container>
+                      )}
+                    </Dropzone>
+                    <div className="flex justify-between ">
+                      <Typography className="text-black font-black">
+                        Experience Rating
+                      </Typography>
+                      <Rating
+                        name="simple-controlled"
+                        value={values.locationRating}
+                        onChange={(event, newValue) => {
+                          console.log(newValue);
+                          setRating(newValue);
+                          setValues((prev) => ({
+                            ...prev,
+                            reviewRating: newValue,
+                          }));
+                        }}
+                      />
+                    </div>
+                    <TextArea
+                      rows="6"
+                      required
+                      name="reviewDescription"
+                      className="mt-2"
+                      placeholder="Share your experience here...."
+                      onChange={(e) => {
+                        setValues((prev) => ({
+                          ...prev,
+                          [e.target.name]: e.target.value,
+                        }));
+                      }}
+                    ></TextArea>
+                    <AltButton location={true} className="mb-4">
+                      Post Review
+                    </AltButton>
+                  </div>
+                </form>
+              </div>
+            )}
+            <ReviewContainer className="col-md-6 px-3 my-4">
+              <div className="d-flex justify-content-between mb-4 items-center mt-3">
+                <ReviewH4 className="text-2xl font-bold">Reviews</ReviewH4>
+                <div className="flex gap-2 md:gap-4 flex-col md:flex-row">
+                  <p className="text-black font-medium">Average Rating</p>{" "}
+                  <i>{FourStars}</i>
                 </div>
               </div>
-              <ul className={classes.reviews}>
-                <li>
+              <Review>
+                {location && location?.locationReviews?.length > 0 ? (
+                  location?.locationReviews?.map((review, i) => {
+                    return (
+                      <ReviewCard>
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <ReviewUser>
+                              <img
+                                src={Avatar}
+                                className="img-fluid "
+                                alt="pfp"
+                              />
+                              <p className="" style={{ color: "#009f57" }}>
+                                {review?.reviewerFullname}
+                              </p>
+                            </ReviewUser>
+                            <i>{FiveStars}</i>
+                          </div>
+
+                          <p>{review?.reviewDescription}</p>
+                        </div>
+                      </ReviewCard>
+                    );
+                  })
+                ) : (
+                  <p>No reviews yet</p>
+                )}
+
+                {/* <ReviewCard>
                   <div>
                     <div className="d-flex justify-content-between">
                       <h5>
@@ -194,38 +283,18 @@ const LocationDetails = () => {
                       experienced in my life. Sound was so amazing and the 3d
                       viewing was ecstatic. Fantastic Popcorns as well!
                     </p>
-                    <div className={classes.user}>
+                    <ReviewUser
+                    // className={classes.user}
+                    >
                       <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
                       <p className="mt-1" style={{ color: "#009f57" }}>
                         Kehinde Olu-Onifade
                       </p>
-                    </div>
+                    </ReviewUser>
                   </div>
-                </li>
-                <li>
-                  <div>
-                    <div className="d-flex justify-content-between">
-                      <h5>
-                        <b>Awesome Sound Experience!!!</b>
-                      </h5>
-                      <i>{FiveStars}</i>
-                    </div>
-
-                    <p>
-                      Awesome Sound Experience!!! Best Cinema Experience I have
-                      experienced in my life. Sound was so amazing and the 3d
-                      viewing was ecstatic. Fantastic Popcorns as well!
-                    </p>
-                    <div className={classes.user}>
-                      <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
-                      <p className="mt-1" style={{ color: "#009f57" }}>
-                        Kehinde Olu-Onifade
-                      </p>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
+                </ReviewCard> */}
+              </Review>
+            </ReviewContainer>
           </div>
         </>
       )}
@@ -268,5 +337,48 @@ const Container = styled.div`
       align-items: center;
       margin-bottom: 5%;
     }
+  }
+`;
+
+const ReviewContainer = styled.div``;
+const ReviewH4 = styled.h4`
+  color: #009f57;
+`;
+const Review = styled.div`
+  max-height: 50vh;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #9d9d9d;
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #d9d9d9;
+  }
+`;
+const ReviewCard = styled.div`
+  background: #ffffff;
+  border: 2px solid rgba(0, 159, 87, 0.5);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  p {
+    color: #9d9d9d;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 24px;
+  }
+`;
+const ReviewUser = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  img {
+    width: 40px;
+    height: 40px;
   }
 `;
