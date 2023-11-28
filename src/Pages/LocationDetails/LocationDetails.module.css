@@ -96,3 +96,10 @@
     gap: 1rem;
   }
 }
+.flex-container::after {
+  content: "";
+  flex: 1 1 23%;
+  max-width: calc(25% - 20px);
+  margin: 10px;
+  box-sizing: border-box;
+}

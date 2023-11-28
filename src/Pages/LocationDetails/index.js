@@ -18,9 +18,8 @@ import {
 } from "../../redux/Api/locationApi";
 import classes from "./LocationDetails.module.css";
 
-import { Input, notification } from "antd";
+import { Image, Input, notification } from "antd";
 import Dropzone from "react-dropzone";
-import { useSelector } from "react-redux";
 const { TextArea } = Input;
 
 const LocationDetails = () => {
@@ -156,7 +155,9 @@ const LocationDetails = () => {
           </div>
           <div
             className={`${classes.reviewContainer} 
-            row mt-5 px-4 py-3`}
+           ${
+             userType === "user" ? `row` : `flex justify-center`
+           } mt-5 px-4 py-3`}
           >
             {userType === "user" && (
               <div className="col-md-6">
@@ -232,7 +233,11 @@ const LocationDetails = () => {
                 </form>
               </div>
             )}
-            <ReviewContainer className="col-md-6 px-3 my-4">
+            <ReviewContainer
+              className={`${
+                userType !== "user" ? `w-full` : `px-3`
+              } col-md-6  my-4 `}
+            >
               <div className="d-flex justify-content-between mb-4 items-center mt-3">
                 <ReviewH4 className="text-2xl font-bold">Reviews</ReviewH4>
                 <div className="flex gap-2 md:gap-4 flex-col md:flex-row">
@@ -240,7 +245,7 @@ const LocationDetails = () => {
                   <i>{FourStars}</i>
                 </div>
               </div>
-              <Review>
+              <Review className={`flex flex-wrap gap-4`}>
                 {location && location?.locationReviews?.length > 0 ? (
                   location?.locationReviews?.map((review, i) => {
                     return (
@@ -262,37 +267,37 @@ const LocationDetails = () => {
 
                           <p>{review?.reviewDescription}</p>
                         </div>
+                        <div>
+                          <div className="flex flex-wrap gap rounded-lg overflow-hidden mt-3 flex-container">
+                            <Image.PreviewGroup
+                              preview={{
+                                onChange: (current, prev) =>
+                                  console.log(
+                                    `current index: ${current}, prev index: ${prev}`
+                                  ),
+                              }}
+                            >
+                              {review?.reviewImagePaths?.map((image, key) => {
+                                return (
+                                  <div className={`flex-[1_0_30%] `}>
+                                    <Image
+                                      src={image}
+                                      width={"100%"}
+                                      height={150}
+                                      className=" object-cover"
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </Image.PreviewGroup>
+                          </div>
+                        </div>
                       </ReviewCard>
                     );
                   })
                 ) : (
                   <p>No reviews yet</p>
                 )}
-
-                {/* <ReviewCard>
-                  <div>
-                    <div className="d-flex justify-content-between">
-                      <h5>
-                        <b>Awesome Sound Experience!!!</b>
-                      </h5>
-                      <i>{FiveStars}</i>
-                    </div>
-
-                    <p>
-                      Awesome Sound Experience!!! Best Cinema Experience I have
-                      experienced in my life. Sound was so amazing and the 3d
-                      viewing was ecstatic. Fantastic Popcorns as well!
-                    </p>
-                    <ReviewUser
-                    // className={classes.user}
-                    >
-                      <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
-                      <p className="mt-1" style={{ color: "#009f57" }}>
-                        Kehinde Olu-Onifade
-                      </p>
-                    </ReviewUser>
-                  </div>
-                </ReviewCard> */}
               </Review>
             </ReviewContainer>
           </div>
@@ -316,7 +321,6 @@ const Container = styled.div`
   box-shadow: 4px 4px 32px 2px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
   height: 20vh;
-  z-index: 1000200000;
   padding: 15px;
   margin-top: 5%;
   p {
@@ -346,7 +350,9 @@ const ReviewH4 = styled.h4`
 `;
 const Review = styled.div`
   max-height: 50vh;
+  display: flex;
   overflow-y: auto;
+  padding-right: 15px;
   ::-webkit-scrollbar {
     width: 12px;
   }
@@ -366,6 +372,7 @@ const ReviewCard = styled.div`
   border-radius: 10px;
   padding: 16px;
   margin-bottom: 16px;
+  flex: 1;
   p {
     color: #9d9d9d;
     font-weight: 600;
