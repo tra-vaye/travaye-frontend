@@ -3,7 +3,7 @@ import { notification } from "antd";
 import { useEffect, useState } from "react";
 import { FiveStars, FourStars } from "../../components/UI/svgs/svgs";
 // import classes from "";
-
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -126,13 +126,14 @@ const BusinessProfile = () => {
           <h6 className="mt-1" usernamame={true}>
             {`${userData?.businessEmail}`}
           </h6>
-          <h6 className="mt-1">{`${userData?.businessCategory}`}</h6>
+          <h6 className="mt-1">{`${userData?.businessCategory
+            .split("-")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")}`}</h6>
         </div>
         <div>
           <div>
-            <h5 className="mt-1 px-1">
-              {userData?.address ? userData?.address : "No Address Provided"}
-            </h5>
+            <h5 className="mt-1 px-1">{userData?.address}</h5>
             <p className="mt-1">
               {userData?.occupation
                 ? userData?.occupation
@@ -157,6 +158,9 @@ const BusinessProfile = () => {
       </Dashboard>
       <Main>
         <div className="">
+          <Profile onClick={toggleDashboard}>
+            <AccountCircleIcon />
+          </Profile>
           <div>
             <H3 color="#009f57" fontSize="30" fontWeight="700" className="mb-2">
               Your Profile
