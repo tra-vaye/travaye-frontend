@@ -10,6 +10,7 @@ import LocationBox from "../../components/UI/Location/LocationBox";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
+import { notification } from "antd";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -68,18 +69,19 @@ const UserProfile = () => {
   const userData = useSelector((store) => store.auth.user).payload;
   const [userInfo, setUserInfo] = useState();
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setLocations(data?.data);
-  //   }
-  //   if (isError) {
-  //     notification.error({
-  //       message: error?.error,
-  //       duration: 3,
-  //       placement: "bottomRight",
-  //     });
-  //   }
-  // }, [data, error?.error, isError, isSuccess]);
+  useEffect(() => {
+    if (isSuccess) {
+      setLocations(data?.data);
+      console.log(locations);
+    }
+    if (isError) {
+      notification.error({
+        message: error?.error,
+        duration: 3,
+        placement: "bottomRight",
+      });
+    }
+  }, [data, error?.error, isError, isSuccess, locations]);
 
   useEffect(() => {
     // if (userSuccess) {
@@ -98,7 +100,7 @@ const UserProfile = () => {
       // refetchUserData();
     }
   }, [location.pathname, firstVisit, refetchLocations]);
-  const userLikedLocations = userData?.user?.likedLocations?.map(
+  const userLikedLocations = userData?.likedLocations?.map(
     (likedLocationName) =>
       locations?.find((location) => location.locationName === likedLocationName)
   );
