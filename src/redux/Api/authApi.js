@@ -56,7 +56,7 @@ export const AuthApi = createApi({
         queryFulfilled
           .then((apiResponse) => {
             console.log(apiResponse);
-            dispatch(updateUser(apiResponse.data?.user));
+            dispatch(updateUser(apiResponse?.data?.user));
           })
           .catch(() => {
             dispatch(logout());
