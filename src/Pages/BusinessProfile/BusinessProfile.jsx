@@ -1,5 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
-import { notification } from "antd";
+import { Image, notification } from "antd";
 import { useEffect, useState } from "react";
 import { FiveStars, FourStars } from "../../components/UI/svgs/svgs";
 // import classes from "";
@@ -11,7 +11,6 @@ import Avatar from "../../assets/user-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
-import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 
 const BusinessProfile = () => {
@@ -36,9 +35,18 @@ const BusinessProfile = () => {
   const toggleDashboard = () => {
     setShowDashboard((prevState) => !prevState);
   };
+  const [selectedCategories, updateSelectedCategories] = useState([]);
+  const [selectedFilters, updateSelectedFilters] = useState([]);
   const [locations, setLocations] = useState([]);
   const location = useLocation();
-  const { data, isError, error, isSuccess } = useGetLocationsQuery(1, 10);
+  const { data, isError, error, isSuccess } = useGetLocationsQuery({
+    page: 1,
+    count: 10,
+    categories: selectedCategories
+      .map((category) => category.toLowerCase().replace(/\s+/g, "-"))
+      .join(","),
+    locationCity: selectedFilters.join(","),
+  });
 
   // const {
   //   data: userData,
@@ -53,6 +61,7 @@ const BusinessProfile = () => {
   useEffect(() => {
     if (isSuccess) {
       setLocations(data?.data);
+      // console.log(locations);
     }
     if (isError) {
       notification.error({
@@ -61,57 +70,40 @@ const BusinessProfile = () => {
         placement: "bottomRight",
       });
     }
-  }, [data, error?.error, isError, isSuccess]);
-  useEffect(() => {
-    // Fetch data again when the page is revisited
-    // refetchUserData();
-  }, [location.pathname]);
-  useEffect(() => {
-    // if (userSuccess) {
-    setUserInfo(userData?.user);
-    if (userData?.user?.businessVerified === "verified") {
-      navigate(`/${userType}`);
-    } else if (userData?.user?.businessVerified === "pending") {
-      notification.warning({
-        message: " Business Verification Pending",
-        duration: 3,
-        placement: "bottomRight",
-      });
-      navigate(`/${userType}`);
-      // refetchUserData();
-    } else if (userData?.user?.businessVerified === "false") {
-      notification.error({
-        message: " Business not Verified ",
-        duration: 3,
-        placement: "bottomRight",
-      });
-      // refetchUserData();
+  }, [data, error, isError, isSuccess, locations]);
 
-      // Navigate to the verification page
-      navigate("/register");
+  useEffect(() => {
+    if (userData) {
+      if (userData?.businessVerified === "verified") {
+        navigate(`/${userType}`);
+      } else if (userData?.businessVerified === "pending") {
+        notification.warning({
+          message: " Business Verification Pending",
+          duration: 3,
+          placement: "bottomRight",
+        });
+        navigate(`/${userType}`);
+        // refetchUserData();
+      } else if (userData?.businessVerified === "false") {
+        notification.error({
+          message: " Business not Verified ",
+          duration: 3,
+          placement: "bottomRight",
+        });
+        // refetchUserData();
+
+        // Navigate to the verification page
+        navigate("/register");
+      }
     }
-    // }
-  }, [userData?.user, navigate, userType]);
+  }, [userData, navigate, userType]);
 
-  // const userLikedLocations = userData?.user?.likedLocations?.map(
-  //   (likedLocationName) =>
-  //     locations?.find((location) => location.locationName === likedLocationName)
-  // );
-
-  // const userId = sessionStorage.getItem("user_id");
-  // const userLocations = locations?.filter((location) => {
-  //   return location.locationAddedBy === userId;
-  // });
-
-  // let content;
-
-  // if (userLocations?.length < 1) {
-  //   content = <p>No Location Added Yet</p>;
-  // } else {
-  //   content = userLocations?.map((location, i) => {
-  //     return <LocationBox location={location} key={i} />;
-  //   });
-  // }
+  let allReviews = [];
+  locations?.map((location) => {
+    if (location.locationAddedBy === userData._id) {
+      allReviews = [...allReviews, ...location.locationReviews];
+    }
+  });
 
   return (
     <Container>
@@ -172,7 +164,7 @@ const BusinessProfile = () => {
               <div className="md:grid md:grid-cols-3  gap-3 flex flex-wrap flex-auto h-auto">
                 {userData?.businessLocationImages.length === 1 ? (
                   // If there is only one image, render a single image
-                  <img
+                  <Image
                     src={userData?.businessLocationImages[0]}
                     alt="Location"
                     class="col-span-2 object-contain w-[100%]"
@@ -180,18 +172,21 @@ const BusinessProfile = () => {
                 ) : (
                   // If there are more than one images, render a grid of three images
                   userData?.businessLocationImages
-                    .slice(0, 4)
+                    .slice(0, 3)
                     .map((image, index) => (
-                      <img
-                        key={index}
+                      <div
                         className={`${
                           index === 0
                             ? "col-span-2 md:row-span-2"
                             : "col-span-1 w-full"
-                        } object-contain rounded-lg`}
-                        src={image}
-                        alt={`Location ${index + 1}`}
-                      />
+                        } object-cover rounded-lg`}
+                      >
+                        <Image
+                          key={index}
+                          src={image}
+                          alt={`Location ${index + 1}`}
+                        />
+                      </div>
                     ))
                 )}
               </div>
@@ -199,63 +194,71 @@ const BusinessProfile = () => {
 
           <div>
             {" "}
-            <ReviewContainer className="col-md-6 px-3 my-4">
+            <ReviewContainer
+              className={`${
+                userType !== "user" ? `w-full` : `px-3`
+              } col-md-6  my-4 `}
+            >
               <div className="d-flex justify-content-between mb-4 items-center mt-3">
                 <ReviewH4 className="text-2xl font-bold">Reviews</ReviewH4>
-                <div className="flex gap-0 md:gap-4 flex-col md:flex-row">
+                <div className="flex gap-2 md:gap-4 flex-col md:flex-row">
                   <p className="text-black font-medium">Average Rating</p>{" "}
                   <i>{FourStars}</i>
                 </div>
               </div>
-              <Review>
-                <ReviewCard>
-                  <div>
-                    <div className="d-flex justify-content-between">
-                      <h5>
-                        <b>Awesome Sound Experience!!!</b>
-                      </h5>
-                      <i>{FiveStars}</i>
-                    </div>
+              <Review className={`flex flex-wrap gap-4 flex-1`}>
+                {locations && allReviews?.length > 0 ? (
+                  allReviews?.map((review, i) => {
+                    return (
+                      <ReviewCard className="flex-[1_0_30%]">
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <ReviewUser>
+                              <img
+                                src={Avatar}
+                                className="img-fluid "
+                                alt="pfp"
+                              />
+                              <p className="" style={{ color: "#009f57" }}>
+                                {review?.reviewerFullname}
+                              </p>
+                            </ReviewUser>
+                            <i>{FiveStars}</i>
+                          </div>
 
-                    <p>
-                      Awesome Sound Experience!!! Best Cinema Experience I have
-                      experienced in my life. Sound was so amazing and the 3d
-                      viewing was ecstatic. Fantastic Popcorns as well!
-                    </p>
-                    <ReviewUser
-                    // className={classes.user}
-                    >
-                      <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
-                      <p className="mt-1" style={{ color: "#009f57" }}>
-                        Kehinde Olu-Onifade
-                      </p>
-                    </ReviewUser>
-                  </div>
-                </ReviewCard>
-                <ReviewCard>
-                  <div>
-                    <div className="d-flex justify-content-between">
-                      <h5>
-                        <b>Awesome Sound Experience!!!</b>
-                      </h5>
-                      <i>{FiveStars}</i>
-                    </div>
-
-                    <p>
-                      Awesome Sound Experience!!! Best Cinema Experience I have
-                      experienced in my life. Sound was so amazing and the 3d
-                      viewing was ecstatic. Fantastic Popcorns as well!
-                    </p>
-                    <ReviewUser
-                    // className={classes.user}
-                    >
-                      <img src={Avatar} className="img-fluid  me-2" alt="pfp" />
-                      <p className="mt-1" style={{ color: "#009f57" }}>
-                        Kehinde Olu-Onifade
-                      </p>
-                    </ReviewUser>
-                  </div>
-                </ReviewCard>
+                          <p>{review?.reviewDescription}</p>
+                        </div>
+                        <div>
+                          <div className="flex flex-wrap gap rounded-lg overflow-hidden mt-3 flex-container">
+                            <Image.PreviewGroup
+                              preview={{
+                                onChange: (current, prev) =>
+                                  console.log(
+                                    `current index: ${current}, prev index: ${prev}`
+                                  ),
+                              }}
+                            >
+                              {review?.reviewImagePaths?.map((image, key) => {
+                                return (
+                                  <div className={`flex-[1_0_30%] `}>
+                                    <Image
+                                      src={image}
+                                      width={"100%"}
+                                      height={150}
+                                      className=" object-cover"
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </Image.PreviewGroup>
+                          </div>
+                        </div>
+                      </ReviewCard>
+                    );
+                  })
+                ) : (
+                  <p>No reviews yet</p>
+                )}
               </Review>
             </ReviewContainer>
             <Button color="green" onClick={toggleNewLocationModal}>
@@ -403,7 +406,9 @@ const ReviewH4 = styled.h4`
 `;
 const Review = styled.div`
   max-height: 50vh;
+  display: flex;
   overflow-y: auto;
+  padding-right: 15px;
   ::-webkit-scrollbar {
     width: 12px;
   }
@@ -432,6 +437,8 @@ const ReviewCard = styled.div`
 `;
 const ReviewUser = styled.div`
   display: flex;
+  gap: 1rem;
+  align-items: center;
   img {
     width: 40px;
     height: 40px;

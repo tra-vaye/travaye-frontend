@@ -6,7 +6,7 @@ export const LocationApi = createApi({
   baseQuery: baseQueryWithInterceptor,
   refetchOnReconnect: true,
   refetchOnUpdateTimeout: 50000,
-  tagTypes: ["Locations", "Location", "Trip", "LikedLocation"],
+  tagTypes: ["Locations", "Location", "Trip", "LikedLocation", "User"],
   endpoints: (builder) => ({
     createLocation: builder.mutation({
       query: (body) => ({
@@ -64,7 +64,7 @@ export const LocationApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["LikedLocation"],
+      invalidatesTags: ["Location", "User"],
     }),
     reviewLocation: builder.mutation({
       query: (body) => ({
