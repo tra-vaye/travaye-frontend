@@ -20,6 +20,7 @@ import classes from "./LocationDetails.module.css";
 
 import { Image, Input, notification } from "antd";
 import Dropzone from "react-dropzone";
+import { useSelector } from "react-redux";
 const { TextArea } = Input;
 
 const LocationDetails = () => {
@@ -36,7 +37,7 @@ const LocationDetails = () => {
   const [rating, setRating] = useState(2);
 
   const [location, setLocation] = useState({});
-  const [addLocationToLikedLocations] =
+  const [addLocationToLikedLocations, { isLoading: likeLocationLoading }] =
     useAddLocationToLikedLocationsMutation();
   const [
     reviewLocation,
@@ -49,6 +50,8 @@ const LocationDetails = () => {
   ] = useReviewLocationMutation();
   const userType = sessionStorage.getItem("userType");
   console.log(userType);
+  const userData = useSelector((state) => state.auth.user).payload;
+  console.log(userData);
   const { data, isError, error, isLoading } = useGetLocationByIdQuery({ id });
   useEffect(() => {
     if (data) {
@@ -92,31 +95,31 @@ const LocationDetails = () => {
   };
   console.log(location);
   const handleAddClick = () => {
-    if (location?.locationName) {
-      addLocationToLikedLocations({ locationName: location.locationName })
-        .unwrap()
-        .then((res) =>
-          notification.success({
-            message: "Liked",
-            duration: 3,
-            placement: "bottomRight",
-          })
-        )
-        .catch((err) => {
-          notification.error({
-            message: err.data.error,
-            duration: 3,
-            placement: "bottomRight",
-          });
-        });
-    } else {
-      // Handle the case where location?.locationName is undefined
-      console.error("Location name is undefined");
-    }
+    // if (location?.locationName) {
+    addLocationToLikedLocations({ locationName: location.locationName });
+    //     .unwrap()
+    //     .then((res) =>
+    //       notification.success({
+    //         message: "Liked",
+    //         duration: 3,
+    //         placement: "bottomRight",
+    //       })
+    //     )
+    //     .catch((err) => {
+    //       notification.error({
+    //         message: err.data.error,
+    //         duration: 3,
+    //         placement: "bottomRight",
+    //       });
+    //     });
+    // } else {
+    //   // Handle the case where location?.locationName is undefined
+    //   console.error("Location name is undefined");
+    // }
   };
   return (
     <div className={classes.location}>
-      {isLoading || reviewLoading ? (
+      {isLoading || reviewLoading || likeLocationLoading ? (
         <Loader />
       ) : (
         <>
@@ -146,10 +149,27 @@ const LocationDetails = () => {
               <p className="my-3">{location.locationDescription}</p>
 
               <div className="d-flex mb-3">
-                <Button color="green" location={true} onClick={handleAddClick}>
-                  Like location
+                {location?.usersThatLiked?.includes(userData._id) ? null : (
+                  <Button
+                    color="green"
+                    location={true}
+                    onClick={handleAddClick}
+                  >
+                    Like location
+                  </Button>
+                )}
+                <Button location={true}>
+                  <a
+                    className="hover:text-white"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      `${location.locationAddress},${location.locationName}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View on Google Maps
+                  </a>
                 </Button>
-                <Button location={true}>View on Google Maps</Button>
               </div>
             </div>
           </div>
