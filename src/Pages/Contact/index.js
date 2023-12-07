@@ -6,8 +6,34 @@ import {
   EmailLink,
 } from "../../components/UI/svgs/svgs";
 import FAQs from "../../components/Faqs";
+import { useRef } from "react";
+import emailjs from "@emailjs/browser";
+import { message } from "antd";
 
 const Contact = () => {
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_je05kl9",
+        "template_2ft9dno",
+        form.current,
+        "f3heQFk_ycb7UsDKq"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          message.success("thanks for reaching out we'll get back to you soon");
+          form.current.reset();
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  };
   return (
     <div className={classes.contact}>
       <h4>Contact Us</h4>
@@ -19,23 +45,38 @@ const Contact = () => {
         unique requests. Send us a message if you have any <br />
         questions, concerns or inquiry
       </p>
-      <form>
+      <form ref={form} onSubmit={sendEmail}>
         <div>
           <label htmlFor="email">Email Address</label>
-          <input type="email" id="email" placeholder="faitholu@gmail.com" />
+          <input
+            name="from_email"
+            type="email"
+            id="email"
+            placeholder="faitholu@gmail.com"
+          />
           <i>{Mail}</i>
         </div>
         <div>
           <label htmlFor="username">Username</label>
-          <input type="text" id="username" placeholder="kaizen.brand" />
+          <input
+            name="from_name"
+            type="text"
+            id="username"
+            placeholder="kaizen.brand"
+          />
           <i>{User}</i>
         </div>
         <div>
           <label htmlFor="message">Message</label>
-          <textarea rows="10" placeholder="Say something" id="message" />
+          <textarea
+            name="message"
+            rows="10"
+            placeholder="Say something"
+            id="message"
+          />
         </div>
         <div className="d-flex justify-content-center">
-          <button>Send</button>
+          <button type="submit">Send</button>
         </div>
       </form>
       <div className="mt-5 ">

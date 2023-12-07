@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { notification } from "antd";
+import { notification, Select } from "antd";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
@@ -9,6 +9,11 @@ import { Button } from "../../components/UI/Buttons";
 import { CloudUpload } from "../../components/UI/svgs/svgs";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useCompleteBusinessRegistrationMutation } from "../../redux/Api/authApi";
+import {
+  useGetStatesQuery,
+  useLazyGetCityQuery,
+  useLazyGetLgaQuery,
+} from "../../redux/Api/geoApi";
 const Flex = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -17,6 +22,9 @@ const Flex = styled(Box)({
 });
 
 const Register = () => {
+  const { data: states } = useGetStatesQuery();
+  const [getCity, { data: city }] = useLazyGetCityQuery();
+  const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [businessInfo, setBusinessInfo] = useState({
     businessName: "",
     businessCategory: "",
@@ -186,6 +194,25 @@ const Register = () => {
                 onChange={(e) => handleChange("businessEmail", e.target.value)}
               />
             </div>
+            <div>
+              <label htmlFor="name">
+                Price Range <span>*</span>
+              </label>
+              <div className="flex gap-[1rem] items-center">
+                <input
+                  id="name"
+                  value={businessInfo?.expiryDate}
+                  onChange={(e) => handleChange("expiryDate", e.target.value)}
+                  placeholder="from"
+                />
+                <input
+                  id="name"
+                  value={businessInfo?.cvv}
+                  onChange={(e) => handleChange("cvv", e.target.value)}
+                  placeholder="to"
+                />
+              </div>
+            </div>
           </div>
           <div className="col-md-6">
             <div>
@@ -197,6 +224,51 @@ const Register = () => {
                 value={businessInfo?.address}
                 onChange={(e) => handleChange("address", e.target.value)}
               />
+            </div>
+            <div>
+              <label htmlFor="address">
+                Business Address <span>*</span>
+              </label>
+              <div className="mt-2 mb-[1rem] flex flex-wrap md:flex-nowrap md:flex-row gap-3 md:gap-5">
+                <Select
+                  placeholder="State"
+                  onSelect={(value) => {
+                    getLga({ state: value.toUpperCase() });
+                    getCity({ state: value.toUpperCase() });
+                    getLandMarks({ state: value.toUpperCase() });
+                    setQueryData((prev) => ({
+                      ...prev,
+                      state: value,
+                      city: "",
+                      lga: "",
+                    }));
+                  }}
+                  // value={queryData.state}
+                  showSearch
+                  className="!w-[150px]"
+                  options={states}
+                />
+                <Select
+                  placeholder="City"
+                  showSearch
+                  onSelect={(value) => {
+                    setQueryData((prev) => ({ ...prev, city: value }));
+                  }}
+                  // value={queryData.city}
+                  className="!w-[150px]"
+                  options={city}
+                />
+                <Select
+                  placeholder="LGA"
+                  showSearch
+                  onSelect={(value) => {
+                    setQueryData((prev) => ({ ...prev, lga: value }));
+                  }}
+                  // value={queryData.lga}
+                  className="!w-[150px]"
+                  options={lga}
+                />
+              </div>
             </div>
             <div>
               <label htmlFor="phone">
@@ -313,6 +385,43 @@ const Register = () => {
                 </section>
               )}
             </Dropzone>
+          </div>
+          <div className="col-md-6">
+            <h4>Add Card Information</h4>
+            <div>
+              <label htmlFor="name">Card Name</label>
+              <input
+                id="name"
+                value={businessInfo?.cardName}
+                onChange={(e) => handleChange("cardName", e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="name">Card Number</label>
+              <input
+                id="name"
+                value={businessInfo?.cardNumber}
+                onChange={(e) => handleChange("cardNumber", e.target.value)}
+              />
+            </div>
+            <div className="flex gap-[1rem] items-center">
+              <div>
+                <label htmlFor="name">Expiry Date</label>
+                <input
+                  id="name"
+                  value={businessInfo?.expiryDate}
+                  onChange={(e) => handleChange("expiryDate", e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="name">CVV</label>
+                <input
+                  id="name"
+                  value={businessInfo?.cvv}
+                  onChange={(e) => handleChange("cvv", e.target.value)}
+                />
+              </div>
+            </div>
           </div>
           <div>
             <Button color="green" type="submit">

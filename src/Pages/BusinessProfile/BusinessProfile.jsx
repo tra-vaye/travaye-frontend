@@ -127,8 +127,8 @@ const BusinessProfile = () => {
             {`${userData?.businessEmail}`}
           </h6>
           <h6 className="mt-1">{`${userData?.businessCategory
-            .split("-")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            ?.split("-")
+            ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ")}`}</h6>
         </div>
         <div>
