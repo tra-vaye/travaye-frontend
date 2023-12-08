@@ -9,6 +9,13 @@ import { Button } from "../../components/UI/Buttons";
 import { CloudUpload } from "../../components/UI/svgs/svgs";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useCompleteBusinessRegistrationMutation } from "../../redux/Api/authApi";
+import {
+  useGetStatesQuery,
+  useLazyGetCityQuery,
+  useLazyGetLandmarksQuery,
+  useLazyGetLgaQuery,
+} from "../../redux/Api/geoApi";
+import { Select } from "antd";
 const Flex = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -27,6 +34,10 @@ const Register = () => {
     cacRegistrationProof: [],
     proofOfAddress: [],
   });
+  const { data: states } = useGetStatesQuery();
+  const [getCity, { data: city }] = useLazyGetCityQuery();
+  const [getLga, { data: lga }] = useLazyGetLgaQuery();
+  const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
   const navigate = useNavigate();
   const userType = useSelector((state) => state.auth.userType);
   const {
