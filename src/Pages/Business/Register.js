@@ -203,13 +203,13 @@ const Register = () => {
               <div className="flex gap-[1rem] items-center">
                 <input
                   id="name"
-                  value={businessInfo?.expiryDate}
+                  // value={businessInfo?.expiryDate}
                   onChange={(e) => handleChange("expiryDate", e.target.value)}
                   placeholder="from"
                 />
                 <input
                   id="name"
-                  value={businessInfo?.cvv}
+                  // value={businessInfo?.cvv}
                   onChange={(e) => handleChange("cvv", e.target.value)}
                   placeholder="to"
                 />
