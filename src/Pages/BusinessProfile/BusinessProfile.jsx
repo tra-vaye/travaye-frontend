@@ -93,17 +93,17 @@ const BusinessProfile = () => {
     // }
   }, [userData?.user, navigate, userType]);
 
-  // const userLikedLocations = userData?.user?.likedLocations?.map(
-  //   (likedLocationName) =>
-  //     locations?.find((location) => location.locationName === likedLocationName)
-  // );
+  const userLikedLocations = userData?.user?.likedLocations?.map(
+    (likedLocationName) =>
+      locations?.find((location) => location.locationName === likedLocationName)
+  );
 
-  // const userId = sessionStorage.getItem("user_id");
-  // const userLocations = locations?.filter((location) => {
-  //   return location.locationAddedBy === userId;
-  // });
+  const userId = sessionStorage.getItem("user_id");
+  const userLocations = locations?.filter((location) => {
+    return location.locationAddedBy === userId;
+  });
 
-  // let content;
+  let content;
 
   // if (userLocations?.length < 1) {
   //   content = <p>No Location Added Yet</p>;
