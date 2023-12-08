@@ -201,13 +201,13 @@ const Register = () => {
               <div className="flex gap-[1rem] items-center">
                 <input
                   id="name"
-                  value={businessInfo?.expiryDate}
+                  // value={businessInfo?.expiryDate}
                   onChange={(e) => handleChange("expiryDate", e.target.value)}
                   placeholder="from"
                 />
                 <input
                   id="name"
-                  value={businessInfo?.cvv}
+                  // value={businessInfo?.cvv}
                   onChange={(e) => handleChange("cvv", e.target.value)}
                   placeholder="to"
                 />
@@ -236,12 +236,12 @@ const Register = () => {
                     getLga({ state: value.toUpperCase() });
                     getCity({ state: value.toUpperCase() });
                     getLandMarks({ state: value.toUpperCase() });
-                    setQueryData((prev) => ({
-                      ...prev,
-                      state: value,
-                      city: "",
-                      lga: "",
-                    }));
+                    // setQueryData((prev) => ({
+                    //   ...prev,
+                    //   state: value,
+                    //   city: "",
+                    //   lga: "",
+                    // }));
                   }}
                   // value={queryData.state}
                   showSearch
@@ -252,7 +252,7 @@ const Register = () => {
                   placeholder="City"
                   showSearch
                   onSelect={(value) => {
-                    setQueryData((prev) => ({ ...prev, city: value }));
+                    // setQueryData((prev) => ({ ...prev, city: value }));
                   }}
                   // value={queryData.city}
                   className="!w-[150px]"
@@ -262,7 +262,7 @@ const Register = () => {
                   placeholder="LGA"
                   showSearch
                   onSelect={(value) => {
-                    setQueryData((prev) => ({ ...prev, lga: value }));
+                    // setQueryData((prev) => ({ ...prev, lga: value }));
                   }}
                   // value={queryData.lga}
                   className="!w-[150px]"

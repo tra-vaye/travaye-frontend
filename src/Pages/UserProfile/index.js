@@ -1,18 +1,16 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
-import { notification } from "antd";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import PointsModal from "../../components/UI/Modal/PointsModal";
-import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
-import Loader from "../../components/UI/Loader";
+import { notification } from "antd";
 
 const UserProfile = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -71,18 +69,19 @@ const UserProfile = () => {
   const userData = useSelector((store) => store.auth.user).payload;
   const [userInfo, setUserInfo] = useState();
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     setLocations(data?.data);
-  //   }
-  //   if (isError) {
-  //     notification.error({
-  //       message: error?.error,
-  //       duration: 3,
-  //       placement: "bottomRight",
-  //     });
-  //   }
-  // }, [data, error?.error, isError, isSuccess]);
+  useEffect(() => {
+    if (isSuccess) {
+      setLocations(data?.data);
+      console.log(locations);
+    }
+    if (isError) {
+      notification.error({
+        message: error?.error,
+        duration: 3,
+        placement: "bottomRight",
+      });
+    }
+  }, [data, error?.error, isError, isSuccess, locations]);
 
   useEffect(() => {
     // if (userSuccess) {
@@ -101,7 +100,7 @@ const UserProfile = () => {
       // refetchUserData();
     }
   }, [location.pathname, firstVisit, refetchLocations]);
-  const userLikedLocations = userData?.user?.likedLocations?.map(
+  const userLikedLocations = userData?.likedLocations?.map(
     (likedLocationName) =>
       locations?.find((location) => location.locationName === likedLocationName)
   );
