@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { notification, Select } from "antd";
+import { notification } from "antd";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
@@ -9,11 +9,6 @@ import { Button } from "../../components/UI/Buttons";
 import { CloudUpload } from "../../components/UI/svgs/svgs";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { useCompleteBusinessRegistrationMutation } from "../../redux/Api/authApi";
-import {
-  useGetStatesQuery,
-  useLazyGetCityQuery,
-  useLazyGetLgaQuery,
-} from "../../redux/Api/geoApi";
 const Flex = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -22,9 +17,6 @@ const Flex = styled(Box)({
 });
 
 const Register = () => {
-  const { data: states } = useGetStatesQuery();
-  const [getCity, { data: city }] = useLazyGetCityQuery();
-  const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [businessInfo, setBusinessInfo] = useState({
     businessName: "",
     businessCategory: "",
@@ -385,43 +377,6 @@ const Register = () => {
                 </section>
               )}
             </Dropzone>
-          </div>
-          <div className="col-md-6">
-            <h4>Add Card Information</h4>
-            <div>
-              <label htmlFor="name">Card Name</label>
-              <input
-                id="name"
-                value={businessInfo?.cardName}
-                onChange={(e) => handleChange("cardName", e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="name">Card Number</label>
-              <input
-                id="name"
-                value={businessInfo?.cardNumber}
-                onChange={(e) => handleChange("cardNumber", e.target.value)}
-              />
-            </div>
-            <div className="flex gap-[1rem] items-center">
-              <div>
-                <label htmlFor="name">Expiry Date</label>
-                <input
-                  id="name"
-                  value={businessInfo?.expiryDate}
-                  onChange={(e) => handleChange("expiryDate", e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="name">CVV</label>
-                <input
-                  id="name"
-                  value={businessInfo?.cvv}
-                  onChange={(e) => handleChange("cvv", e.target.value)}
-                />
-              </div>
-            </div>
           </div>
           <div>
             <Button color="green" type="submit">
