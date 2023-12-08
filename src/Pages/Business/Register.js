@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { notification } from "antd";
+import { notification, Select } from "antd";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
@@ -12,10 +12,9 @@ import { useCompleteBusinessRegistrationMutation } from "../../redux/Api/authApi
 import {
   useGetStatesQuery,
   useLazyGetCityQuery,
-  useLazyGetLandmarksQuery,
   useLazyGetLgaQuery,
+  useLazyGetLandmarksQuery,
 } from "../../redux/Api/geoApi";
-import { Select } from "antd";
 const Flex = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -24,6 +23,10 @@ const Flex = styled(Box)({
 });
 
 const Register = () => {
+  const { data: states } = useGetStatesQuery();
+  const [getCity, { data: city }] = useLazyGetCityQuery();
+  const [getLga, { data: lga }] = useLazyGetLgaQuery();
+  const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
   const [businessInfo, setBusinessInfo] = useState({
     businessName: "",
     businessCategory: "",
@@ -34,10 +37,6 @@ const Register = () => {
     cacRegistrationProof: [],
     proofOfAddress: [],
   });
-  const { data: states } = useGetStatesQuery();
-  const [getCity, { data: city }] = useLazyGetCityQuery();
-  const [getLga, { data: lga }] = useLazyGetLgaQuery();
-  const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
   const navigate = useNavigate();
   const userType = useSelector((state) => state.auth.userType);
   const {
@@ -204,13 +203,13 @@ const Register = () => {
               <div className="flex gap-[1rem] items-center">
                 <input
                   id="name"
-                  // value={businessInfo?.expiryDate}
+                  value={businessInfo?.expiryDate}
                   onChange={(e) => handleChange("expiryDate", e.target.value)}
                   placeholder="from"
                 />
                 <input
                   id="name"
-                  // value={businessInfo?.cvv}
+                  value={businessInfo?.cvv}
                   onChange={(e) => handleChange("cvv", e.target.value)}
                   placeholder="to"
                 />
@@ -388,6 +387,43 @@ const Register = () => {
                 </section>
               )}
             </Dropzone>
+          </div>
+          <div className="col-md-6">
+            <h4>Add Card Information</h4>
+            <div>
+              <label htmlFor="name">Card Name</label>
+              <input
+                id="name"
+                value={businessInfo?.cardName}
+                onChange={(e) => handleChange("cardName", e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="name">Card Number</label>
+              <input
+                id="name"
+                value={businessInfo?.cardNumber}
+                onChange={(e) => handleChange("cardNumber", e.target.value)}
+              />
+            </div>
+            <div className="flex gap-[1rem] items-center">
+              <div>
+                <label htmlFor="name">Expiry Date</label>
+                <input
+                  id="name"
+                  value={businessInfo?.expiryDate}
+                  onChange={(e) => handleChange("expiryDate", e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="name">CVV</label>
+                <input
+                  id="name"
+                  value={businessInfo?.cvv}
+                  onChange={(e) => handleChange("cvv", e.target.value)}
+                />
+              </div>
+            </div>
           </div>
           <div>
             <Button color="green" type="submit">
