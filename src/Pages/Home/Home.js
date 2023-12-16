@@ -25,6 +25,7 @@ import Carousel from "../../components/UI/Carousel";
 import Footer from "../../components/Layout/Footer/Footer";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
+import ReviewCarousel from "../../components/UI/Review/Review";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -85,44 +86,11 @@ const Home = () => {
           <img src={ReviewImage} alt="banner" className="img-fluid" />
         </div>
         <div
-          className={`col-lg-6 d-flex flex-column justify-content-center px-5 ${classes.content}`}
+          className={`col-lg-6 d-flex flex-column justify-content-center ${classes.content}`}
         >
-          <h2>What are they saying?</h2>
-          <h3>What Our Customers Say About Travaye</h3>
-          <article>
-            I am a GenZ Techie trying to live my best life without worrying
-            about Sapa and Travaye helps me do just that by helping me find top
-            notch locations I can flex at within my budget. Shoutout to Travaye!{" "}
-          </article>
-          <div className={classes.user}>
-            <div className="d-flex justify-content-between flex-wrap">
-              <div className="d-flex justify-content-center align-items-center mt-3 me-4 ">
-                <img src={Avatar} alt="avatar" />
-                <div>
-                  <p>Barnabas Peters</p>
-                  <p
-                    style={{
-                      fontWeight: " 700",
-                      fontSize: "22px",
-                      lineHeight: " 40px",
-                      textAlign: "justify",
-                      color: " #9d9d9d",
-                    }}
-                  >
-                    Photographer
-                  </p>
-                  <div className={classes.stars}>
-                    <img src={ReviewStars} alt="stars" className="mt-3 " />
-                  </div>
-                </div>
-              </div>
-
-              <div className="d-flex justify-content-between align-items-center justify-self-center mx-auto mt-3">
-                <ScrollRightBtn className="review-scroll" />
-                <ScrollLeftBtn className="review-scroll" />
-              </div>
-            </div>
-          </div>
+          <h2 className="mx-5">What are they saying?</h2>
+          <h3 className="mx-5">What Our Customers Say About Travaye</h3>
+          <ReviewCarousel classes={classes} />
         </div>
       </section>
       <GetStartedConainer>
