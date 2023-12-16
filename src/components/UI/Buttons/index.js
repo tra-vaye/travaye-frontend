@@ -21,9 +21,8 @@ export const AltButton = styled.button`
 export const ScrollLeftBtn = (props) => {
   return (
     <button
-      className={`${classes.scroll} ${
-        props.className === "review-scroll" && classes.review
-      } `}
+      // className={props.className}
+      className={`${classes.scroll} ${classes.review} ${props.className}`}
     >
       <img src={ArrowBackIosNewIcon} alt="scroll" />
     </button>
@@ -33,9 +32,7 @@ export const ScrollLeftBtn = (props) => {
 export const ScrollRightBtn = (props) => {
   return (
     <button
-      className={`${classes.scroll} ${
-        props.className === "review-scroll" && classes.review
-      } `}
+      className={`${classes.scroll} ${classes.review} ${props.className}`}
     >
       <img src={ArrowForwardIosIcon} alt="scroll" />
     </button>
