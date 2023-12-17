@@ -1,13 +1,11 @@
-import { Box, Typography } from "@mui/material";
-import { Select, notification } from "antd";
+import { Box } from "@mui/material";
+import { notification } from "antd";
 import { useEffect, useState } from "react";
-import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
-import { CloudUpload } from "../../components/UI/svgs/svgs";
 import {
   useCompleteBusinessRegistrationMutation,
   useGetMeQuery,
@@ -26,7 +24,7 @@ const Flex = styled(Box)({
   flexWrap: "wrap",
 });
 
-const Register = () => {
+const Subscribe = () => {
   const { data: states } = useGetStatesQuery();
   const { data: categories, isLoading: getCategoriesLoading } =
     useGetCategoriesQuery();
@@ -38,20 +36,10 @@ const Register = () => {
   const [loading, setIsLoading] = useState(false);
 
   const [businessInfo, setBusinessInfo] = useState({
-    businessName: "",
-    businessCategory: "",
-    businessSubCategory: "",
-    businessEmail: "",
-    businessAddress: "",
-    businessTelephone: "",
-    businessLGA: "",
-    businessState: "",
-    businessCity: "",
-    businessLocationImages: [],
-    cacRegistrationProof: [],
-    proofOfAddress: [],
-    businessPriceRangeFrom: "",
-    businessPriceRangeTo: "",
+    cardName: "",
+    cardNumber: "",
+    cardExpiryDate: "",
+    cardCvv: "",
   });
   const navigate = useNavigate();
   const userType = useSelector((state) => state.auth.userType);
@@ -75,17 +63,17 @@ const Register = () => {
   useEffect(() => {
     if (isSuccess && businessData?.user) {
       setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData.user }));
-      if (businessData?.user?.businessVerified === "verified") {
+      if (businessData?.user?.subscribed === "verified") {
         navigate(`/${userType}`);
-      } else if (businessData?.user?.businessVerified === "pending") {
+      } else if (businessData?.user?.subscribed === "pending") {
         notification.warning({
           message: " Business Verification Pending",
           duration: 3,
           placement: "bottomRight",
         });
-        navigate(`/${userType}`);
+        navigate(`/subscribe`);
         refetch();
-      } else if (businessData?.user?.businessVerified === "false") {
+      } else if (businessData?.user?.subscribed === "false") {
         notification.error({
           message: " Business not Verified ",
           duration: 3,
@@ -94,7 +82,7 @@ const Register = () => {
         refetch();
 
         // Navigate to the verification page
-        navigate("/register");
+        navigate("/subscribe");
       }
     }
   }, [isSuccess, businessData?.user, navigate, refetch, userType]);
@@ -106,21 +94,6 @@ const Register = () => {
     }));
   };
   console.log(businessInfo);
-
-  const handleFileDrop = (acceptedFiles, field) => {
-    console.log(acceptedFiles);
-    setBusinessInfo((prevInfo) => ({
-      ...prevInfo,
-      [field]: [...acceptedFiles],
-    }));
-  };
-  const handleLocationImagesFileDrop = (acceptedFiles, field) => {
-    console.log(acceptedFiles);
-    setBusinessInfo((prevInfo) => ({
-      ...prevInfo,
-      [field]: [...businessInfo.businessLocationImages, ...acceptedFiles],
-    }));
-  };
 
   useEffect(() => {
     if (isError) {
@@ -143,19 +116,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     setIsLoading(true);
     const formData = new FormData();
-    Object.entries(businessInfo).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    businessInfo.businessLocationImages.forEach((file) => {
-      formData.append("businessLocationImages", file);
-    });
-    businessInfo.cacRegistrationProof.forEach((file) => {
-      formData.append("cacRegistrationProof", file);
-    });
-    businessInfo.proofOfAddress.forEach((file) => {
-      formData.append("proofOfAddress", file);
-    });
-    console.log(formData);
+
     e.preventDefault();
     await completeBusiness(formData);
     setIsLoading(false);
@@ -167,13 +128,10 @@ const Register = () => {
         loading ||
         getCategoriesLoading ||
         completeBusinessLoading) && <Loader />}
-      <h4>Complete Registration</h4>
-      <h6>
-        Please Complete Your Registration to gain full access to your Travaye
-        Business Page
-      </h6>
+      <h4>Verify you're Human</h4>
+      <h6>2 Months free, Please add your card for verification</h6>
       <form onSubmit={handleSubmit}>
-        <div className="row mt-3">
+        {/* <div className="row mt-3">
           <div className="col-md-6">
             <div>
               <label htmlFor="name">
@@ -345,9 +303,9 @@ const Register = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="row mt-3">
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <h4>Upload Documents</h4>
             <h6>
               Please ensure to upload clear, concise and correct documents.
@@ -446,8 +404,8 @@ const Register = () => {
                 </section>
               )}
             </Dropzone>
-          </div>
-          {/* <div className="col-md-6">
+          </div> */}
+          <div className="col-md-6">
             <h4>Add Card Information</h4>
             <div>
               <label htmlFor="name">Card Name</label>
@@ -458,32 +416,34 @@ const Register = () => {
               />
             </div>
             <div>
-              <label htmlFor="name">Card Number</label>
+              <label htmlFor="cardNumber">Card Number</label>
               <input
-                id="name"
+                id="cardNumber"
                 value={businessInfo?.cardNumber}
                 onChange={(e) => handleChange("cardNumber", e.target.value)}
               />
             </div>
             <div className="flex gap-[1rem] items-center">
               <div>
-                <label htmlFor="name">Expiry Date</label>
+                <label htmlFor="cardExpDate">Expiry Date</label>
                 <input
-                  id="name"
+                  id="cardExpDate"
                   value={businessInfo?.expiryDate}
-                  onChange={(e) => handleChange("expiryDate", e.target.value)}
+                  onChange={(e) =>
+                    handleChange("cardExpiryDate", e.target.value)
+                  }
                 />
               </div>
               <div>
-                <label htmlFor="name">CVV</label>
+                <label htmlFor="cardCvv">CVV</label>
                 <input
-                  id="name"
+                  id="cardvv"
                   value={businessInfo?.cvv}
-                  onChange={(e) => handleChange("cvv", e.target.value)}
+                  onChange={(e) => handleChange("cardCvv", e.target.value)}
                 />
               </div>
             </div>
-          </div> */}
+          </div>
           <div>
             <Button color="green" type="submit">
               Submit
@@ -495,7 +455,7 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Subscribe;
 
 const Container = styled.div`
   padding: 2% 5%;

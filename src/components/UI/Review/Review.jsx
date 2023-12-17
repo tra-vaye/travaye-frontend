@@ -1,14 +1,13 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css/bundle";
+import styled from "styled-components";
 import { A11y, Navigation, Pagination, Scrollbar } from "swiper";
-import Lagos from "../../../assets/lagos.png";
-import Ibadan from "../../../assets/ibadan.png";
+import "swiper/css/bundle";
+import { Swiper, SwiperSlide } from "swiper/react";
 import Abuja from "../../../assets/abuja.png";
-import WaterMark from "../../../assets/watermark.png";
+import Avatar from "../../../assets/avatar.png";
+import Ibadan from "../../../assets/ibadan.png";
+import Lagos from "../../../assets/lagos.png";
 import ReviewStars from "../../../assets/review-stars.png";
 import { ScrollLeftBtn, ScrollRightBtn } from "../Buttons";
-import Avatar from "../../../assets/avatar.png";
-import styled from "styled-components";
 
 const Data = [
   { location: "Lagos, Nigeria", img: Lagos, rating: "" },
