@@ -124,7 +124,7 @@ const AddedLocations = () => {
         </Card>
       </div>
 
-      <footer className="row">
+      <footer className="row sticky bottom-0 bg-white py-[2%] shadow-md">
         <div className="col-md-3">
           <Title>Total Added Locations</Title>
           <Value>5 Locations</Value>
@@ -148,6 +148,7 @@ export default AddedLocations;
 
 const Container = styled.div`
   padding: 5%;
+  position: relative;
   h4 {
     text-align: center;
     font-weight: 700;
