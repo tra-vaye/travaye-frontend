@@ -50,7 +50,9 @@ const UserProfile = lazy(() => {
 const BusinessProfile = lazy(() => {
   return import("./Pages/BusinessProfile/BusinessProfile");
 });
-
+const Subscribe = lazy(() => {
+  return import("./Pages/Subscribe/Subscribe");
+});
 function App() {
   const [showSideNav, setShowSideNav] = useState(false);
 
@@ -78,6 +80,9 @@ function App() {
             )}
             {userType === "business" && (
               <Route path="/business" element={<BusinessProfile />} />
+            )}
+            {userType === "business" && (
+              <Route path="/subscribe" element={<Subscribe />} />
             )}
             {/* Redirect to the appropriate route if user tries to access the wrong route */}
             {userType === "business" && (

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
+import Loader from "../../components/UI/Loader";
 import { CloudUpload } from "../../components/UI/svgs/svgs";
 import {
   useCompleteBusinessRegistrationMutation,
@@ -18,7 +19,6 @@ import {
   useLazyGetLgaQuery,
 } from "../../redux/Api/geoApi";
 import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
-import Loader from "../../components/UI/Loader";
 const Flex = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -35,6 +35,7 @@ const Register = () => {
   const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
   const [subData, setSubData] = useState([]);
+  const [loading, setIsLoading] = useState(false);
 
   const [businessInfo, setBusinessInfo] = useState({
     businessName: "",
@@ -135,11 +136,12 @@ const Register = () => {
         duration: 3,
         placement: "bottomRight",
       });
-      navigate(`/${userType}`);
+      navigate(`/subscribe`);
     }
   }, [isError, error, completeBusinessSuccess, userType, navigate]);
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     const formData = new FormData();
     Object.entries(businessInfo).forEach(([key, value]) => {
       formData.append(key, value);
@@ -156,11 +158,15 @@ const Register = () => {
     console.log(formData);
     e.preventDefault();
     await completeBusiness(formData);
+    setIsLoading(false);
   };
 
   return (
     <Container>
-      {(isLoading || getCategoriesLoading) && <Loader />}
+      {(isLoading ||
+        loading ||
+        getCategoriesLoading ||
+        completeBusinessLoading) && <Loader />}
       <h4>Complete Registration</h4>
       <h6>
         Please Complete Your Registration to gain full access to your Travaye
@@ -545,15 +551,3 @@ const FileUpload = styled.div`
   align-items: center;
   height: auto;
 `;
-
-// const categories = [
-//   "Please select a category",
-//   "Special Events",
-//   "Food & Drinks",
-//   "Entertainment Venues",
-//   "Parks & Relaxation Spots",
-//   "History & Arts",
-//   "Wildlife Attractions",
-//   "Sports & Recreation Centres",
-//   "Historical/Tourist Attractions",
-// ];
