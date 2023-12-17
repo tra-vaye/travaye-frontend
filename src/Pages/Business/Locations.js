@@ -7,6 +7,9 @@ import Loader from "../../components/UI/Loader";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import { BackDrop } from "../../components/UI/Modal/Modal";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
+import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
+import { useGetStatesQuery } from "../../redux/Api/geoApi";
+import { Select, Input, Rate } from "antd";
 
 const categories = [
   "All",
@@ -25,9 +28,11 @@ const filters = ["All", "Abuja", "Ibadan", "Lagos"];
 const Locations = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [locations, setLocations] = useState([]);
-
+  const [subData, setSubData] = useState([]);
   const [selectedCategories, updateSelectedCategories] = useState([]);
   const [selectedFilters, updateSelectedFilters] = useState([]);
+  const { data: locationCategories } = useGetCategoriesQuery();
+  const { data: states } = useGetStatesQuery();
 
   // Categories and locationCity are queries for the backend and they are in array formats
   // I am joining every element in the array using .join() to make the request query a single query in a request to avoid server overload
@@ -75,7 +80,6 @@ const Locations = () => {
               <p className="mt-2">Recent Searches</p>
               <MenuOpenIcon onClick={toggleSidebar} />
             </Heading>
-
             <FilterButtonContainer>
               {filters.map((filter, i) => {
                 return (
@@ -164,10 +168,63 @@ const Locations = () => {
                 );
               })}
             </ul>
-            <h6>
-              Filter By: <br /> City
-              {/* Use a select here and map the location cities. onchange and add to the location api to make requests */}
-            </h6>
+            <div></div>
+            <h6>Filter By:</h6>
+            <span className="text-[#009F57]">Category</span>
+            <div className="mt-2 flex flex-wrap md:flex-nowrap md:flex-row gap-3 md:gap-5">
+              <Select
+                placeholder="Category"
+                showSearch
+                onSelect={(value) => {
+                  setSubData([]);
+                  // setQueryData((prev) => ({ ...prev, category: value }));
+                  setSubData(
+                    locationCategories.find((cat) => cat.value === value)
+                      ?.sub || []
+                  );
+                }}
+                // className="w-full md:w-[50%]"
+                className="!w-[250px]"
+                options={locationCategories}
+              />
+              <Select
+                placeholder="Sub Category"
+                showSearch
+                onSelect={(value) => {
+                  // setQueryData((prev) => ({
+                  //   ...prev,
+                  //   subcategory: value,
+                  // }));
+                }}
+                // className="w-full md:w-[50%]"
+                className="!w-[250px]"
+                options={subData}
+              />
+            </div>
+            <span className="text-[#009F57]">City</span>
+            <Select
+              placeholder="City"
+              showSearch
+              onSelect={(value) => {
+                // setQueryData((prev) => ({ ...prev, city: value }));
+              }}
+              // value={queryData.city}
+              className="!w-[200px]"
+              options={states}
+            />
+            <span className="text-[#009F57]">Budget</span>
+            <div className="mt-2 flex gap-3">
+              <span>
+                <label>From</label>
+                <Input />
+              </span>
+              <span>
+                <label>To</label>
+                <Input />
+              </span>
+            </div>
+            <span className="text-[#009F57]">Rating</span>
+            <Rate value={0} />
           </SideBar>
         </>
       )}
@@ -238,6 +295,7 @@ const SideBar = styled.div`
   padding: 3%;
   padding-top: 140px;
   z-index: 20;
+  overflow-y: scroll;
   h6 {
     margin-bottom: 20px;
     font-weight: 700;
