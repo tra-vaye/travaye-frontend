@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { notification, Select } from "antd";
+import { Select, notification } from "antd";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
@@ -7,14 +7,18 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import { CloudUpload } from "../../components/UI/svgs/svgs";
-import { useGetMeQuery } from "../../redux/Api/authApi";
-import { useCompleteBusinessRegistrationMutation } from "../../redux/Api/authApi";
+import {
+  useCompleteBusinessRegistrationMutation,
+  useGetMeQuery,
+} from "../../redux/Api/authApi";
 import {
   useGetStatesQuery,
   useLazyGetCityQuery,
-  useLazyGetLgaQuery,
   useLazyGetLandmarksQuery,
+  useLazyGetLgaQuery,
 } from "../../redux/Api/geoApi";
+import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
+import Loader from "../../components/UI/Loader";
 const Flex = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -24,18 +28,29 @@ const Flex = styled(Box)({
 
 const Register = () => {
   const { data: states } = useGetStatesQuery();
+  const { data: categories, isLoading: getCategoriesLoading } =
+    useGetCategoriesQuery();
+
   const [getCity, { data: city }] = useLazyGetCityQuery();
   const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
+  const [subData, setSubData] = useState([]);
+
   const [businessInfo, setBusinessInfo] = useState({
     businessName: "",
     businessCategory: "",
+    businessSubCategory: "",
     businessEmail: "",
-    address: "",
+    businessAddress: "",
     businessTelephone: "",
+    businessLGA: "",
+    businessState: "",
+    businessCity: "",
     businessLocationImages: [],
     cacRegistrationProof: [],
     proofOfAddress: [],
+    businessPriceRangeFrom: "",
+    businessPriceRangeTo: "",
   });
   const navigate = useNavigate();
   const userType = useSelector((state) => state.auth.userType);
@@ -145,6 +160,7 @@ const Register = () => {
 
   return (
     <Container>
+      {(isLoading || getCategoriesLoading) && <Loader />}
       <h4>Complete Registration</h4>
       <h6>
         Please Complete Your Registration to gain full access to your Travaye
@@ -168,19 +184,50 @@ const Register = () => {
                 Business Category <span>*</span>
               </label>
               <select
+                value={businessInfo.businessCategory}
                 required={true}
                 id="category"
+                onChange={(e) => {
+                  handleChange("businessCategory", e.target.value);
+                  setSubData([]);
+                  setSubData(
+                    categories.find((cat) => cat.value === e.target.value)
+                      ?.sub || []
+                  );
+                }}
+              >
+                <option value="" disabled selected>
+                  Select a category
+                </option>
+                {categories?.map((category, i) => (
+                  <option value={category.value} key={i}>
+                    {category.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="subCategory">
+                Business Sub Category <span>*</span>
+              </label>
+              <select
+                required={true}
+                id="subCategory"
                 onChange={(e) =>
-                  handleChange("businessCategory", e.target.value)
+                  handleChange("businessSubCategory", e.target.value)
                 }
               >
-                {categories.map((category, i) => (
+                <option value="" disabled selected>
+                  Select a Sub-category
+                </option>
+                {subData?.map((category, i) => (
                   <option
-                    value={category}
+                    value={category.value}
                     selected={i === 0 ? true : false}
                     key={i}
                   >
-                    {category}
+                    {category.label}
                   </option>
                 ))}
               </select>
@@ -197,20 +244,28 @@ const Register = () => {
               />
             </div>
             <div>
-              <label htmlFor="name">
+              <label htmlFor="businessPriceRange">
                 Price Range <span>*</span>
               </label>
               <div className="flex gap-[1rem] items-center">
                 <input
-                  id="name"
+                  id="businessPriceRangeFrom"
                   // value={businessInfo?.expiryDate}
-                  onChange={(e) => handleChange("expiryDate", e.target.value)}
+                  onChange={(e) =>
+                    handleChange("businessPriceRangeFrom", e.target.value)
+                  }
+                  type="number"
+                  min={1}
                   placeholder="from"
                 />
                 <input
-                  id="name"
+                  id="businessPriceRangeFromTo"
                   // value={businessInfo?.cvv}
-                  onChange={(e) => handleChange("cvv", e.target.value)}
+                  type="number"
+                  min={1}
+                  onChange={(e) =>
+                    handleChange("businessPriceRangeFromTo", e.target.value)
+                  }
                   placeholder="to"
                 />
               </div>
@@ -223,8 +278,10 @@ const Register = () => {
               </label>
               <input
                 id="address"
-                value={businessInfo?.address}
-                onChange={(e) => handleChange("address", e.target.value)}
+                value={businessInfo?.businessAddress}
+                onChange={(e) =>
+                  handleChange("businessAddress", e.target.value)
+                }
               />
             </div>
             <div>
@@ -238,23 +295,18 @@ const Register = () => {
                     getLga({ state: value.toUpperCase() });
                     getCity({ state: value.toUpperCase() });
                     getLandMarks({ state: value.toUpperCase() });
-                    // setQueryData((prev) => ({
-                    //   ...prev,
-                    //   state: value,
-                    //   city: "",
-                    //   lga: "",
-                    // }));
+                    handleChange("businessState", value);
                   }}
                   // value={queryData.state}
-                  showSearch
+                  // showSearch
                   className="!w-[150px]"
                   options={states}
                 />
                 <Select
                   placeholder="City"
-                  showSearch
+                  // showSearch
                   onSelect={(value) => {
-                    // setQueryData((prev) => ({ ...prev, city: value }));
+                    handleChange("businessCity", value);
                   }}
                   // value={queryData.city}
                   className="!w-[150px]"
@@ -262,9 +314,9 @@ const Register = () => {
                 />
                 <Select
                   placeholder="LGA"
-                  showSearch
+                  // showSearch
                   onSelect={(value) => {
-                    // setQueryData((prev) => ({ ...prev, lga: value }));
+                    handleChange("businessLGA", value);
                   }}
                   // value={queryData.lga}
                   className="!w-[150px]"
@@ -279,6 +331,7 @@ const Register = () => {
               <input
                 id="phone"
                 type="number"
+                min={1}
                 value={businessInfo?.businessTelephone}
                 onChange={(e) =>
                   handleChange("businessTelephone", e.target.value)
@@ -388,7 +441,7 @@ const Register = () => {
               )}
             </Dropzone>
           </div>
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <h4>Add Card Information</h4>
             <div>
               <label htmlFor="name">Card Name</label>
@@ -424,7 +477,7 @@ const Register = () => {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
           <div>
             <Button color="green" type="submit">
               Submit
@@ -493,14 +546,14 @@ const FileUpload = styled.div`
   height: auto;
 `;
 
-const categories = [
-  "Please select a category",
-  "Special Events",
-  "Food & Drinks",
-  "Entertainment Venues",
-  "Parks & Relaxation Spots",
-  "History & Arts",
-  "Wildlife Attractions",
-  "Sports & Recreation Centres",
-  "Historical/Tourist Attractions",
-];
+// const categories = [
+//   "Please select a category",
+//   "Special Events",
+//   "Food & Drinks",
+//   "Entertainment Venues",
+//   "Parks & Relaxation Spots",
+//   "History & Arts",
+//   "Wildlife Attractions",
+//   "Sports & Recreation Centres",
+//   "Historical/Tourist Attractions",
+// ];
