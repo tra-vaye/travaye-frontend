@@ -131,10 +131,14 @@ const Login = () => {
   const handleClick = async () => {
     if (userSignUp) {
       dispatch(setUserType({ userType: "user" }));
+      sessionStorage.setItem("userType", "user");
+
       await userLogin({ username: values.userName, password: values.passWord });
     }
     if (!userSignUp) {
       dispatch(setUserType({ userType: "business" }));
+      sessionStorage.setItem("userType", "business");
+
       await businessLogin({
         businessEmail: values.email,
         password: values.passWord,

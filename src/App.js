@@ -60,7 +60,7 @@ function App() {
     setShowSideNav((prevState) => !prevState);
   };
   const token = sessionStorage.getItem("authToken");
-  const userType = useSelector((state) => state.auth.userType);
+  const userType = sessionStorage.getItem("userType");
   return (
     <>
       <Header onToggleSideNav={toggleSideNav} showSideNav={showSideNav} />

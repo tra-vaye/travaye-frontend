@@ -8,9 +8,17 @@ export const PaymentApi = createApi({
   refetchOnUpdateTimeout: 50000,
   tagTypes: ["Payment"],
   endpoints: (builder) => ({
-    verifyPayment: builder.mutation({
+    verifyTrialPayment: builder.mutation({
       query: (paymentData) => ({
-        url: "pay/verify",
+        url: "pay/verifyTrial",
+        method: "POST",
+        body: paymentData,
+      }),
+      invalidatesTags: ["Payment"],
+    }),
+    refundTrialPayment: builder.mutation({
+      query: (paymentData) => ({
+        url: "pay/refundTrial",
         method: "POST",
         body: paymentData,
       }),
@@ -19,4 +27,5 @@ export const PaymentApi = createApi({
   }),
 });
 
-export const { useVerifyPaymentMutation } = PaymentApi;
+export const { useVerifyTrialPaymentMutation, useRefundTrialPaymentMutation } =
+  PaymentApi;

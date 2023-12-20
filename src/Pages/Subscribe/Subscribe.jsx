@@ -7,7 +7,10 @@ import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
 
-import { useVerifyPaymentMutation } from "../../redux/Api/paymentApi";
+import {
+  useRefundTrialPaymentMutation,
+  useVerifyTrialPaymentMutation,
+} from "../../redux/Api/paymentApi";
 
 const Subscribe = () => {
   const [loading, setIsLoading] = useState(false);
@@ -16,19 +19,29 @@ const Subscribe = () => {
   const userType = useSelector((state) => state.auth.userType);
   const businessData = useSelector((store) => store.auth.user).payload;
 
-  const [businessInfo, setBusinessInfo] = useState({
-    businessEmail: businessData.businessEmail,
-  });
+  //   const [businessInfo, setBusinessInfo] = useState({
+  //     businessEmail: businessData.businessEmail,
+  //   });
   const [
-    verifyPayment,
+    verifyTrialPayment,
     {
-      isLoading: isLoadingPayment,
-      isError: isPaymentError,
-      isSuccess: isPaymentSuccess,
-      data: paymentData,
-      error: paymentError,
+      isLoading: isLoadingTrialPayment,
+      isError: isTrialPaymentError,
+      isSuccess: isTrialPaymentSuccess,
+      data: trialPaymentData,
+      error: trialPaymentError,
     },
-  ] = useVerifyPaymentMutation();
+  ] = useVerifyTrialPaymentMutation();
+  const [
+    refundTrialPayment,
+    {
+      isLoading: isLoadingTrialPaymentRefund,
+      isError: isPaymentRefundError,
+      isSuccess: isPaymentRefundSuccess,
+      data: paymentRefundData,
+      error: paymentRefundError,
+    },
+  ] = useRefundTrialPaymentMutation();
   const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
   const amount = 50 * 100; // Amount in kobo (NGN 50)
 
@@ -48,9 +61,11 @@ const Subscribe = () => {
 
     setIsLoading(true);
 
-    await verifyPayment({ reference: response.reference });
+    await verifyTrialPayment({ reference: response.reference });
+    await refundTrialPayment({ paymentReference: response.reference });
     setIsLoading(false);
-    navigate(`/${userType}`);
+    console.log("Navigate:", navigate);
+    navigate(`/business`);
   };
 
   const handlePaymentClose = () => {
@@ -59,10 +74,10 @@ const Subscribe = () => {
   };
   useEffect(() => {
     if (businessData) {
-      setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData }));
+      //   setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData }));
       if (businessData?.businessVerified === "verified") {
         if (businessData?.addedCard === true) {
-          navigate(`/${userType}`);
+          navigate(`/business`);
         } else {
           navigate(`/subscribe`);
         }
@@ -73,7 +88,7 @@ const Subscribe = () => {
           placement: "bottomRight",
         });
         if (businessData?.addedCard === true) {
-          navigate(`/${userType}`);
+          navigate(`/business`);
         } else {
           navigate(`/subscribe`);
         }
@@ -90,36 +105,39 @@ const Subscribe = () => {
   }, [businessData, navigate, userType]);
 
   useEffect(() => {
-    if (isPaymentError) {
+    if (isTrialPaymentError) {
       notification.error({
-        message: paymentError?.data?.error,
+        message: trialPaymentError?.data?.error,
         duration: 3,
         placement: "bottomRight",
       });
     }
-    if (isPaymentSuccess) {
+    if (isTrialPaymentSuccess) {
       notification.success({
-        message: paymentData.message,
+        message: trialPaymentData.message,
         duration: 3,
         placement: "bottomRight",
       });
-      window.location.href = paymentData.authorization_url;
+      navigate("/business");
     }
   }, [
-    isPaymentSuccess,
-    paymentError,
-    isPaymentError,
+    isTrialPaymentSuccess,
+    trialPaymentError,
+    isTrialPaymentError,
     userType,
     navigate,
-    paymentData,
+    trialPaymentData,
   ]);
   return (
     <Container>
-      {(loading || isLoadingPayment) && <Loader />}
-      <h4>
-        Verify you're Human, A charge of NGN 5 is going to occur on your account
+      {(loading || isLoadingTrialPayment) && <Loader />}
+      <h4 className="mb-2">
+        Verify you're Human, Your account will be charged NGN 50, and the amount
+        will be refunded.
       </h4>
-      <h6>2 Months free, Please add your card for verification</h6>
+      <h6 className="mb-2">
+        2 Months free, Please add your card for verification
+      </h6>
       <div>
         <PaystackButton {...config}>
           <Button color="green" type="button">
