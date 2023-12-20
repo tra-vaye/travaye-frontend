@@ -76,14 +76,22 @@ const Register = () => {
     if (isSuccess && businessData?.user) {
       setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData.user }));
       if (businessData?.user?.businessVerified === "verified") {
-        navigate(`/${userType}`);
+        if (businessData?.user?.addedCard === true) {
+          navigate(`/${userType}`);
+        } else {
+          navigate(`/subscribe`);
+        }
       } else if (businessData?.user?.businessVerified === "pending") {
         notification.warning({
           message: " Business Verification Pending",
           duration: 3,
           placement: "bottomRight",
         });
-        navigate(`/${userType}`);
+        if (businessData?.user?.addedCard === true) {
+          navigate(`/${userType}`);
+        } else {
+          navigate(`/subscribe`);
+        }
         refetch();
       } else if (businessData?.user?.businessVerified === "false") {
         notification.error({

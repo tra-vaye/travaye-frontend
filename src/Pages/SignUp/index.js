@@ -29,13 +29,12 @@ const SignUp = () => {
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
-
     dispatch(setUserType({ userType: userSignUp ? "user" : "business" }));
   };
 
-  useEffect(() => {
-    sessionStorage.clear();
-  }, []);
+  // useEffect(() => {
+  //   sessionStorage.clear();
+  // }, []);
 
   const [
     userRegister,
