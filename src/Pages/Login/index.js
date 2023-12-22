@@ -32,9 +32,9 @@ const Login = () => {
     dispatch(setUserType({ userType: userSignUp ? "user" : "business" }));
   };
 
-  useEffect(() => {
-    sessionStorage.clear();
-  }, []);
+  // useEffect(() => {
+  //   sessionStorage.clear();
+  // }, []);
 
   const [
     userLogin,
@@ -97,14 +97,22 @@ const Login = () => {
         sessionStorage.setItem("userType", userType);
         sessionStorage.setItem("user_id", businessData?.user?._id);
         if (businessData?.user?.businessVerified === "verified") {
-          navigate(`/${userType}`);
+          if (businessData?.user?.addedCard === true) {
+            navigate(`/${userType}`);
+          } else {
+            navigate(`/subscribe`);
+          }
         } else if (businessData?.user?.businessVerified === "pending") {
           notification.warning({
             message: " Business Verification Pending",
             duration: 3,
             placement: "bottomRight",
           });
-          navigate(`/${userType}`);
+          if (businessData?.user?.addedCard === true) {
+            navigate(`/${userType}`);
+          } else {
+            navigate(`/subscribe`);
+          }
         } else {
           navigate(`/register`);
         }
@@ -123,10 +131,14 @@ const Login = () => {
   const handleClick = async () => {
     if (userSignUp) {
       dispatch(setUserType({ userType: "user" }));
+      sessionStorage.setItem("userType", "user");
+
       await userLogin({ username: values.userName, password: values.passWord });
     }
     if (!userSignUp) {
       dispatch(setUserType({ userType: "business" }));
+      sessionStorage.setItem("userType", "business");
+
       await businessLogin({
         businessEmail: values.email,
         password: values.passWord,

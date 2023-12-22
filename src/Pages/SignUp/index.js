@@ -29,13 +29,12 @@ const SignUp = () => {
 
   const toggleSignUp = () => {
     setUserSignUp((prevState) => !prevState);
-
     dispatch(setUserType({ userType: userSignUp ? "user" : "business" }));
   };
 
-  useEffect(() => {
-    sessionStorage.clear();
-  }, []);
+  // useEffect(() => {
+  //   sessionStorage.clear();
+  // }, []);
 
   const [
     userRegister,
@@ -141,6 +140,8 @@ const SignUp = () => {
   const handleClick = async () => {
     if (userSignUp) {
       dispatch(setUserType({ userType: "user" }));
+      sessionStorage.setItem("userType", "user");
+
       await userRegister({
         fullName: values?.fullName,
         username: values?.userName,
@@ -150,6 +151,8 @@ const SignUp = () => {
     }
     if (!userSignUp) {
       dispatch(setUserType({ userType: "business" }));
+      sessionStorage.setItem("userType", "business");
+
       await businessRegister({
         businessName: values.businessName,
         businessEmail: values.email,
