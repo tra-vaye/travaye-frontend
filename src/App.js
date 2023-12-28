@@ -9,6 +9,7 @@ import Loader from "./components/UI/Loader";
 
 import { useSelector } from "react-redux";
 import RequireAuth from "./Layout/RequireAuth";
+import CreateEvent from "./Pages/CreateEvent";
 
 const AddedLocations = lazy(() => {
   return import("./Pages/AddedLocations");
@@ -121,6 +122,7 @@ function App() {
           <Route path="/business-locations" element={<BusinessLocations />} />
           <Route path="/locations" element={<Locations />} />
           <Route path="/verify-email" element={<Verification />} />
+          <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/contact-us" element={<Contact />} />
         </Routes>
       </Suspense>
