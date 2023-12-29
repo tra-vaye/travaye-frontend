@@ -21,11 +21,12 @@ import classes from "./LocationDetails.module.css";
 import { Image, Input, notification } from "antd";
 import Dropzone from "react-dropzone";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const { TextArea } = Input;
 
 const LocationDetails = () => {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const initialValues = {
     reviewDescription: "",
     pictures: [],
@@ -49,9 +50,7 @@ const LocationDetails = () => {
     },
   ] = useReviewLocationMutation();
   const userType = sessionStorage.getItem("userType");
-  console.log(userType);
   const userData = useSelector((state) => state.auth.user).payload;
-  console.log(userData);
   const { data, isError, error, isLoading } = useGetLocationByIdQuery({ id });
   useEffect(() => {
     if (data) {
@@ -158,17 +157,11 @@ const LocationDetails = () => {
                     Like location
                   </Button>
                 )}
-                <Button location={true}>
-                  <a
-                    className="hover:text-white"
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                      `${location.locationAddress},${location.locationName}`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View on Google Maps
-                  </a>
+                <Button
+                  onClick={() => navigate(`/location/map`)}
+                  location={true}
+                >
+                  View on Google Maps
                 </Button>
               </div>
             </div>

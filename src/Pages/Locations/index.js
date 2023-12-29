@@ -27,7 +27,9 @@ const Locations = () => {
       <Container>
         <div className="d-flex justify-content-between mt-5 align-items-center ">
           <h3>Locations</h3>
-          <Button>View Added Locations</Button>
+          <Button onClick={() => navigate("/added-locations")}>
+            View Added Locations
+          </Button>
         </div>
         <div>
           {data?.data.map((e, i) => (

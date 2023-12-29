@@ -39,6 +39,9 @@ const Login = lazy(() => {
 const PlanTrip = lazy(() => {
   return import("./Pages/Plan-a-trip");
 });
+const Maps = lazy(() => {
+  return import("./Pages/Maps");
+});
 const SignUp = lazy(() => {
   return import("./Pages/SignUp");
 });
@@ -95,7 +98,8 @@ function App() {
             <Route path="/plan-a-trip" element={<PlanTrip />} />
             <Route path="/verify-email" element={<Verification />} />
             <Route path="/location/:id" element={<LocationDetails />} />
-            <Route path="/added" element={<AddedLocations />} />
+            <Route path="/location/map" element={<Maps />} />
+            <Route path="/added-locations" element={<AddedLocations />} />
           </Route>
           {/* <Route
             path="/user"

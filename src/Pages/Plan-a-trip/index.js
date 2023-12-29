@@ -31,11 +31,11 @@ const PlanTrip = () => {
   const [queryData, setQueryData] = useState({
     state: "",
     city: "",
-    category: "",
+    category: [],
     lga: "",
     landmarks: "",
     budget: "",
-    subcategory: "",
+    subcategory: [],
   });
   const [subData, setSubData] = useState([]);
   const handleSubmit = (e) => {
@@ -113,12 +113,23 @@ const PlanTrip = () => {
             <Select
               placeholder="Category"
               showSearch
+              mode="multiple"
               onSelect={(value) => {
                 setSubData([]);
-                setQueryData((prev) => ({ ...prev, category: value }));
+                // setQueryData((prev) => ({ ...prev, category: value }));
                 setSubData(
                   categories.find((cat) => cat.value === value)?.sub || []
                 );
+              }}
+              onChange={(value) => {
+                setSubData([]);
+                setQueryData((prev) => ({ ...prev, category: value }));
+                // setSubData(
+                //   categories.find(
+                //     (cat) =>
+                //       cat.value[value?.length - 1] === value[value?.length - 1]
+                //   )?.sub || []
+                // );
               }}
               // className="w-full md:w-[50%]"
               className="!w-[250px]"
@@ -126,8 +137,9 @@ const PlanTrip = () => {
             />
             <Select
               placeholder="Sub Category"
+              mode="multiple"
               showSearch
-              onSelect={(value) => {
+              onChange={(value) => {
                 setQueryData((prev) => ({
                   ...prev,
                   subcategory: value,

@@ -138,7 +138,7 @@ const AddedLocations = () => {
           <Value>#25,000</Value>
         </div>
         <div className="col-md-3">
-          <Button>Finish Selection</Button>
+          <Button onClick={() => window.print()}>Finish Selection</Button>
         </div>
       </footer>
     </Container>
