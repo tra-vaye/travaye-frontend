@@ -17,9 +17,7 @@ const Locations = () => {
       .then((res) => {
         console.log(res, data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [state]);
   return (
     <>
@@ -53,7 +51,27 @@ const Locations = () => {
 
                 <div className="d-flex col-md-3 align-items-center">
                   <p className="me-3">#500</p>
-                  <Button color="green">Add Location</Button>
+                  <Button
+                    onClick={() => {
+                      const currentLocations =
+                        JSON.parse(localStorage.getItem("location")) || [];
+                      if (currentLocations?.some((obj) => obj._id === e?._id))
+                        return;
+                      else
+                        localStorage.setItem(
+                          "location",
+                          JSON.stringify([
+                            ...currentLocations,
+                            {
+                              ...e,
+                            },
+                          ])
+                        );
+                    }}
+                    color="green"
+                  >
+                    Add Location
+                  </Button>
                   <Button onClick={() => navigate(`/location/${e?._id}`)}>
                     Preview
                   </Button>

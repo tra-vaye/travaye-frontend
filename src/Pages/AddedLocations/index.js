@@ -2,136 +2,78 @@ import { Button } from "../../components/UI/Buttons";
 import styled from "styled-components";
 import MaryLandImg from "../../assets/maryland-mall.png";
 import { FourStars, Bin } from "../../components/UI/svgs/svgs";
+import { useEffect, useState } from "react";
+import { Rate } from "antd";
 
 const AddedLocations = () => {
+  const [locations, setLocations] = useState(
+    JSON.parse(localStorage.getItem("location"))
+  );
+  useEffect(() => {
+    setLocations(JSON.parse(localStorage.getItem("location")));
+  }, [JSON.stringify(localStorage.getItem("location"))]);
   return (
     <Container>
       <h4>My Added Locations</h4>
       <div>
-        <Card>
-          <div className="row">
-            <div className="d-flex col-md-6">
-              <img src={MaryLandImg} alt="" className="img-fluid" />
-              <div>
-                <p>The Maryland Mall Cinema (Genesis Cinemas)</p>
-                <h5>Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja</h5>
-                <h6>Movie Theatre</h6>
+        {locations?.map((e) => (
+          <Card>
+            <div className="row">
+              <div className="flex justify-between items-center">
+                <img
+                  src={e?.locationImagePath[0]}
+                  alt=""
+                  className="img-fluid"
+                />
+                <div>
+                  <p>{e?.locationName}</p>
+                  <h5>{e?.locationAddress}</h5>
+                  <h6>{e?.locationCategory}</h6>
+                </div>
+                <Rate value={e?.locationRating} />
+                <div className="d-flex col-md-3 justify-content-between align-items-center ">
+                  <b>#500 2movies</b>
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => {
+                      const newLocations = locations.filter(
+                        (loc) => loc?.locationName !== e?.locationName
+                      );
+                      localStorage.setItem(
+                        "location",
+                        JSON.stringify(newLocations)
+                      );
+                      setLocations(newLocations);
+                    }}
+                  >
+                    {Bin}
+                  </span>
+                </div>
               </div>
             </div>
-            <StarContainer className="d-flex  align-items-center col-md-3">
-              <i>{FourStars}</i>
-            </StarContainer>
-            <div className="d-flex col-md-3 justify-content-between align-items-center ">
-              <b>#500 2movies</b>
-              <i>{Bin}</i>
-            </div>
-          </div>
-        </Card>
-        <Card>
-          <div className="row">
-            <div className="d-flex col-md-6">
-              <img src={MaryLandImg} alt="" className="img-fluid" />
-              <div>
-                <p>The Maryland Mall Cinema (Genesis Cinemas)</p>
-                <h5>Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja</h5>
-                <h6>Movie Theatre</h6>
-              </div>
-            </div>
-            <StarContainer className="d-flex  align-items-center col-md-3">
-              <i>{FourStars}</i>
-            </StarContainer>
-            <div className="d-flex col-md-3 justify-content-between align-items-center ">
-              <b>#500 2movies</b>
-              <i>{Bin}</i>
-            </div>
-          </div>
-        </Card>
-        <Card>
-          <div className="row">
-            <div className="d-flex col-md-6">
-              <img src={MaryLandImg} alt="" className="img-fluid" />
-              <div>
-                <p>The Maryland Mall Cinema (Genesis Cinemas)</p>
-                <h5>Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja</h5>
-                <h6>Movie Theatre</h6>
-              </div>
-            </div>
-            <StarContainer className="d-flex  align-items-center col-md-3">
-              <i>{FourStars}</i>
-            </StarContainer>
-            <div className="d-flex col-md-3 justify-content-between align-items-center ">
-              <b>#500 2movies</b>
-              <i>{Bin}</i>
-            </div>
-          </div>
-        </Card>{" "}
-        <Card>
-          <div className="row">
-            <div className="d-flex col-md-6">
-              <img src={MaryLandImg} alt="" className="img-fluid" />
-              <div>
-                <p>The Maryland Mall Cinema (Genesis Cinemas)</p>
-                <h5>Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja</h5>
-                <h6>Movie Theatre</h6>
-              </div>
-            </div>
-            <StarContainer className="d-flex  align-items-center col-md-3">
-              <i>{FourStars}</i>
-            </StarContainer>
-            <div className="d-flex col-md-3 justify-content-between align-items-center ">
-              <b>#500 2movies</b>
-              <i>{Bin}</i>
-            </div>
-          </div>
-        </Card>{" "}
-        <Card>
-          <div className="row">
-            <div className="d-flex col-md-6">
-              <img src={MaryLandImg} alt="" className="img-fluid" />
-              <div>
-                <p>The Maryland Mall Cinema (Genesis Cinemas)</p>
-                <h5>Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja</h5>
-                <h6>Movie Theatre</h6>
-              </div>
-            </div>
-            <StarContainer className="d-flex  align-items-center col-md-3">
-              <i>{FourStars}</i>
-            </StarContainer>
-            <div className="d-flex col-md-3 justify-content-between align-items-center ">
-              <b>#500 2movies</b>
-              <i>{Bin}</i>
-            </div>
-          </div>
-        </Card>{" "}
-        <Card>
-          <div className="row">
-            <div className="d-flex col-md-6">
-              <img src={MaryLandImg} alt="" className="img-fluid" />
-              <div>
-                <p>The Maryland Mall Cinema (Genesis Cinemas)</p>
-                <h5>Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja</h5>
-                <h6>Movie Theatre</h6>
-              </div>
-            </div>
-            <StarContainer className="d-flex  align-items-center col-md-3">
-              <i>{FourStars}</i>
-            </StarContainer>
-            <div className="d-flex col-md-3 justify-content-between align-items-center ">
-              <b>#500 2movies</b>
-              <i>{Bin}</i>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        ))}
       </div>
 
       <footer className="row sticky bottom-0 bg-white py-[2%] shadow-md">
         <div className="col-md-3">
           <Title>Total Added Locations</Title>
-          <Value>5 Locations</Value>
+          <Value>{locations?.length} Locations</Value>
         </div>
         <div className="col-md-3">
           <Title>Total Outing Categories</Title>
-          <Value>4 Outing Categories</Value>
+          <Value>
+            {
+              locations?.reduce((acc, e) => {
+                if (acc.includes(e?.locationCategory)) {
+                  return acc;
+                } else {
+                  return [...acc, e?.locationCategory];
+                }
+              }, []).length
+            }{" "}
+            Outing Categories
+          </Value>
         </div>
         <div className="col-md-3">
           <Title>Total Budget Cost</Title>
