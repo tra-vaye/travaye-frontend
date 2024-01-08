@@ -12,36 +12,20 @@ const Verification = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [codes, setCodes] = useState(["", "", "", ""]);
+  const [codeTimeOut, setCodeTimeOut] = useState(59);
   const nonEmptyElements = codes.filter((element) => element !== "");
   // const [isLoading, setIsLoading] = useState(false);
   let buttonDisabled = Boolean(nonEmptyElements.length < 4);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (codeTimeOut > 0) setCodeTimeOut((prev) => prev - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [codeTimeOut]);
   const userType = useSelector((state) => state.auth.userType);
   console.log(userType);
   const [codeVerify, { isLoading, error, isError, isSuccess, data }] =
     useCodeVerifyMutation();
-
-  useEffect(() => {
-    if (isError) {
-      notification.error({
-        message: error?.data?.error,
-        duration: 3,
-        placement: "bottomRight",
-      });
-    }
-    // if (isSuccess) {
-    //   // Handle successful verification,
-    //   notification.success({
-    //     message: "Email Verified Successfully",
-    //     duration: 3,
-    //     placement: "bottomRight",
-    //   });
-    //   const verifiedUserOrBusiness = data?.user;
-    //   const authToken = verifiedUserOrBusiness?.token;
-    //   sessionStorage.setItem("authToken", authToken);
-    //   navigate(`/${userType}`);
-    //   // navigate(`${userType}`);
-    // }
-  }, [isError, isSuccess, error, navigate, userType, data?.user]);
 
   const handleChange = (index, value) => {
     const newCodes = [...codes];
@@ -70,28 +54,24 @@ const Verification = () => {
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
-    try {
-      const code = codes.join("");
-      console.log(userType);
-      const response = await codeVerify({ code, userType });
-
-      // Handle the success case
-      if (response.data?.user) {
+    const code = codes.join("");
+    codeVerify({ code, userType })
+      .unwrap()
+      .then(() => {
         notification.success({
           message: "Email Verified Successfully",
           duration: 3,
           placement: "bottomRight",
         });
-
-        // const verifiedUserOrBusiness = response.data.user;
-        // const authToken = verifiedUserOrBusiness.token;
-        // sessionStorage.setItem("authToken", authToken);
         navigate(`/${userType}`);
-      }
-    } catch (error) {
-      // Handle errors (if necessary)
-      console.error("Verification error:", error);
-    }
+      })
+      .catch((error) => {
+        notification.error({
+          message: error?.data?.error,
+          duration: 3,
+          placement: "bottomRight",
+        });
+      });
   };
   return (
     <Container className="d-flex justify-content-center col-md-6 offset-md-3 mt-3 text-center">
@@ -116,7 +96,13 @@ const Verification = () => {
           ))}
         </div>
         <Timer>
-          Resend code in : <span>59:00</span>
+          <span>
+            {codeTimeOut > 0 ? (
+              <> Resend code in : {codeTimeOut}:00 </>
+            ) : (
+              <span>click here</span>
+            )}
+          </span>
         </Timer>
         <Button
           color="green"

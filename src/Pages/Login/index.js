@@ -23,7 +23,9 @@ const Login = () => {
   const userType = useSelector((state) => state.auth.userType);
   console.log(userType);
   const [userSignUp, setUserSignUp] = useState(true);
-
+  useEffect(() => {
+    dispatch(setUserType({ userType: "user" }));
+  }, []);
   const navigate = useNavigate();
 
   const toggleSignUp = () => {
