@@ -8,7 +8,50 @@ import Ibadan from "../../../assets/ibadan.png";
 import Lagos from "../../../assets/lagos.png";
 import ReviewStars from "../../../assets/review-stars.png";
 import { ScrollLeftBtn, ScrollRightBtn } from "../Buttons";
-
+const reviews = [
+  {
+    name: "Victor Olawoye",
+    occupation: "Photographer",
+    review:
+      "Travaye is a fantastic app for photographers like me. It provides location-specific tips and tricks and even suggests the best photography spots. I no longer need to rely on multiple sources for planning my shoots. Travaye has consolidated everything I need into one convenient app",
+  },
+  {
+    name: "Sandra Johnson",
+    occupation: "Fitness Enthusiast",
+    review:
+      "Travaye has contributed a lot to my fitness journey. With its extensive database of fitness-friendly locations, healthy dining options, and nearby workout facilities, I can easily access unforgettable fitness experiences",
+  },
+  {
+    name: "Joy Bankole",
+    occupation: "Influencer",
+    review:
+      "I really love this app! It's like it was made for me! The app allows me to budget content trips, share my reviews for points, and grow my audience all from one platform. It's a powerful tool that helps me maintain a consistent online presence, even when I'm on a tight budget.",
+  },
+  {
+    name: "Emeka Nzere",
+    occupation: "Student",
+    review:
+      "You don't want to go out on dates without this app in your pocket!",
+  },
+  {
+    name: "Gbemisola Peters",
+    occupation: "Tech Sis",
+    review:
+      "I didn't even know there were so many coffee shops where i could work till i found this app",
+  },
+  {
+    name: "Dele Ali",
+    occupation: "Student",
+    review:
+      "Shoutout to Travaye! This app helps me find top notch locations within my budget",
+  },
+  {
+    name: "Barnabas Peters",
+    occupation: "Photographer",
+    review:
+      "I am a GenZ Techie trying to live a luxury life without worrying about Sapa and Travaye helps me do just that by helping me find top notch locations I can flex at within my budget. Shoutout to Travaye!",
+  },
+];
 const Data = [
   { location: "Lagos, Nigeria", img: Lagos, rating: "" },
   { location: "Ibadan, Nigeria", img: Ibadan, rating: "" },
@@ -48,21 +91,16 @@ const ReviewCarousel = ({ classes }) => {
         enabled: true,
       }}
     >
-      {Data.map((data, i) => {
+      {reviews.map((data, i) => {
         return (
           <SwiperSlide key={i} className="w-full flex flex-col m-0 mx-1 ">
-            <Article className=" !break-words">
-              I am a GenZ Techie trying to live a luxury life without worrying
-              about Sapa and Travaye helps me do just that by helping me find
-              top notch locations I can flex at within my budget. Shoutout to
-              Travaye!{" "}
-            </Article>
+            <Article className=" !break-words">{data?.review}</Article>
             <div className={classes.user}>
               <div className="d-flex justify-content-between flex-wrap">
                 <div className="d-flex justify-content-center align-items-center mt-3 me-4 ">
                   <img src={Avatar} alt="avatar" />
                   <div>
-                    <p>Barnabas Peters</p>
+                    <p>{data?.name}</p>
                     <p
                       style={{
                         fontWeight: " 700",
@@ -72,7 +110,7 @@ const ReviewCarousel = ({ classes }) => {
                         color: " #9d9d9d",
                       }}
                     >
-                      Photographer
+                      {data?.occupation}
                     </p>
                     <div className={classes.stars}>
                       <img src={ReviewStars} alt="stars" className="mt-3 " />
