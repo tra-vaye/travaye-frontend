@@ -5,12 +5,12 @@ import Footer from "../../components/Layout/Footer/Footer";
 const WaitList = () => {
   return (
     <div className="h-screen w-screen">
-      <img className="w-full h-full" src={flyer} />
-      <div className="m-auto py-[5%] px-[10%]">
+      <img className="w-full h-[30%] md:h-full" src={flyer} />
+      <div className="m-auto py-[5%] px-[5%] md:px-[10%]">
         <h4 className="text-center text-[#009F57] text-[25px] font-[600] mb-[1rem]">
-          OUR MESSSAGE:
+          OUR MESSAGE:
         </h4>
-        <p className="text-[20px] font-[400]">
+        <p className="text-[15px] md:text-[20px] font-[400]">
           We're fine-tuning our next product version with even more
           budget-friendly options. Behind the scenes, we're crafting
           partnerships to bring you richer lifestyle experiences. Explore with
