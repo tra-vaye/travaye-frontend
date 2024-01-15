@@ -1,5 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
-import { Image, notification } from "antd";
+import { Image, notification, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { FiveStars, FourStars } from "../../components/UI/svgs/svgs";
 // import classes from "";
@@ -12,8 +12,11 @@ import { Button } from "../../components/UI/Buttons";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
+import { useUpdateProfilePhotoMutation } from "../../redux/Api/authApi";
+import { IoIosCamera } from "react-icons/io";
 
 const BusinessProfile = () => {
+  const [updateProfile, { isLoading }] = useUpdateProfilePhotoMutation();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [newLocationModal, setNewLocationModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
@@ -130,8 +133,24 @@ const BusinessProfile = () => {
         <Profile close={true}>
           <CloseIcon onClick={toggleDashboard} />
         </Profile>
-
-        <img src={Avatar} alt="avatar" />
+        <div className="relative">
+          {isLoading && <Spin />}
+          <img src={Avatar} alt="avatar" />
+          <label htmlFor="photo">
+            <IoIosCamera className="text-black text-[25px] absolute bottom-[10%] right-[2%] cursor-pointer !block" />
+          </label>
+          <input
+            onChange={(e) => {
+              const profileData = new FormData();
+              profileData.append("picture", e.target.files[0]);
+              updateProfile(profileData);
+            }}
+            id="photo"
+            accept="image/*"
+            type="file"
+            className="hidden"
+          />
+        </div>
         <div>
           <h5 className="mt-5">{userData?.businessName}</h5>
           <h6 className="mt-1" usernamame={true}>
@@ -280,9 +299,13 @@ const BusinessProfile = () => {
                 )}
               </Review>
             </ReviewContainer>
-            <Button color="green" onClick={toggleNewLocationModal}>
-              Post New Location
-            </Button>
+            <a
+              target="_blank"
+              href="https://www.travaye.ng/create-event"
+              className="bg-[#e9a009] px-[4px] font-[600] h-[2.5rem] rounded-[10px] flex items-center justify-center text-[15px] text-[#f0f0f0]"
+            >
+              <p>Create Event</p>
+            </a>
           </div>
         </div>
         <BoxContainer>

@@ -71,6 +71,14 @@ export const AuthApi = createApi({
       }),
       invalidatesTags: ["Profile"],
     }),
+    updateProfilePhoto: builder.mutation({
+      query: (body) => ({
+        url: "user/profile-photo",
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
   }),
 });
 
@@ -82,4 +90,5 @@ export const {
   useBusinessRegisterMutation,
   useCodeVerifyMutation,
   useCompleteBusinessRegistrationMutation,
+  useUpdateProfilePhotoMutation,
 } = AuthApi;

@@ -10,9 +10,13 @@ import LocationBox from "../../components/UI/Location/LocationBox";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
-import { notification } from "antd";
+import { notification, Spin } from "antd";
+import { useUpdateProfilePhotoMutation } from "../../redux/Api/authApi";
+import { IoIosCamera } from "react-icons/io";
 
 const UserProfile = () => {
+  const [updateProfile, { isLoading: updatingPhoto }] =
+    useUpdateProfilePhotoMutation();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [newLocationModal, setNewLocationModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
@@ -141,7 +145,26 @@ const UserProfile = () => {
           <CloseIcon onClick={toggleDashboard} />
         </Profile>
 
-        <img src={Avatar} alt="avatar" />
+        <div className="relative">
+          {updatingPhoto && (
+            <Spin className="absolute bottom-[50%] left-[50%]" />
+          )}
+          <img src={Avatar} alt="avatar" />
+          <label htmlFor="photo">
+            <IoIosCamera className="text-black text-[25px] absolute bottom-[15%] right-[5%] cursor-pointer !block" />
+          </label>
+          <input
+            onChange={(e) => {
+              const profileData = new FormData();
+              profileData.append("picture", e.target.files[0]);
+              updateProfile(profileData);
+            }}
+            id="photo"
+            accept="image/*"
+            type="file"
+            className="hidden"
+          />
+        </div>
         <div>
           <h5 className="mt-1">{`${userData?.fullName}`}</h5>
           <h6 usernamame={true}>{`@${userData?.username}`}</h6>
@@ -177,13 +200,20 @@ const UserProfile = () => {
           <Profile onClick={toggleDashboard}>
             <AccountCircleIcon />
           </Profile>
-          <div className="d-flex justify-content-between">
+          <div className="flex justify-start items-center gap-[0.3rem]">
             {/* <Button color="green" onClick={toggleNewLocationModal}>
               Post New
             </Button> */}
             <Link to="/plan-a-trip">
               <Button>Plan A Trip</Button>
             </Link>
+            <a
+              target="_blank"
+              href="https://www.travaye.ng/create-event"
+              className="bg-[#e9a009] px-[4px] font-[600] h-[2.5rem] rounded-[10px] flex items-center justify-center text-[15px] text-[#f0f0f0]"
+            >
+              <p>Create Event</p>
+            </a>
           </div>
           <div
             style={{ transform: "scale(0.7)", cursor: "pointer" }}

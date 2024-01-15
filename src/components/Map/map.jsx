@@ -1,5 +1,6 @@
 import "leaflet/dist/leaflet.css";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import Travaye from "../../assets/travaye.png";
 import { Icon } from "leaflet";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
@@ -20,7 +21,7 @@ const Map = ({ lat, long }) => {
           position={[6.5392, 3.3842]}
           icon={
             new Icon({
-              iconUrl: markerIconPng,
+              iconUrl: Travaye,
               iconSize: [25, 41],
               iconAnchor: [12, 41],
             })

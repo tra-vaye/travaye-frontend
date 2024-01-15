@@ -11,6 +11,7 @@
 body {
   background-color: rgb(255, 254, 252);
   overflow-x: hidden !important;
+  font-family: "Work Sans", sans-serif !important;
 }
 
 /* Carousel */

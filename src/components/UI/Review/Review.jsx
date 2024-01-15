@@ -58,7 +58,6 @@ const Data = [
   { location: "Abuja, Nigeria", img: Abuja, rating: "" },
 ];
 const ReviewCarousel = ({ classes }) => {
-  console.log(classes);
   return (
     <Swiper
       slidesPerView={1}
