@@ -149,7 +149,11 @@ const UserProfile = () => {
           {updatingPhoto && (
             <Spin className="absolute bottom-[50%] left-[50%]" />
           )}
-          <img src={Avatar} alt="avatar" />
+          <img
+            className="rounded-full"
+            src={userData?.profilePhoto || Avatar}
+            alt="avatar"
+          />
           <label htmlFor="photo">
             <IoIosCamera className="text-black text-[25px] absolute bottom-[15%] right-[5%] cursor-pointer !block" />
           </label>

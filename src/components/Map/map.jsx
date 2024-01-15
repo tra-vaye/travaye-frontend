@@ -1,5 +1,4 @@
 import "leaflet/dist/leaflet.css";
-import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import Travaye from "../../assets/travaye.png";
 import { Icon } from "leaflet";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -27,7 +26,7 @@ const Map = ({ lat, long }) => {
             })
           }
         >
-          <Popup>current location</Popup>
+          <Popup>business location</Popup>
         </Marker>
       </MapContainer>
     </div>

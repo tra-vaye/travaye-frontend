@@ -74,10 +74,10 @@ export const AuthApi = createApi({
     updateProfilePhoto: builder.mutation({
       query: (body) => ({
         url: "user/profile-photo",
-        method: "PATCH",
+        method: "POST",
         body,
       }),
-      invalidatesTags: ["Profile"],
+      invalidatesTags: ["Profile", "User"],
     }),
   }),
 });

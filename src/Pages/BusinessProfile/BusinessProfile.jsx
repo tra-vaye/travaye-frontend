@@ -135,7 +135,7 @@ const BusinessProfile = () => {
         </Profile>
         <div className="relative">
           {isLoading && <Spin />}
-          <img src={Avatar} alt="avatar" />
+          <img src={userData?.profilePhoto || Avatar} alt="avatar" />
           <label htmlFor="photo">
             <IoIosCamera className="text-black text-[25px] absolute bottom-[10%] right-[2%] cursor-pointer !block" />
           </label>
