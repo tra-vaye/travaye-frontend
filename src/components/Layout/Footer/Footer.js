@@ -25,7 +25,8 @@ const Footer = () => {
           </div>
         </div>
         <div className="mb-5">
-          <h4>Subscribe To Our Newsletter</h4>
+          {/* <h4>Subscribe To Our Newsletter</h4> */}
+          <h4>Join Our Waitlist</h4>
           <form>
             <input type="email" placeholder="Enter Your Email" />
             <button>
@@ -50,7 +51,7 @@ const Footer = () => {
         <div className="mb-4">
           <h4>Useful Links</h4>
           <ul>
-            {Links.map(({ name, href }, i) => {
+            {/* {Links.map(({ name, href }, i) => {
               return (
                 <li key={i}>
                   <Link to={href} key={i}>
@@ -58,7 +59,7 @@ const Footer = () => {
                   </Link>
                 </li>
               );
-            })}
+            })} */}
             <li>
               <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
                 Watch Stories

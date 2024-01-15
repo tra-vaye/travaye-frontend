@@ -1,7 +1,7 @@
 .footer {
   background: #009f57;
   color: white;
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
   display: flex;
   flex-direction: column;
   justify-content: center;
