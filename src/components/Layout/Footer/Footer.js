@@ -61,8 +61,8 @@ const Footer = () => {
               );
             })} */}
             <li>
-              <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
-                Watch Stories
+              <a target="_blank" href="https://forms.gle/qgZ2RVkkqt2f49bs8">
+                submit survey
               </a>
             </li>
           </ul>
