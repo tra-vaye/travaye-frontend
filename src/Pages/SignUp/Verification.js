@@ -1,11 +1,14 @@
-import { notification } from "antd";
+import { notification, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
-import { useCodeVerifyMutation } from "../../redux/Api/authApi";
+import {
+  useCodeVerifyMutation,
+  useResendVerificationMailMutation,
+} from "../../redux/Api/authApi";
 import { AuthFormWrapper } from "../Login";
 
 const Verification = () => {
@@ -26,6 +29,8 @@ const Verification = () => {
   console.log(userType);
   const [codeVerify, { isLoading, error, isError, isSuccess, data }] =
     useCodeVerifyMutation();
+  const [resendCode, { isLoading: resending }] =
+    useResendVerificationMailMutation();
 
   const handleChange = (index, value) => {
     const newCodes = [...codes];
@@ -100,7 +105,23 @@ const Verification = () => {
             {codeTimeOut > 0 ? (
               <> Resend code in : {codeTimeOut}:00 </>
             ) : (
-              <span>click here</span>
+              <>
+                {resending ? (
+                  <Spin />
+                ) : (
+                  <span
+                    onClick={() =>
+                      resendCode({})
+                        .unwrap()
+                        .then(() => {
+                          setCodeTimeOut(59);
+                        })
+                    }
+                  >
+                    click here
+                  </span>
+                )}
+              </>
             )}
           </span>
         </Timer>

@@ -134,10 +134,14 @@ const BusinessProfile = () => {
           <CloseIcon onClick={toggleDashboard} />
         </Profile>
         <div className="relative">
-          {isLoading && <Spin />}
-          <img src={userData?.profilePhoto || Avatar} alt="avatar" />
+          {isLoading && <Spin className="absolute bottom-[50%] left-[50%]" />}
+          <img
+            className="rounded-full"
+            src={userData?.profilePhoto || Avatar}
+            alt="avatar"
+          />
           <label htmlFor="photo">
-            <IoIosCamera className="text-black text-[25px] absolute bottom-[10%] right-[2%] cursor-pointer !block" />
+            <IoIosCamera className="text-black text-[25px] absolute bottom-[15%] right-[5%] cursor-pointer !block" />
           </label>
           <input
             onChange={(e) => {
@@ -191,10 +195,17 @@ const BusinessProfile = () => {
           <Profile onClick={toggleDashboard}>
             <AccountCircleIcon />
           </Profile>
-          <div>
+          <div className="flex items-center justify-between">
             <H3 color="#009f57" fontSize="30" fontWeight="700" className="mb-2">
               Your Profile
             </H3>
+            <a
+              target="_blank"
+              href="https://www.travaye.ng/create-event"
+              className="bg-[#009F57] px-[4px] font-[600] h-[2.5rem] rounded-[10px] flex items-center justify-center text-[15px] text-[#f0f0f0] w-fit"
+            >
+              <p>Create Event</p>
+            </a>
           </div>
           {/* Check the length of businessLocationImages array */}
           {userData?.businessLocationImages &&
@@ -299,13 +310,6 @@ const BusinessProfile = () => {
                 )}
               </Review>
             </ReviewContainer>
-            <a
-              target="_blank"
-              href="https://www.travaye.ng/create-event"
-              className="bg-[#e9a009] px-[4px] font-[600] h-[2.5rem] rounded-[10px] flex items-center justify-center text-[15px] text-[#f0f0f0]"
-            >
-              <p>Create Event</p>
-            </a>
           </div>
         </div>
         <BoxContainer>

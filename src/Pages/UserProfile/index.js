@@ -214,7 +214,7 @@ const UserProfile = () => {
             <a
               target="_blank"
               href="https://www.travaye.ng/create-event"
-              className="bg-[#e9a009] px-[4px] font-[600] h-[2.5rem] rounded-[10px] flex items-center justify-center text-[15px] text-[#f0f0f0]"
+              className="bg-[#009F57] px-[4px] font-[600] h-[2.5rem] rounded-[10px] flex items-center justify-center text-[15px] text-[#f0f0f0]"
             >
               <p>Create Event</p>
             </a>

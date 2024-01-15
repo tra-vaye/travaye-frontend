@@ -79,6 +79,13 @@ export const AuthApi = createApi({
       }),
       invalidatesTags: ["Profile", "User"],
     }),
+    resendVerificationMail: builder.mutation({
+      query: () => ({
+        url: "user/resend-verification",
+        method: "POST",
+        body: {},
+      }),
+    }),
   }),
 });
 
@@ -91,4 +98,5 @@ export const {
   useCodeVerifyMutation,
   useCompleteBusinessRegistrationMutation,
   useUpdateProfilePhotoMutation,
+  useResendVerificationMailMutation,
 } = AuthApi;
