@@ -28,7 +28,11 @@ const Footer = () => {
           {/* <h4>Subscribe To Our Newsletter</h4> */}
           <h4>Join Our Waitlist</h4>
           <form>
-            <input type="email" placeholder="Enter Your Email" />
+            <input
+              className="text-black"
+              type="email"
+              placeholder="Enter Your Email"
+            />
             <button>
               <svg
                 width="30"
