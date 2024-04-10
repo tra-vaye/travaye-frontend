@@ -28,10 +28,10 @@ const Login = () => {
   }, []);
   const navigate = useNavigate();
 
-  const toggleSignUp = () => {
+  const toggleSignUp = (type) => {
     setUserSignUp((prevState) => !prevState);
 
-    dispatch(setUserType({ userType: userSignUp ? "user" : "business" }));
+    dispatch(setUserType({ userType: type }));
   };
 
   // useEffect(() => {
@@ -159,7 +159,6 @@ const Login = () => {
       email: "",
       passWord: "",
     },
-    validationSchema: userSignUp ? userLoginSchema : businessLoginSchema,
     onSubmit,
   });
 
@@ -183,13 +182,15 @@ const Login = () => {
             <AuthFormWrapper onSubmit={handleSubmit}>
               <AuthRoutes>
                 <RouteLink
-                  onClick={!userSignUp ? toggleSignUp : undefined}
+                  onClick={!userSignUp ? () => toggleSignUp("user") : undefined}
                   active={userSignUp}
                 >
                   USER
                 </RouteLink>
                 <RouteLink
-                  onClick={userSignUp ? toggleSignUp : undefined}
+                  onClick={
+                    userSignUp ? () => toggleSignUp("business") : undefined
+                  }
                   active={!userSignUp}
                 >
                   BUSINESS

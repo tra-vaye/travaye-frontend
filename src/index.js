@@ -5,7 +5,8 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import WaitList from "./Pages/waitList/WaitList";
 
-// import { PersistGate } from "redux-persist/integration/react";
+import { PersistGate } from "redux-persist/integration/react";
+import persistStore from "redux-persist/lib/persistStore";
 // import storage from "redux-persist/lib/storage";
 import App from "./App";
 import "./index.css";
@@ -30,10 +31,11 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         {/* <PersistGate loading={null} persistor={persistStore(store)}> */}
-        {/* <App /> */}
-        <Routes>
-          <Route path="/" element={<WaitList />} />
-        </Routes>
+        <App />
+        {/* <Routes>
+            <Route path="/" element={<App />} />
+          </Routes> */}
+        {/* <div>app</div> */}
         {/* </PersistGate> */}
       </BrowserRouter>
     </Provider>
