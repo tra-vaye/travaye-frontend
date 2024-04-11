@@ -41,7 +41,7 @@ const Contact = () => {
       <br />
 
       <p>
-        We are interested in hearing your thoughts. We accept all inuiries and
+        We are interested in hearing your thoughts. We accept all inquiries and
         unique requests. Send us a message if you have any <br />
         questions, concerns or inquiry
       </p>
@@ -81,9 +81,9 @@ const Contact = () => {
       </form>
       <div className="mt-5 ">
         <h4 className="text-center">Get in Touch</h4>
-        <div className={classes.links}>
+        <div className={`${classes.links} `}>
           <a href="mailto:travaye@gmail.com">
-            <div>
+            <div className="py-4">
               <i>{EmailLink}</i>
               <p>
                 Email Address <br />
@@ -92,7 +92,7 @@ const Contact = () => {
             </div>
           </a>
           <a href="tel:+234567823433">
-            <div>
+            <div className="py-4">
               <i>{PhoneLink}</i>
               <p>
                 Contact <br />
