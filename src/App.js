@@ -79,9 +79,9 @@ function App() {
             {userType === "user" && (
               <Route path="/user" element={<UserProfile />} />
             )}
-            {userType === "business" && (
+            {/* {userType === "business" && ( */}
               <Route path="/register" element={<Register />} />
-            )}
+            {/* )} */}
             {userType === "business" && (
               <Route path="/business" element={<BusinessProfile />} />
             )}
