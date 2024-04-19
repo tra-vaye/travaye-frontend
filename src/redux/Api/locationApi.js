@@ -18,22 +18,20 @@ export const LocationApi = createApi({
     }),
     getLocations: builder.query({
       query: ({ page, count, categories, locationCity }) =>
-        `location?page=${page}&count=${count}&filters=${encodeURIComponent(
-          categories
-        )}&location=${encodeURIComponent(locationCity)}`,
+        `locations?page=${page}&count=${count}`,
       providesTags: ["Locations"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
     }),
     getLocationById: builder.query({
       query: ({ id }) => ({
-        url: `location/${id}`,
+        url: `locations/${id}`,
       }),
       providesTags: ["Location"],
     }),
     planATrip: builder.query({
       query: ({ state, city, category, lga, budget, subcategory }) =>
-        `location/plan?state=${state}&category=${category}&subcategory=${subcategory}&city=${city}&lga=${lga}&budget=${budget}`,
+        `locations/plan?state=${state}&category=${category}&subcategory=${subcategory}&city=${city}&lga=${lga}&budget=${budget}`,
       providesTags: ["Trip"],
     }),
     filterLocation: builder.query({

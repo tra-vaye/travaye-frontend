@@ -76,15 +76,15 @@ function App() {
           {!token && <Route path="/login" element={<Login />} />}
           {!token && <Route path="/signup" element={<SignUp />} />}
           <Route path="" element={<RequireAuth />}>
-            {userType === "user" && (
-              <Route path="/user" element={<UserProfile />} />
-            )}
-            {/* {userType === "business" && ( */}
-              <Route path="/register" element={<Register />} />
+            {/* {userType === "user" && ( */}
+            <Route path="/user" element={<UserProfile />} />
             {/* )} */}
-            {userType === "business" && (
-              <Route path="/business" element={<BusinessProfile />} />
-            )}
+            {/* {userType === "business" && ( */}
+            <Route path="/register" element={<Register />} />
+            {/* )} */}
+            {/* {userType === "business" && ( */}
+            <Route path="/business" element={<BusinessProfile />} />
+            {/* )} */}
             {userType === "business" && (
               <Route path="/subscribe" element={<Subscribe />} />
             )}

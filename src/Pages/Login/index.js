@@ -6,12 +6,14 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
+import { IoEyeSharp } from "react-icons/io5";
+import { FaEyeSlash } from "react-icons/fa6";
 
 import classes from "./Login.module.css";
 
 import { businessLoginSchema, userLoginSchema } from "../../schemas";
 
-import { notification } from "antd";
+import { notification, message } from "antd";
 import {
   useBusinessLoginMutation,
   useUserLoginMutation,
@@ -21,7 +23,7 @@ import { setUserType } from "../../redux/Slices/authSlice";
 const Login = () => {
   const dispatch = useDispatch();
   const userType = useSelector((state) => state.auth.userType);
-  console.log(userType);
+  const [seePass, setSeePass] = useState(false);
   const [userSignUp, setUserSignUp] = useState(true);
   useEffect(() => {
     dispatch(setUserType({ userType: "user" }));
@@ -135,7 +137,14 @@ const Login = () => {
       dispatch(setUserType({ userType: "user" }));
       sessionStorage.setItem("userType", "user");
 
-      await userLogin({ username: values.userName, password: values.passWord });
+      await userLogin({ username: values.userName, password: values.passWord })
+        .unwrap()
+        .catch((err) => {
+          notification.error({
+            message: err?.data?.error || "an error occured",
+            placement: "bottomRight",
+          });
+        });
     }
     if (!userSignUp) {
       dispatch(setUserType({ userType: "business" }));
@@ -144,7 +153,11 @@ const Login = () => {
       await businessLogin({
         businessEmail: values.email,
         password: values.passWord,
-      });
+      })
+        .unwrap()
+        .catch((err) => {
+          notification.error(err?.data?.error || "an error occured");
+        });
     }
   };
 
@@ -215,18 +228,30 @@ const Login = () => {
                 {!userSignUp && errors.email && (
                   <ErrorText>{errors.email}</ErrorText>
                 )}
-
-                <input
-                  className={`${
-                    errors.passWord && classes["input-error"]
-                  } mt-5`}
-                  id="passWord"
-                  name="passWord"
-                  type="passWord"
-                  placeholder="Password"
-                  value={values.passWord}
-                  onChange={handleChange}
-                />
+                <span className="relative block mt-5">
+                  <input
+                    className={`${
+                      errors.passWord && classes["input-error"]
+                    } w-full`}
+                    id="passWord"
+                    name="passWord"
+                    type={seePass ? "text" : "password"}
+                    placeholder="Password"
+                    value={values.passWord}
+                    onChange={handleChange}
+                  />
+                  {seePass ? (
+                    <FaEyeSlash
+                      className="absolute right-[2%] top-[10%] translate-y-[50%] cursor-pointer"
+                      onClick={() => setSeePass((prev) => !prev)}
+                    />
+                  ) : (
+                    <IoEyeSharp
+                      className="absolute right-[2%] top-[10%] translate-y-[50%] cursor-pointer"
+                      onClick={() => setSeePass((prev) => !prev)}
+                    />
+                  )}
+                </span>
                 {errors.passWord && <ErrorText> {errors.passWord}</ErrorText>}
                 <p className={`mb-3 text-end mt-4 ${classes.p}`}>
                   Forgot Password?

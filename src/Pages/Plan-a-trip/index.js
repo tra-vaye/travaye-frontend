@@ -15,6 +15,7 @@ import {
   useLazyPlanATripQuery,
 } from "../../redux/Api/locationApi";
 import classes from "./Trip.module.css";
+
 // import Loader from "../../components/UI/Loader";
 // import { Select } from "antd";
 // import { useState } from "react";
@@ -94,7 +95,7 @@ const PlanTrip = () => {
               className="!w-[250px]"
               options={lga}
             />
-            <Select
+            {/* <Select
               placeholder="Landmark Areas"
               showSearch
               onSelect={(value) => {
@@ -103,7 +104,7 @@ const PlanTrip = () => {
               // value={queryData.lga}
               className="!w-[250px]"
               options={landmarks}
-            />
+            /> */}
           </div>
         </div>
         <div className="mt-3">

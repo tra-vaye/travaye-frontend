@@ -4,12 +4,17 @@ import { Card, StarContainer } from "../AddedLocations";
 import MaryLandImg from "../../assets/maryland-mall.png";
 import { FourStars } from "../../components/UI/svgs/svgs";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useLazyPlanATripQuery } from "../../redux/Api/locationApi";
+import {
+  useLazyPlanATripQuery,
+  useGetLocationsQuery,
+} from "../../redux/Api/locationApi";
 import { useEffect } from "react";
 import Loader from "../../components/UI/Loader";
+
 const Locations = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const { data: locations } = useGetLocationsQuery();
   const [planATrip, { isLoading, data }] = useLazyPlanATripQuery();
   useEffect(() => {
     planATrip(state)
@@ -30,7 +35,7 @@ const Locations = () => {
           </Button>
         </div>
         <div>
-          {data?.data.map((e, i) => (
+          {locations?.data.map((e, i) => (
             <Card key={i}>
               <div className="row">
                 <div className="d-flex col-md-6">
