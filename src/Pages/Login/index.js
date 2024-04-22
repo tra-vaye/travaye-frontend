@@ -253,9 +253,12 @@ const Login = () => {
                   )}
                 </span>
                 {errors.passWord && <ErrorText> {errors.passWord}</ErrorText>}
-                <p className={`mb-3 text-end mt-4 ${classes.p}`}>
+                <Link
+                  to={"/forgot-password"}
+                  className={`mb-3 text-end mt-4 ${classes.p}`}
+                >
                   Forgot Password?
-                </p>
+                </Link>
               </div>
               {/* <div className="d-flex justify-content-center">{Alternate}</div> */}
               {/* <SocialsContainer>

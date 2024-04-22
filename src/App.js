@@ -36,6 +36,12 @@ const LocationDetails = lazy(() => {
 const Login = lazy(() => {
   return import("./Pages/Login");
 });
+const ForgotPassword = lazy(() => {
+  return import("./Pages/Login/ForgotPassword");
+});
+const ResetPassword = lazy(() => {
+  return import("./Pages/Login/ResetPassword");
+});
 const PlanTrip = lazy(() => {
   return import("./Pages/Plan-a-trip");
 });
@@ -73,8 +79,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           {/* <Route path="/" element={<Main />} /> */}
-          {!token && <Route path="/login" element={<Login />} />}
-          {!token && <Route path="/signup" element={<SignUp />} />}
+          {<Route path="/login" element={<Login />} />}
+          {<Route path="/signup" element={<SignUp />} />}
+          {<Route path="/forgot-password" element={<ForgotPassword />} />}
+          {<Route path="/reset-password" element={<ResetPassword />} />}
           <Route path="" element={<RequireAuth />}>
             {/* {userType === "user" && ( */}
             <Route path="/user" element={<UserProfile />} />
