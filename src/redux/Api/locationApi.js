@@ -17,8 +17,10 @@ export const LocationApi = createApi({
       invalidatesTags: ["Locations"],
     }),
     getLocations: builder.query({
-      query: ({ page, count, categories, locationCity }) =>
-        `locations?page=${page}&count=${count}`,
+      query: ({ page, count, categories, locationCity }) => ({
+        url: `locations`,
+        params: { page, count },
+      }),
       providesTags: ["Locations"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
@@ -72,6 +74,19 @@ export const LocationApi = createApi({
       }),
       invalidatesTags: ["Location"],
     }),
+    getStates: builder.query({
+      query: () => ({
+        url: "states",
+      }),
+      transformResponse: (apiResponse) => {
+        const res = Object.entries(apiResponse).map(([key, value]) => ({
+          value: key,
+          label: key,
+          states: value,
+        }));
+        return res;
+      },
+    }),
   }),
 });
 
@@ -85,4 +100,5 @@ export const {
   useAddLocationToLikedLocationsMutation,
   useGetPlanATripQuery,
   useReviewLocationMutation,
+  useGetStatesQuery,
 } = LocationApi;

@@ -8,15 +8,15 @@ const LocationBox = (props) => {
       className="flex flex-col"
     >
       <img
-        src={props.location.locationImagePath[0]}
+        src={props.location.businessLocationImages[0]}
         alt="location"
-        className="img-fluid"
+        className="img-fluid !w-[250px] h-[216px]"
       />
       <h6 className="mt-2 font-extrabold text-lg ">
-        {props.location.locationName}
+        {props.location.businessName}
       </h6>
       <div className=" flex content-between flex-wrap break-words">
-        <p>{props.location.locationAddress}</p>
+        <p>{props.location.businessAddress}</p>
       </div>
     </Box>
   );

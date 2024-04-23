@@ -128,8 +128,8 @@ const LocationDetails = () => {
               <figure>
                 <img
                   src={
-                    location.locationImagePath
-                      ? location.locationImagePath[0]
+                    location.businessLocationImages
+                      ? location.businessLocationImages[0]
                       : Maryland
                   }
                   alt="poster"
@@ -141,11 +141,14 @@ const LocationDetails = () => {
             </div>
             <div className={`col-md-6 ${classes.details}`}>
               <div>
-                <h4>{location.locationName}</h4>
-                <h6>{location.locationAddress}</h6>
+                <h4>{location?.businessName}</h4>
+                <h6>{location?.businessAddress}</h6>
+                <h6>{location?.businessCategory}</h6>
+                <h6>{location?.businessRangeFrom}</h6>
+                <h6>0{location?.businessTelephone}</h6>
               </div>
 
-              <p className="my-3">{location.locationDescription}</p>
+              <p className="my-3">{location?.businessDescription}</p>
 
               <div className="d-flex mb-3">
                 {location?.usersThatLiked?.includes(userData._id) ? null : (

@@ -35,27 +35,27 @@ const Locations = () => {
           </Button>
         </div>
         <div>
-          {locations?.data.map((e, i) => (
+          {data?.data.map((e, i) => (
             <Card key={i}>
-              <div className="row">
-                <div className="d-flex col-md-6">
+              <div className="w-full grid grid-cols-3">
+                <div className="d-flex colmd-6">
                   <img
-                    src={e?.locationImagePath[0]}
+                    src={e?.businessLocationImages[0]}
                     alt=""
-                    className="img-fluid"
+                    className="img-fluid w-[230px] h-[120px]"
                   />
                   <div>
-                    <p>{e?.locationName}</p>
+                    <p>{e?.businessName}</p>
                     <h5>{e?.locationDescription}</h5>
-                    <h6>{e?.locationCategory}</h6>
+                    <h6>{e?.businessCategory}</h6>
                   </div>
                 </div>
-                <StarContainer className="d-flex  align-items-center col-md-3">
+                <StarContainer className="d-flex  align-items-center colmd-3">
                   <i>{FourStars}</i>
                 </StarContainer>
 
-                <div className="d-flex col-md-3 align-items-center">
-                  <p className="me-3">#500</p>
+                <div className="flex colmd-3 align-items-center justify-end w-full">
+                  <p className="me-3">#{e?.businessPriceRangeFrom}</p>
                   <Button
                     onClick={() => {
                       const currentLocations =

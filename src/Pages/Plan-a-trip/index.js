@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
 import {
-  useGetStatesQuery,
+  // useGetStatesQuery,
   useLazyGetCityQuery,
   useLazyGetLandmarksQuery,
   useLazyGetLgaQuery,
@@ -13,6 +13,7 @@ import {
 import {
   useGetCategoriesQuery,
   useLazyPlanATripQuery,
+  useGetStatesQuery,
 } from "../../redux/Api/locationApi";
 import classes from "./Trip.module.css";
 
@@ -26,7 +27,7 @@ const PlanTrip = () => {
   const { data } = useGetStatesQuery();
   const { data: categories } = useGetCategoriesQuery();
   const [getCity, { data: city }] = useLazyGetCityQuery();
-  const [getLga, { data: lga }] = useLazyGetLgaQuery();
+  // const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
   const [planTrip, { isLoading }] = useLazyPlanATripQuery();
   const [queryData, setQueryData] = useState({
@@ -39,6 +40,7 @@ const PlanTrip = () => {
     subcategory: [],
   });
   const [subData, setSubData] = useState([]);
+  const [lga, setLga] = useState([]);
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate("/locations", { state: queryData });
@@ -59,23 +61,24 @@ const PlanTrip = () => {
           <div className="mt-2 flex flex-wrap md:flex-nowrap md:flex-row gap-3 md:gap-5">
             <Select
               placeholder="State"
-              onSelect={(value) => {
-                getLga({ state: value.toUpperCase() });
-                getCity({ state: value.toUpperCase() });
-                getLandMarks({ state: value.toUpperCase() });
+              onSelect={(value, obj) => {
+                // getLga({ state: value.toUpperCase() });
+                // getCity({ state: value.toUpperCase() });
+                // getLandMarks({ state: value.toUpperCase() });
                 setQueryData((prev) => ({
                   ...prev,
                   state: value,
                   city: "",
                   lga: "",
                 }));
+                setLga(obj?.states.map((e) => ({ value: e, label: e })));
               }}
               // value={queryData.state}
               showSearch
               className="!w-[250px]"
               options={data}
             />
-            <Select
+            {/* <Select
               placeholder="City"
               showSearch
               onSelect={(value) => {
@@ -84,7 +87,7 @@ const PlanTrip = () => {
               // value={queryData.city}
               className="!w-[250px]"
               options={city}
-            />
+            /> */}
             <Select
               placeholder="Local Government Area"
               showSearch
