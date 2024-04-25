@@ -21,23 +21,23 @@ const AddedLocations = () => {
             <div className="row">
               <div className="flex justify-between items-center">
                 <img
-                  src={e?.locationImagePath[0]}
+                  src={e?.businessLocationImages[0]}
                   alt=""
                   className="img-fluid"
                 />
                 <div>
-                  <p>{e?.locationName}</p>
-                  <h5>{e?.locationAddress}</h5>
-                  <h6>{e?.locationCategory}</h6>
+                  <p>{e?.businessName}</p>
+                  <h5>{e?.businessAddress}</h5>
+                  <h6>{e?.businessCategory}</h6>
                 </div>
-                <Rate value={e?.locationRating} />
+                <Rate value={e?.rating} />
                 <div className="d-flex col-md-3 justify-content-between align-items-center ">
-                  <b>#500 2movies</b>
+                  <b>#{e?.businessPriceRangeFrom}</b>
                   <span
                     className="cursor-pointer"
                     onClick={() => {
                       const newLocations = locations.filter(
-                        (loc) => loc?.locationName !== e?.locationName
+                        (loc) => loc?.businessName !== e?.businessName
                       );
                       localStorage.setItem(
                         "location",
