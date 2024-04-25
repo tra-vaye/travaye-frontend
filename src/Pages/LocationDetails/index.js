@@ -94,8 +94,8 @@ const LocationDetails = () => {
   };
   console.log(location);
   const handleAddClick = () => {
-    // if (location?.locationName) {
-    addLocationToLikedLocations({ locationName: location.locationName });
+    // if (location?.locationName) {  
+    addLocationToLikedLocations({ locationName: location._id });
     //     .unwrap()
     //     .then((res) =>
     //       notification.success({

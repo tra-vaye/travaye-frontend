@@ -104,10 +104,7 @@ const UserProfile = () => {
       // refetchUserData();
     }
   }, [location.pathname, firstVisit, refetchLocations]);
-  const userLikedLocations = userData?.likedLocations?.map(
-    (likedLocationName) =>
-      locations?.find((location) => location.locationName === likedLocationName)
-  );
+  const userLikedLocations = userData?.likedLocations;
 
   // Filter out any undefined values in case a location name doesn't match any location
   const filteredUserLikedLocations = userLikedLocations?.filter(Boolean) || [];

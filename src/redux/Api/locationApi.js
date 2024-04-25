@@ -37,7 +37,7 @@ export const LocationApi = createApi({
       providesTags: ["Trip"],
     }),
     filterLocation: builder.query({
-      query: () => `location?filters=wildlife-attractions&location=lagos`,
+      query: () => `locations?filters=wildlife-attractions&location=lagos`,
       providesTags: ["Location"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
@@ -60,7 +60,7 @@ export const LocationApi = createApi({
     }),
     addLocationToLikedLocations: builder.mutation({
       query: (body) => ({
-        url: "location/like",
+        url: "locations/like",
         method: "POST",
         body,
       }),
@@ -68,7 +68,7 @@ export const LocationApi = createApi({
     }),
     reviewLocation: builder.mutation({
       query: (body) => ({
-        url: "location/review",
+        url: "locations/review",
         method: "POST",
         body,
       }),
