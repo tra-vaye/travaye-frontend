@@ -65,10 +65,10 @@ const AddedLocations = () => {
           <Value>
             {
               locations?.reduce((acc, e) => {
-                if (acc.includes(e?.locationCategory)) {
+                if (acc.includes(e?.businessCategory)) {
                   return acc;
                 } else {
-                  return [...acc, e?.locationCategory];
+                  return [...acc, e?.businessCategory];
                 }
               }, []).length
             }{" "}
