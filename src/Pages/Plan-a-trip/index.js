@@ -41,10 +41,12 @@ const PlanTrip = () => {
   });
   const [subData, setSubData] = useState([]);
   const [lga, setLga] = useState([]);
+  const [cities, setCities] = useState([]);
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate("/locations", { state: queryData });
   };
+
   return (
     <div className=" ">
       {isLoading && <Loader />}
@@ -71,14 +73,15 @@ const PlanTrip = () => {
                   city: "",
                   lga: "",
                 }));
-                setLga(obj?.states.map((e) => ({ value: e, label: e })));
+                setCities(obj.cities.map((city) => ({value:city, label: city})));
+                setLga(obj.lgas.map((d) => ({value: d, label: d})));
               }}
               // value={queryData.state}
               showSearch
               className="!w-[250px]"
-              options={data}
+              options={data?.map((d, index) => ({value: d.state, label: d.state, index, cities: d.cities, lgas: d.lgas}))}
             />
-            {/* <Select
+            <Select
               placeholder="City"
               showSearch
               onSelect={(value) => {
@@ -86,8 +89,8 @@ const PlanTrip = () => {
               }}
               // value={queryData.city}
               className="!w-[250px]"
-              options={city}
-            /> */}
+              options={cities}
+            />
             <Select
               placeholder="Local Government Area"
               showSearch

@@ -78,14 +78,14 @@ export const LocationApi = createApi({
       query: () => ({
         url: "states",
       }),
-      transformResponse: (apiResponse) => {
-        const res = Object.entries(apiResponse).map(([key, value]) => ({
-          value: key,
-          label: key,
-          states: value,
-        }));
-        return res;
-      },
+      // transformResponse: (apiResponse) => {
+      //   const res = Object.entries(apiResponse).map(([key, value]) => ({
+      //     value: key,
+      //     label: key,
+      //     states: value,
+      //   }));
+      //   return res;
+      // },
     }),
   }),
 });
