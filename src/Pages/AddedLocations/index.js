@@ -12,6 +12,8 @@ const AddedLocations = () => {
   useEffect(() => {
     setLocations(JSON.parse(localStorage.getItem("location")));
   }, [JSON.stringify(localStorage.getItem("location"))]);
+
+  console.log(locations);
   return (
     <Container>
       <h4>My Added Locations</h4>
@@ -77,7 +79,9 @@ const AddedLocations = () => {
         </div>
         <div className="col-md-3">
           <Title>Total Budget Cost</Title>
-          <Value>#25,000</Value>
+          <Value>#{locations?.reduce((acc, e)  => {
+            return acc + e.businessPriceRangeFrom
+          }, 0)}</Value>
         </div>
         <div className="col-md-3">
           <Button onClick={() => window.print()}>Finish Selection</Button>
