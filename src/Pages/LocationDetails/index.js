@@ -262,8 +262,8 @@ const LocationDetails = () => {
                 </div>
               </div>
               <Review className={`flex flex-wrap gap-4`}>
-                {location && location?.locationReviews?.length > 0 ? (
-                  location?.locationReviews?.map((review, i) => {
+                {location && location?.reviews?.length > 0 ? (
+                  location?.reviews?.map((review, i) => {
                     return (
                       <ReviewCard>
                         <div>
