@@ -25,7 +25,7 @@ const LocationBox = (props) => {
 export default LocationBox;
 
 const Box = styled.div`
-  width: 230px;
+  min-width: 230px;
   padding: 10px;
   margin-bottom: 25px;
   background-color: rgb(255, 254, 252);

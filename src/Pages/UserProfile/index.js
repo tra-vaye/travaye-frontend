@@ -253,6 +253,9 @@ const Profile = styled.i`
   }
 `;
 const BoxContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   @media (max-width: 532px) {
     display: grid;
     place-items: center;
