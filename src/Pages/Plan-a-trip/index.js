@@ -165,10 +165,10 @@ const PlanTrip = () => {
             placeholder="Select Your Budget "
             className="!w-[250px]"
             options={[
-              { value: "free", label: "free" },
-              { value: "free - 5k", label: "free - 5k" },
-              { value: "5k - 10k", label: "5k - 10k" },
-              { value: "10k - 20k", label: "10k - 20k" },
+              { value: 0, label: "free" },
+              { value: 5000, label: "free - 5k" },
+              { value: 10000, label: "5k - 10k" },
+              { value: 20000, label: "10k - 20k" },
             ]}
             onSelect={(value) => {
               setQueryData((prev) => ({ ...prev, budget: value }));
