@@ -47,6 +47,8 @@ const PlanTrip = () => {
     navigate("/locations", { state: queryData });
   };
 
+  console.log(categories);
+
   return (
     <div className=" ">
       {isLoading && <Loader />}

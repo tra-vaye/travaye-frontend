@@ -48,7 +48,7 @@ export const LocationApi = createApi({
       }),
       transformResponse: (res) => {
         const result = res.map((e) => ({
-          value: e.name,
+          value: e.slug || e.name,
           label: e.name,
           sub: e?.sub?.map((e) => ({
             value: e.slug,
