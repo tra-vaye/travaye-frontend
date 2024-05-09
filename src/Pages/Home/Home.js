@@ -75,15 +75,16 @@ const Home = () => {
         How To Use Travaye
       </h2>
       <Instructions />
-      <section className={`row px-3 ${classes.reviews}`}>
-        <div className="col-lg-6 d-flex justify-content-center">
+      <section className={`px-3 ${classes.reviews}`}>
+        {/* <div className="col-lg-6 d-flex justify-content-center">
           <img src={ReviewImage} alt="banner" className="img-fluid" />
-        </div>
+        </div> */}
         <div
-          className={`col-lg-6 d-flex flex-column justify-content-center ${classes.content}`}
+          className={`mx-auto d-flex flex-column justify-content-center ${classes.content}`}
         >
-          <h2 className="mx-5">What are they saying?</h2>
-          <h3 className="mx-5">What Our Customers Say About Travaye</h3>
+          <h3 className="text-[#000000] text-[56px] font-[800] text-center">
+            What Our Customers Say
+          </h3>
           <ReviewCarousel classes={classes} />
         </div>
       </section>
