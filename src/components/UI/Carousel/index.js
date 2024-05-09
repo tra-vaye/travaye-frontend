@@ -17,8 +17,8 @@ const Carousel = () => {
   return (
     <div>
       <Swiper
-        slidesPerView={3}
-        slidesPerGroup={3}
+        slidesPerView={4}
+        slidesPerGroup={4}
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         grabCursor={true}
         navigation={true}

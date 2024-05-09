@@ -36,8 +36,9 @@ const Home = () => {
         <div className="row">
           <div className="col-lg-6  mt-4">
             <p className={classes.intro}>
-              Enjoy Outings without having to think of{" "}
-              <span className={classes.sapa}>Sapa!</span>{" "}
+              Your guide to{" "}
+              <span className={classes.sapa}>affordable adventures</span> in
+              Nigeria
             </p>
             <p>
               Plan your trips with Travaye and get the best places to visit for
@@ -45,18 +46,8 @@ const Home = () => {
             </p>
             <LandingButtonsContainer>
               <Link to="/plan-a-trip">
-                <button className={classes.btn}>Plan A Trip</button>
+                <button className={classes.btn}>Plan A Trip &rarr;</button>
               </Link>
-              <div>
-                <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
-                  <div className="d-flex">
-                    <i>{PlayStory}</i>
-                    <button className={classes["btn--alt"]}>
-                      Watch Stories
-                    </button>
-                  </div>
-                </a>
-              </div>
             </LandingButtonsContainer>
           </div>
           <LandingImagesContainer className="col-lg-6 d-flex justify-content-center align-self-start">
@@ -76,10 +67,13 @@ const Home = () => {
         </div>
       </section>
       <Perks />
-      <p className={classes.text}>PLANNING WITH TRAVAYE?</p>
-      <h2>Discover Places Around Nigeria</h2>
+      <h2 className="text-[#000000] text-[56px] font-[800] text-center">
+        Discover Places Around Nigeria
+      </h2>
       <Carousel />
-      <h2>How To Use Travaye</h2>
+      <h2 className="text-[#000000] text-[56px] font-[800] text-center">
+        How To Use Travaye
+      </h2>
       <Instructions />
       <section className={`row px-3 ${classes.reviews}`}>
         <div className="col-lg-6 d-flex justify-content-center">
