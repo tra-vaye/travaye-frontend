@@ -66,6 +66,14 @@ export const LocationApi = createApi({
       }),
       invalidatesTags: ["Location", "User"],
     }),
+    unlikeLocation: builder.mutation({
+      query: (body) => ({
+        url: "locations/unlike",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Location", "User"],
+    }),
     reviewLocation: builder.mutation({
       query: (body) => ({
         url: "locations/review",
@@ -98,6 +106,7 @@ export const {
   useLazyPlanATripQuery,
   useGetCategoriesQuery,
   useAddLocationToLikedLocationsMutation,
+  useUnlikeLocationMutation,
   useGetPlanATripQuery,
   useReviewLocationMutation,
   useGetStatesQuery,
