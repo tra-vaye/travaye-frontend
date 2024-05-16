@@ -105,7 +105,7 @@ const LocationDetails = () => {
 	};
 
 	const handleUnlike = (id) => {
-		unlike({ locationID: id })
+		unlike({ locationName: id })
 			.unwrap()
 			.then((r) => {
 				notification.success({
