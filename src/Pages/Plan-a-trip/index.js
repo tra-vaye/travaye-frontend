@@ -171,6 +171,7 @@ const PlanTrip = () => {
               { value: 5000, label: "free - 5k" },
               { value: 10000, label: "5k - 10k" },
               { value: 20000, label: "10k - 20k" },
+              { value: 20001, label: "20k+" },
             ]}
             onSelect={(value) => {
               setQueryData((prev) => ({ ...prev, budget: value }));
