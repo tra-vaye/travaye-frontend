@@ -1,11 +1,8 @@
 import 'leaflet/dist/leaflet.css';
-import Travaye from '../../assets/travaye.png';
-import { Icon } from 'leaflet';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { googleApiKey } from '../../server';
 import { useSearchParams } from 'react-router-dom';
 
-const Map = ({ lat, long }) => {
+const Map = () => {
   const [params] = useSearchParams();
 
   const address = params.get('address');
