@@ -178,7 +178,7 @@ const LocationDetails = () => {
 									</Button>
 								)}
 								<Button
-									onClick={() => navigate(`/location/map`)}
+									onClick={() => navigate(`/location/map?address=${location?.businessAddress}&name=${location?.businessName}`)}
 									location={true}
 								>
 									View on Google Maps

@@ -18,7 +18,7 @@ export const baseQueryWithInterceptor = async (args, api, extraOptions) => {
   // Check if the response has a status code of 401
   if (result.error?.status === 401 || result.error?.originalStatus === 401) {
     sessionStorage.removeItem("authToken");
-    message.error("Session Expired");
+    message.error("Session Expired"); 
     window.location.href = "/login";
   }
   if (result.error?.status === 404 || result.error?.originalStatus === 404) {

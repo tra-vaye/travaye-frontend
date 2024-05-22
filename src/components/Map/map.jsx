@@ -1,12 +1,19 @@
-import "leaflet/dist/leaflet.css";
-import Travaye from "../../assets/travaye.png";
-import { Icon } from "leaflet";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import 'leaflet/dist/leaflet.css';
+import Travaye from '../../assets/travaye.png';
+import { Icon } from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { googleApiKey } from '../../server';
+import { useSearchParams } from 'react-router-dom';
 
 const Map = ({ lat, long }) => {
-  return (
-    <div className="w-[98%] h-[98%] py-[2%] border-t border-[#D6DDEB] mx-auto">
-      <MapContainer
+  const [params] = useSearchParams();
+
+  const address = params.get('address');
+  const name = params.get('name');
+	const apiKey = googleApiKey;
+	return (
+		<div className="w-[98%] h-[98%] py-[2%] border-t border-[#D6DDEB] mx-auto">
+			{/* <MapContainer
         center={[6.5392, 3.3842]}
         zoom={10}
         scrollWheelZoom={false}
@@ -28,9 +35,18 @@ const Map = ({ lat, long }) => {
         >
           <Popup>business location</Popup>
         </Marker>
-      </MapContainer>
-    </div>
-  );
+      </MapContainer> */}
+			<iframe
+				width="100%"
+				height="500"
+				style={{ border: '0' }}
+				loading="lazy"
+				allowFullScreen
+				referrerPolicy="no-referrer-when-downgrade"
+				src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${name}+${address}`}
+			></iframe>
+		</div>
+	);
 };
 
 export default Map;
