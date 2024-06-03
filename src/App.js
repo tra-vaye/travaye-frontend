@@ -60,6 +60,12 @@ const UserProfile = lazy(() => {
 const BusinessProfile = lazy(() => {
   return import("./Pages/BusinessProfile/BusinessProfile");
 });
+const BusinessSettings = lazy(() => {
+  return import("./Pages/Business/Settings");
+});
+const UserSettings = lazy(() => {
+  return import("./Pages/UserSettings/UserSettings");
+});
 const Subscribe = lazy(() => {
   return import("./Pages/Subscribe/Subscribe");
 });
@@ -71,6 +77,7 @@ function App() {
   };
   const token = sessionStorage.getItem("authToken");
   const userType = sessionStorage.getItem("userType");
+
   return (
     <>
       <Header onToggleSideNav={toggleSideNav} showSideNav={showSideNav} />
@@ -84,21 +91,29 @@ function App() {
           {<Route path="/forgot-password" element={<ForgotPassword />} />}
           {<Route path="/reset-password" element={<ResetPassword />} />}
           <Route path="" element={<RequireAuth />}>
-            {/* {userType === "user" && ( */}
-            <Route path="/user" element={<UserProfile />} />
-            {/* )} */}
+            {userType === "user" && (
+              <Route path="/user" element={<UserProfile />} />
+            )}
             {/* {userType === "business" && ( */}
             <Route path="/register" element={<Register />} />
             {/* )} */}
             {/* {userType === "business" && ( */}
             <Route path="/business" element={<BusinessProfile />} />
+
+            {userType === "business" &&  (
+              <Route path="/settings" element={<BusinessSettings />} />
+            )}
+            {userType === "user" &&  (
+              <Route path="/settings" element={<UserSettings />} />
+            )}
+            <Route path="/settings" element={<BusinessProfile />} />
             {/* )} */}
             {userType === "business" && (
               <Route path="/subscribe" element={<Subscribe />} />
             )}
             {/* Redirect to the appropriate route if user tries to access the wrong route */}
             {userType === "business" && (
-              <Route path="/user" element={<Navigate to="/business" />} />
+              <Route path="/user" element={<Navigate to='/business' />} />
             )}
             {userType === "user" && (
               <Route path="/business" element={<Navigate to="/user" />} />

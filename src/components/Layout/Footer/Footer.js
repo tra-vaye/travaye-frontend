@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 const Links = [
   { name: "My Account", href: "/user" },
   { name: "View Locations", href: "/business-locations" },
+  { name: "Watch Stories", href: "/" },
 ];
 const Footer = () => {
   return (
@@ -33,7 +34,7 @@ const Footer = () => {
               type="email"
               placeholder="Enter Your Email"
             />
-            <button>
+            <button className="md:mx-auto">
               <svg
                 width="30"
                 height="22"
@@ -55,7 +56,7 @@ const Footer = () => {
         <div className="mb-4">
           <h4>Useful Links</h4>
           <ul>
-            {/* {Links.map(({ name, href }, i) => {
+            {Links.map(({ name, href }, i) => {
               return (
                 <li key={i}>
                   <Link to={href} key={i}>
@@ -63,12 +64,12 @@ const Footer = () => {
                   </Link>
                 </li>
               );
-            })} */}
-            <li>
+            })}
+            {/* <li>
               <a target="_blank" href="https://forms.gle/qgZ2RVkkqt2f49bs8">
                 submit survey
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
