@@ -60,12 +60,12 @@ const UserProfile = lazy(() => {
 const BusinessProfile = lazy(() => {
   return import("./Pages/BusinessProfile/BusinessProfile");
 });
-const BusinessSettings = lazy(() => {
-  return import("./Pages/Business/Settings");
-});
-const UserSettings = lazy(() => {
-  return import("./Pages/UserSettings/UserSettings");
-});
+// const BusinessSettings = lazy(() => {
+//   return import("./Pages/Business/Settings");
+// });
+// const UserSettings = lazy(() => {
+//   return import("./Pages/UserSettings/UserSettings");
+// });
 const Subscribe = lazy(() => {
   return import("./Pages/Subscribe/Subscribe");
 });
@@ -100,12 +100,12 @@ function App() {
             {/* {userType === "business" && ( */}
             <Route path="/business" element={<BusinessProfile />} />
 
-            {userType === "business" &&  (
+            {/* {userType === "business" &&  (
               <Route path="/settings" element={<BusinessSettings />} />
             )}
             {userType === "user" &&  (
               <Route path="/settings" element={<UserSettings />} />
-            )}
+            )} */}
             <Route path="/settings" element={<BusinessProfile />} />
             {/* )} */}
             {userType === "business" && (
