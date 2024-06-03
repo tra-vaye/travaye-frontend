@@ -2,23 +2,11 @@ import classes from "./Home.module.css";
 import Perks from "../../components/UI/Perks";
 import Instructions from "../../components/UI/Instructions";
 import Explore from "../../components/UI/Explore";
-// import ReviewImage from "../../assets/review-image.png";
-// import Avatar from "../../assets/avatar.png";
-// import GetStarted from "../../assets/get-started.png";
-// import introVid from "../../assets/travaye-intro.mp4";
 import PurpleBistro from "../../assets/purple-bistro.png";
 import Maryland from "../../assets/maryland-landing.png";
 
-// import {
-//   FacebookIcon,
-//   InstaIcon,
-//   PlayStory,
-//   TwitterIcon,
-// } from "../../components/UI/svgs/svgs";
 import {
-  Button,
-  ScrollLeftBtn,
-  ScrollRightBtn,
+  Button
 } from "../../components/UI/Buttons";
 import Carousel from "../../components/UI/Carousel";
 import Footer from "../../components/Layout/Footer/Footer";

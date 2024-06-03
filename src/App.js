@@ -7,7 +7,6 @@ import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
 import Loader from "./components/UI/Loader";
 
-import { useSelector } from "react-redux";
 import RequireAuth from "./Layout/RequireAuth";
 import CreateEvent from "./Pages/CreateEvent";
 
@@ -75,7 +74,7 @@ function App() {
   const toggleSideNav = () => {
     setShowSideNav((prevState) => !prevState);
   };
-  const token = sessionStorage.getItem("authToken");
+  // const token = sessionStorage.getItem("authToken");
   const userType = sessionStorage.getItem("userType");
 
   return (
