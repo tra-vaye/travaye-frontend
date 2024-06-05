@@ -74,7 +74,7 @@ function App() {
   const toggleSideNav = () => {
     setShowSideNav((prevState) => !prevState);
   };
-  // const token = sessionStorage.getItem("authToken");
+  // const token = sessionStorage.getItem("authToken");g
   const userType = sessionStorage.getItem("userType");
 
   return (
@@ -115,7 +115,7 @@ function App() {
               <Route path="/user" element={<Navigate to='/business' />} />
             )}
             {userType === "user" && (
-              <Route path="/business" element={<Navigate to="/user" />} />
+              <Route path="/business" element={<BusinessProfile />} />
             )}
             <Route path="/plan-a-trip" element={<PlanTrip />} />
             <Route path="/verify-email" element={<Verification />} />

@@ -120,12 +120,12 @@ const Dashboard = ({ showDashboard, setBusinessInfo }) => {
 }
 
 
-const DashboardContainer = styled.div`
+export const DashboardContainer = styled.aside`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-	width: 30%;
+	width: 20%;
 	height: calc(100vh - 95px);
 	position: relative;
 
@@ -135,7 +135,7 @@ const DashboardContainer = styled.div`
 	border-top: 0;
 	border-right: 2px solid transparent;
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-	padding-top: 70px;
+	padding-block: 50px;
 	z-index: 5;
 	transition: all ease-in-out 500ms !important;
 
@@ -162,7 +162,57 @@ const DashboardContainer = styled.div`
 
 	@media (max-width: 1150px) {
 		max-width: ${(props) => (props.showDashboard ? "auto" : "0")};
-		width: 35%;
+		width: 25%;
+	}
+
+	@media (max-width: 950px) {
+		width: 34%;
+	}
+
+	@media (max-width: 720px) {
+		width: 42%;
+	}
+
+	@media (max-width: 560px) {
+		width: 56%;
+	}
+`;
+
+export const TogleButton = styled.button`
+	position: absolute;
+	display: none;
+	top: 120px;
+	z-index: 1000 !important;
+	background-color: white;
+	border-radius: 50%;
+	padding: 8px;
+	padding-right: 4px;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.4);
+	transition: all ease-in-out 300ms;
+	cursor: pointer;
+	opacity: 0.7;
+	transform: scale(1) rotate(${(props) => (props.showDashboard ? "" : "180")}deg) !important;
+	
+	&:focus {
+		opacity: 1;
+	}
+  
+	@media (max-width: 1150px) {
+		transform: scale(1) rotate(${(props) => (props.showDashboard ? "" : "180")}deg) !important;
+		display: block;
+		left: ${(props) => (props.showDashboard ? "22%" : "10px")};
+  	}
+
+  	@media (max-width: 950px) {
+		left: ${(props) => (props.showDashboard ? "30.5%" : "10px")};
+	}
+
+	@media (max-width: 720px) {
+		left: ${(props) => (props.showDashboard ? "38%" : "10px")};
+	}
+
+	@media (max-width: 560px) {
+		left: ${(props) => (props.showDashboard ? "50.5%" : "10px")};
 	}
 `;
 

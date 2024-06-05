@@ -1,21 +1,18 @@
-import CloseIcon from "@mui/icons-material/Close";
 import { Image, notification, Spin } from "antd";
 import { useEffect, useState } from "react";
-import { FiveStars, FourStars } from "../../components/UI/svgs/svgs";
-// import classes from "";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
-import { Button } from "../../components/UI/Buttons";
-import LocationModal from "../../components/UI/Modal/LocationModal";
-import NewLocation from "../../components/UI/Modal/NewLocation";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 import { useUpdateProfilePhotoMutation } from "../../redux/Api/authApi";
 import { IoIosCamera } from "react-icons/io";
+import { BsBoxArrowInLeft } from "react-icons/bs";
+import { DashboardContainer, TogleButton } from "../../components/Layout/BusinessSidebar";
+import { InsightBox } from "../Business/Settings";
+import { Button } from "../../components/UI/Buttons";
 
-const BusinessSettings = () => {
+const UserSettings = () => {
   const [updateProfile, { isLoading }] = useUpdateProfilePhotoMutation();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [newLocationModal, setNewLocationModal] = useState(false);
@@ -59,7 +56,7 @@ const BusinessSettings = () => {
   //   userType: userType,
   // });
   const userData = useSelector((store) => store.auth.user).payload;
-  const [userInfo, setUserInfo] = useState();
+  const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
     if (isSuccess) {
@@ -77,62 +74,35 @@ const BusinessSettings = () => {
 
   useEffect(() => {
     if (userData) {
-      if (userData?.businessVerified === "verified") {
-        navigate(`/${userType}`);
-      } else if (userData?.businessVerified === "pending") {
-        notification.warning({
-          message: " Business Verification Pending",
-          duration: 3,
-          placement: "bottomRight",
-        });
-        navigate(`/${userType}`);
-        // refetchUserData();
-      } else if (userData?.businessVerified === "false") {
-        notification.error({
-          message: " Business not Verified ",
-          duration: 3,
-          placement: "bottomRight",
-        });
-        // refetchUserData();
-
-        // Navigate to the verification page
-        navigate("/register");
-      }
+      setUserInfo(userData);
+      console.log(userData);
     }
   }, [userData, navigate, userType]);
 
-  const userLikedLocations = userData?.user?.likedLocations?.map(
-    (likedLocationName) =>
-      locations?.find((location) => location.locationName === likedLocationName)
-  );
+  const handleChange = (field, value) => {
+    setUserInfo((prevInfo) => ({
+      ...prevInfo,
+      [field]: value,
+    }));
+  };
 
-  const userId = sessionStorage.getItem("user_id");
-  const userLocations = locations?.filter((location) => {
-    return location.locationAddedBy === userId;
-  });
-
-  let content;
-
-  // if (userLocations?.length < 1) {
-  //   content = <p>No Location Added Yet</p>;
-  // } else {
-  //   content = userLocations?.map((location, i) => {
-  //     return <LocationBox location={location} key={i} />;
-  //   });
-  // }
-  let allReviews = [];
-  locations?.map((location) => {
-    if (location.locationAddedBy === userData._id) {
-      allReviews = [...allReviews, ...location.reviews];
-    }
-  });
+  const handleSubmit = async (e) => {
+    // setIsLoading(true);
+    const formData = new FormData();
+    Object.entries(userInfo).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    console.log(formData);
+    e.preventDefault();
+    // setIsLoading(false);
+  };
 
   return (
     <Container>
-      <Dashboard showDashboard={showDashboard}>
-        <Profile close={true}>
-          <CloseIcon onClick={toggleDashboard} />
-        </Profile>
+        <TogleButton showDashboard={showDashboard}>
+        <BsBoxArrowInLeft size={28} fill="black" onClick={() => setShowDashboard(prev => !prev)} />
+      </TogleButton>
+      <DashboardContainer showDashboard={showDashboard}>
         <div className="relative">
           {isLoading && <Spin className="absolute bottom-[50%] left-[50%]" />}
           <img
@@ -156,67 +126,127 @@ const BusinessSettings = () => {
           />
         </div>
         <div>
-          <h5 className="mt-5">{userData?.businessName}</h5>
-          <h6 className="mt-1" usernamame={true}>
-            {`${userData?.businessEmail}`}
-          </h6>
-          <h6 className="mt-1">{`${userData?.businessCategory
-            ?.split("-")
-            ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ")}`}</h6>
+          <h3 className="mt-4 text-[#000000] text-2xl font-bold">{userData?.fullName}</h3>
+          <h6 className="mt-1 text-[#E9A309] font-medium text-xl ">@{userData?.username}</h6>
+          <p className="mt-1 text-[#9d9d9d] text-lg font-semibold">{userData.occupation || "University Student"}</p>
         </div>
         <div>
           <div>
-            <h5 className="mt-1 px-1">{userData?.address}</h5>
-            <p className="mt-1">
-              {userData?.occupation
-                ? userData?.occupation
-                : "  No Occupation Provided"}
+            <h5 className="text-xl font-bold text-[#009F57] mt-6 flex gap-1 justify-center">
+              About
+            </h5>
+            <p className="mt-1 px-3">
+              {userData?.about || "Civil Engineer (In View) // Creative Director at Kaizen Brand // Chelsea FC Fanatic"}
             </p>
           </div>
-          {!userData?.businessName && (
-            <div className="mt-1">
-              <h5>Total Outings</h5>
-              <p>27 Outings</p>
-            </div>
-          )}
-          <div className="mt-1">
-            <h5>{userData?.fullName ? "Total Posts" : "User Visits"}</h5>
-            <p>{userData?.fullName ? "6 Posts" : "null"}</p>
+          <div className="mt-6">
+            <h5>Total Outings</h5>
+            <p>{userData?.outings?.length || "27"} outings</p>
           </div>
-          <div className="mt-1">
+          <div className="mt-6">
+            <h5>Total Posts</h5>
+            <p>{userData?.posts?.length || "6"} posts</p>
+          </div>
+          <div className="mt-6">
             <h5>Average Review</h5>
             <p>4.5 stars</p>
           </div>
         </div>
-      </Dashboard>
+      </DashboardContainer>
       <Main>
-        User Settings
+      <div className="w-full flex justify-between items-center mb-4">
+          <h3 className="text-2xl text-[#009F57] font-bold">Settings</h3>
+          <button className="text-[#E9A309] font-semibold underline" onClick={() => window.history.back()}>Go back{">"}</button>
+        </div>
+        <h5 className="text-xl text-[#E9A309] font-semibold">*Edit Basic Information</h5>
+        <form onSubmit={handleSubmit}>
+        <div className="row mt-3">
+          <div className="col-md-6">
+            <div>
+              <label htmlFor="name">
+                Full Name
+              </label>
+              <input
+                id="fullName"
+                value={userInfo?.fullName}
+                onChange={(e) => handleChange("fullName", e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div>
+              <label htmlFor="name">
+                Username
+              </label>
+              <input
+                id="username"
+                value={userInfo?.username}
+                onChange={(e) => handleChange("username", e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="col-md-6">
+            <label htmlFor="about">
+              About
+            </label>
+            <textarea
+              id="about"
+              value={userInfo?.about}
+              onChange={(e) => handleChange("about", e.target.value)}
+              rows={5}
+              placeholder="We are a sports and rec brand dedicated to helping athletes destress after a workout session or other related activities."
+            />
+          </div>
+
+          <div className="col-md-6">
+            <label htmlFor="password">
+              Password
+            </label>
+            <input
+              id="password"
+              placeholder="***********"
+              disabled
+              // onChange={(e) => handleChange("username", e.target.value)}
+            />
+          </div>
+
+          </div>
+        </form>
+
+      <h5 className="text-xl text-[#E9A309] font-semibold py-3.5">*View More Data</h5>
+      <div className="grid md:grid-cols-2 gap-x-8 gap-y-3">
+        <InsightBox>
+          <h6>Number of Businesses Liked</h6>
+          <p>{userData?.likes?.length || 68}</p>
+        </InsightBox>
+        <InsightBox>
+          <h6>Number of Businesses Reviewed</h6>
+          <p>{userData?.reviews?.length || 76}</p>
+        </InsightBox>
+        <InsightBox>
+          <h6>Number of Profiles Viewed</h6>
+          <p>168</p>
+        </InsightBox>
+        <InsightBox>
+          <h6>Number of Visits</h6>
+          <p>27 Outings</p>
+        </InsightBox>
+      </div>
+      <div className="flex flex-col items-end gap-2.5 my-9">
+        <Button color="#009F57" className="!border-none ml-auto" onClick={handleSubmit}>
+          Update Profile
+        </Button>
+        {/* <Button color="#FF3D00" className="!border-none ml-auto">
+          Cancel Subscription
+        </Button> */}
+      </div>
       </Main>
     </Container>
   );
 };
 
-export default BusinessSettings;
-
-const Profile = styled.i`
-  margin-right: 10px;
-  margin-left: 10px;
-
-  svg {
-    transform: scale(${(props) => !props.close && "1.5"});
-    cursor: pointer;
-  }
-  @media (min-width: 1151px) {
-    display: none;
-  }
-`;
-const BoxContainer = styled.div`
-  @media (max-width: 532px) {
-    display: grid;
-    place-items: center;
-  }
-`;
+export default UserSettings;
 
 const Container = styled.div`
   display: flex;
@@ -224,8 +254,9 @@ const Container = styled.div`
 
   height: calc(100vh - 95px);
   overflow: auto;
+
   ::-webkit-scrollbar {
-    width: 12px; /* Set the width of the scrollbar */
+    width: 12px;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -236,74 +267,41 @@ const Container = styled.div`
   ::-webkit-scrollbar-track {
     background-color: #d9d9d9;
   }
+
   a {
     text-decoration: none;
   }
-  button {
-    transform: scale(0.7);
-  }
 `;
 
-const Dashboard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 30%;
-  height: calc(100vh - 95px);
-
-  overflow: auto;
-  background-color: rgb(255, 254, 252);
-  border-top: 0;
-  border-right: 2px solid transparent;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-  padding-top: 70px;
-  z-index: 10;
-  ::-webkit-scrollbar {
-    width: 12px; /* Set the width of the scrollbar */
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: #9d9d9d;
-    border-radius: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #d9d9d9;
-  }
-  &:nth-child(5) div {
-    margin-top: 1rem;
-  }
-
-  h5 {
-    color: #009f57;
-    font-weight: 700;
-  }
-
-  svg {
-    display: none;
-  }
-  @media (max-width: 1150px) {
-    display: ${(props) => (props.showDashboard ? "block" : "none")};
-    padding-top: 100px;
-    svg {
-      display: block;
-    }
-  }
-`;
-const H3 = styled.h3`
-  color: ${(props) => props.color};
-  font-weight: ${(props) => `${props.fontWeight}`};
-  font-size: ${(props) => `${props.fontSize}px`};
-`;
 const Main = styled.div`
-  width: 100%;
+  flex: 1 1 0%;
   min-height: auto;
   margin-left: 0;
   padding: 20px 40px;
   overflow: auto;
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  input,
+  select, textarea {
+    outline: none;
+    display: block;
+    width: 100%;
+    background: #ffffff;
+    border: 2px solid rgba(0, 159, 87, 0.25);
+    border-radius: 5px;
+
+    margin-bottom: 16px;
+    padding: 4px 8px;
+  }
+
   ::-webkit-scrollbar {
     width: 12px;
+    display: none;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -317,50 +315,6 @@ const Main = styled.div`
 
   @media (max-width: 1150px) {
     margin-left: 0;
-    width: 100%;
-  }
-`;
-const ReviewContainer = styled.div``;
-const ReviewH4 = styled.h4`
-  color: #009f57;
-`;
-const Review = styled.div`
-  max-height: 50vh;
-  display: flex;
-  overflow-y: auto;
-  padding-right: 15px;
-  ::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: #9d9d9d;
-    border-radius: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #d9d9d9;
-  }
-`;
-const ReviewCard = styled.div`
-  background: #ffffff;
-  border: 2px solid rgba(0, 159, 87, 0.5);
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 16px;
-  p {
-    color: #9d9d9d;
-    font-weight: 600;
-    font-size: 15px;
-    line-height: 24px;
-  }
-`;
-const ReviewUser = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  img {
-    width: 40px;
-    height: 40px;
+    /* width: 100%; */
   }
 `;

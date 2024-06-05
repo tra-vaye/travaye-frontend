@@ -8,7 +8,8 @@ import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
 import { useGetMeQuery } from "../../redux/Api/authApi";
 import { BsBoxArrowInLeft } from "react-icons/bs";
 import { useGetStatesQuery, useLazyGetCityQuery, useLazyGetLgaQuery } from "../../redux/Api/geoApi";
-import Dashboard from "../../components/Layout/BusinessSidebar";
+import Dashboard, { TogleButton } from "../../components/Layout/BusinessSidebar";
+import { Button } from "../../components/UI/Buttons";
 
 const BusinessSettings = () => {
   const [showDashboard, setShowDashboard] = useState(false);
@@ -75,7 +76,7 @@ const BusinessSettings = () => {
         refetch();
 
         // Navigate to the verification page
-        navigate("/register");
+        // navigate("/register");
       }
     }
   }, [isSuccess, businessData?.user, navigate, refetch, userType]);
@@ -103,7 +104,7 @@ const BusinessSettings = () => {
       <TogleButton showDashboard={showDashboard}>
         <BsBoxArrowInLeft size={28} fill="black" onClick={() => setShowDashboard(prev => !prev)} />
       </TogleButton>
-      <Dashboard showDashboard={showDashboard} setBusinessInfo={setBusinessInfo}  />
+      <Dashboard showDashboard={showDashboard} setBusinessInfo={setBusinessInfo} />
       <Main>
         <div className="w-full flex justify-between items-center mb-4">
           <h3 className="text-2xl text-[#009F57] font-bold">Settings</h3>
@@ -147,12 +148,11 @@ const BusinessSettings = () => {
             </div>
 
             <div>
-              <label htmlFor="email">
+              <label htmlFor="about">
                 About Business
               </label>
               <textarea
                 id="about"
-                type="email"
                 value={businessInfo?.businessAbout}
                 onChange={(e) => handleChange("businessAbout", e.target.value)}
                 rows={5}
@@ -243,24 +243,31 @@ const BusinessSettings = () => {
         </div>
       </form>
       <h5 className="text-xl text-[#E9A309] font-semibold py-3.5">*View Insights</h5>
-      <div className="grid grid-cols-2 gap-x-9 gap-y-4">
+      <div className="grid md:grid-cols-2 gap-x-8 gap-y-3">
         <InsightBox>
           <h6>Number of Likes</h6>
-          <p>68</p>
+          <p>{userData?.likes?.length || 68}</p>
         </InsightBox>
         <InsightBox>
-          <h6>Number of Likes</h6>
-          <p>68</p>
+          <h6>Number of Reviews</h6>
+          <p>{userData?.reviews?.length || 76}</p>
         </InsightBox>
         <InsightBox>
-          <h6>Number of Likes</h6>
-          <p>68</p>
+          <h6>Profile Views</h6>
+          <p>168</p>
         </InsightBox>
         <InsightBox>
-          <h6>Number of Likes</h6>
-          <p>68</p>
+          <h6>Business Growth Metric</h6>
+          <p>12% from registration</p>
         </InsightBox>
-
+      </div>
+      <div className="flex flex-col items-end gap-2.5 my-9">
+          <Button color="#009F57" className="!border-none ml-auto" onClick={handleSubmit}>
+            Update Profile
+          </Button>
+          <Button color="#FF3D00" className="!border-none ml-auto">
+            Cancel Subscription
+          </Button>
       </div>
       </Main>
     </Container>
@@ -268,25 +275,6 @@ const BusinessSettings = () => {
 };
 
 export default BusinessSettings;
-
-const TogleButton = styled.button`
-  position: absolute;
-  display: none;
-  /* left: ${(props) => (props.showDashboard ? "21%" : "0")}; */
-  top: 120px;
-  z-index: 1000 !important;
-  background-color: white;
-  border-radius: 50%;
-  padding: 8px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.4);
-  cursor: pointer;
-  transform: scale(1) rotate(${(props) => (props.showDashboard ? "" : "180")}deg) !important;
-  
-  @media (max-width: 1150px) {
-    display: block;
-    left: ${(props) => (props.showDashboard ? "22.8%" : "0")};
-  }
-`;
 
 const Container = styled.div`
   display: flex;
@@ -310,24 +298,15 @@ const Container = styled.div`
   a {
     text-decoration: none;
   }
-  /* button {
-    transform: scale(0.7);
-  } */
 `;
 
 const Main = styled.div`
-  width: 100%;
+  flex: 1 1 0%;
   min-height: auto;
   margin-left: 0;
   padding: 20px 40px;
   overflow: auto;
-  /* position: relative; */
 
-  span {
-    color: #ff3d00;
-    font-weight: 600;
-    font-size: 18px;
-  }
   label {
     display: block;
     margin-bottom: 10px;
@@ -359,7 +338,7 @@ const Main = styled.div`
 
   ::-webkit-scrollbar {
     width: 12px;
-    display: none;
+    /* display: none; */
   }
 
   ::-webkit-scrollbar-thumb {
@@ -373,14 +352,15 @@ const Main = styled.div`
 
   @media (max-width: 1150px) {
     margin-left: 0;
-    width: 100%;
+    /* width: 100%; */
   }
 `;
 
-const InsightBox = styled.div`
+export const InsightBox = styled.div`
   padding: 10px 24px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-radius: 6px;
   background-color: #ffffff;
   box-shadow: 0px 4px 16px 0px #009F571F;
@@ -394,10 +374,6 @@ const InsightBox = styled.div`
   p {
     font-weight: 600;
     color: #009F57;
+    text-align: end;
   }
-`;
-
-const ReviewContainer = styled.div``;
-const ReviewH4 = styled.h4`
-  color: #009f57;
 `;
