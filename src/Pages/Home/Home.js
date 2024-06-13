@@ -1,25 +1,12 @@
 import classes from "./Home.module.css";
-import LandingImage from "../../assets/landing.png";
 import Perks from "../../components/UI/Perks";
 import Instructions from "../../components/UI/Instructions";
-import ReviewImage from "../../assets/review-image.png";
-import ReviewStars from "../../assets/review-stars.png";
-import Avatar from "../../assets/avatar.png";
-import GetStarted from "../../assets/get-started.png";
-import Man from "../../assets/man.png";
+import Explore from "../../components/UI/Explore";
 import PurpleBistro from "../../assets/purple-bistro.png";
 import Maryland from "../../assets/maryland-landing.png";
 
 import {
-  FacebookIcon,
-  InstaIcon,
-  PlayStory,
-  TwitterIcon,
-} from "../../components/UI/svgs/svgs";
-import {
-  Button,
-  ScrollLeftBtn,
-  ScrollRightBtn,
+  Button
 } from "../../components/UI/Buttons";
 import Carousel from "../../components/UI/Carousel";
 import Footer from "../../components/Layout/Footer/Footer";
@@ -33,11 +20,12 @@ const Home = () => {
   return (
     <>
       <section className={classes.landing}>
-        <div className="row">
-          <div className="col-lg-6  mt-4">
+        <div className="row align-items-center">
+          <div className="col-md-6 mt-4">
             <p className={classes.intro}>
-              Enjoy Outings without having to think of{" "}
-              <span className={classes.sapa}>Sapa!</span>{" "}
+              Your guide to{" "}
+              <span className={classes.sapa}>affordable adventures</span>
+              in Nigeria
             </p>
             <p>
               Plan your trips with Travaye and get the best places to visit for
@@ -45,76 +33,68 @@ const Home = () => {
             </p>
             <LandingButtonsContainer>
               <Link to="/plan-a-trip">
-                <button className={classes.btn}>Plan A Trip</button>
+                <button className={classes.btn}>Plan A Trip &rarr;</button>
               </Link>
-              <div>
-                <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
-                  <div className="d-flex">
-                    <i>{PlayStory}</i>
-                    <button className={classes["btn--alt"]}>
-                      Watch Stories
-                    </button>
-                  </div>
-                </a>
-              </div>
             </LandingButtonsContainer>
           </div>
-          <LandingImagesContainer className="col-lg-6 d-flex justify-content-center align-self-start">
-            <MarylandLink src={Maryland} className="img-fluid " />
+          <div className={`${classes.videoSection} position-relative align-self-start ml-auto`}>
+            <LandingImagesContainerYellow />
+            <LandingImagesContainer className="d-flex justify-content-center">
+              <MarylandLink src={Maryland} className="img-fluid" />
 
-            <PurpleBistroLink src={PurpleBistro} className="img-fluid " />
+              <PurpleBistroLink src={PurpleBistro} className="img-fluid" />
+              <YouTube
+                src="https://www.youtube.com/embed/-N9OxTpt09Y?&autoplay=1&mute=1&controls=1&loop=1&modestbranding=1"
+                title="YouTube video player"
+                allow="autoplay; encrypted-media;"
+              ></YouTube>
+              
+              {/* <div
+                className={`d-flex flex-column justify-content-evenly ${classes.socials}`}
+              >
+                {FacebookIcon}{" "}
+                <a href="http://twitter.com/travaye_"> {TwitterIcon}</a>
+                <a href="https://www.instagram.com/travaye_/"> {InstaIcon} </a>
+              </div> */}
+            </LandingImagesContainer>
 
-            <img src={LandingImage} alt="poster" className="img-fluid " />
-            <div
-              className={`d-flex flex-column justify-content-evenly ${classes.socials}`}
-            >
-              {FacebookIcon}{" "}
-              <a href="http://twitter.com/travaye_"> {TwitterIcon}</a>
-              <a href="https://www.instagram.com/travaye_/"> {InstaIcon} </a>
-            </div>
-          </LandingImagesContainer>
+          </div>
         </div>
       </section>
       <Perks />
-      <p className={classes.text}>PLANNING WITH TRAVAYE?</p>
-      <h2>Discover Places Around Nigeria</h2>
-      <Carousel />
-      <h2>How To Use Travaye</h2>
+      <TitleText>
+        Discover Places Around Nigeria
+      </TitleText>
+      <div className="w-full">
+        <Carousel />
+      </div>
+      <TitleText>
+        How To Use Travaye
+      </TitleText>
       <Instructions />
-      <section className={`row px-3 ${classes.reviews}`}>
-        <div className="col-lg-6 d-flex justify-content-center">
-          <img src={ReviewImage} alt="banner" className="img-fluid" />
+      <div
+        className={classes.reviewSlide}
+      >
+        <TitleText>
+          What Our Customers Say
+        </TitleText>
+        <ReviewCarousel classes={classes} />
+      </div>
+      <section className={classes.explore}>
+        <div className="d-flex justify-content-between align-items-center">
+          <TitleText className="text-white !px-0">Explore with Travaye!</TitleText>
+          <Button
+            color="orange"
+            onClick={() => {
+              navigate("/plan-a-trip");
+            }}
+          >
+            Get Started
+          </Button>
         </div>
-        <div
-          className={`col-lg-6 d-flex flex-column justify-content-center ${classes.content}`}
-        >
-          <h2 className="mx-5">What are they saying?</h2>
-          <h3 className="mx-5">What Our Customers Say About Travaye</h3>
-          <ReviewCarousel classes={classes} />
-        </div>
+        <Explore classes={classes} />
       </section>
-      <GetStartedConainer>
-        <GetStartedContent className="row">
-          <div className="col-md-6 d-flex justify-content-center align-items-center  ">
-            <div>
-              <h2>
-                Explore The World <br /> With Travaye
-              </h2>
-              <Button
-                color="orange"
-                onClick={() => {
-                  navigate("/plan-a-trip");
-                }}
-              >
-                Get Started
-              </Button>
-            </div>
-          </div>
-          <div className="d-none d-md-block col-md-6 ">
-            <img src={Man} alt="poster" className="img-fluid" />
-          </div>
-        </GetStartedContent>
-      </GetStartedConainer>
+
       <Footer />
     </>
   );
@@ -122,79 +102,71 @@ const Home = () => {
 
 export default Home;
 
-const GetStartedConainer = styled.section`
-  margin-top: 8rem;
-  display: flex;
-  justify-content: center;
-  h2 {
-    text-align: start;
-    color: white;
-    margin-bottom: 50px;
-    font-size: 30px;
-    @media (max-width: 767px) {
-      text-align: center;
-    }
-  }
-  img {
-    width: 280px;
-    height: 320px;
-    position: relative;
-    left: 20%;
-    bottom: 0;
-  }
-  button {
-    border-radius: 30px;
-    font-size: 20px;
-  }
-`;
-
-const GetStartedContent = styled.div`
-  width: 70%;
-  background-color: #009f57;
-  background-image: url(${GetStarted});
-  background-position: center;
-  border-radius: 50px;
-
-  @media (max-width: 1030px) {
-    width: 90%;
-  }
-  @media (max-width: 767px) {
-    padding: 15px;
-    button {
-      width: 100%;
-    }
-  }
-`;
-
 const LandingImagesContainer = styled.div`
-  position: relative;
-
-  @media (max-width: 991px) {
-    transform: translateY(150px);
+  height: fit-content;
+  border: 14px solid #009F57;
+  z-index: 2;
+  border-radius: 15px;
+  background-color: white;
+  overflow: hidden;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    /* transform: translateY(150px); */
   }
+`;
+
+const LandingImagesContainerYellow = styled.div`
+  height: 100%;
+  top: 13px;
+  left: 31px;
+  width: 91%;
+  position: absolute;
+  border: 20px solid #E9A309;
+  border-radius: 15px;
+  bottom: -5px;
+  z-index: -2;
+
+  @media (max-width: 768px) {
+    width: 93.2%;
+  }
+`;
+
+const YouTube = styled.iframe`
+  width: 100%;
+  height: 500px;
+
+  @media (max-width: 780px) {
+
+  }
+
 `;
 
 const PurpleBistroLink = styled.img`
   position: absolute;
   top: 7%;
-  left: 0;
-  transform: scale(0.9);
-  @media (max-width: 640px) {
+  right: -22%;
+  transform: scale(0.8);
+  z-index: 3;
+
+  @media (max-width: 780px) {
     transform: scale(0.7);
-    left: -40px;
-    top: -30px;
+    right: -25%;
+    top: 30px;
   }
 `;
 
 const MarylandLink = styled.img`
   position: absolute;
-  bottom: 17%;
-  left: 0;
-  transform: scale(0.9);
-  @media (max-width: 640px) {
+  bottom: 7%;
+  left: -32%;
+  z-index: 3;
+  transform: scale(0.8);
+
+  @media (max-width: 780px) {
     transform: scale(0.7);
-    left: -40px;
-    bottom: 0;
+    left: -24%;
+    bottom: 20px;
   }
 `;
 
@@ -208,3 +180,23 @@ const LandingButtonsContainer = styled.div`
     }
   }
 `;
+
+const TitleText = styled.h2`
+  color: #000;
+  font-size: 56px;
+  font-weight: 700;
+  text-align: center;
+  padding-inline: 5%;
+  
+  @media (max-width: 1024px) {
+    font-size: 48px;
+  }
+
+  @media (max-width: 780px) {
+    font-size: 36px;
+  }
+
+  @media (max-width: 568px) {
+    font-size: 28px;
+  }
+`

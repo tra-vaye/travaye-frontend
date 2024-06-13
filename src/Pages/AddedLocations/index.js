@@ -12,6 +12,8 @@ const AddedLocations = () => {
   useEffect(() => {
     setLocations(JSON.parse(localStorage.getItem("location")));
   }, [JSON.stringify(localStorage.getItem("location"))]);
+
+  console.log(locations);
   return (
     <Container>
       <h4>My Added Locations</h4>
@@ -21,23 +23,23 @@ const AddedLocations = () => {
             <div className="row">
               <div className="flex justify-between items-center">
                 <img
-                  src={e?.locationImagePath[0]}
+                  src={e?.businessLocationImages[0]}
                   alt=""
                   className="img-fluid"
                 />
                 <div>
-                  <p>{e?.locationName}</p>
-                  <h5>{e?.locationAddress}</h5>
-                  <h6>{e?.locationCategory}</h6>
+                  <p>{e?.businessName}</p>
+                  <h5>{e?.businessAddress}</h5>
+                  <h6>{e?.businessCategory}</h6>
                 </div>
-                <Rate value={e?.locationRating} />
+                <Rate value={e?.rating} />
                 <div className="d-flex col-md-3 justify-content-between align-items-center ">
-                  <b>#500 2movies</b>
+                  <b>#{e?.businessPriceRangeFrom}</b>
                   <span
                     className="cursor-pointer"
                     onClick={() => {
                       const newLocations = locations.filter(
-                        (loc) => loc?.locationName !== e?.locationName
+                        (loc) => loc?.businessName !== e?.businessName
                       );
                       localStorage.setItem(
                         "location",
@@ -65,10 +67,10 @@ const AddedLocations = () => {
           <Value>
             {
               locations?.reduce((acc, e) => {
-                if (acc.includes(e?.locationCategory)) {
+                if (acc.includes(e?.businessCategory)) {
                   return acc;
                 } else {
-                  return [...acc, e?.locationCategory];
+                  return [...acc, e?.businessCategory];
                 }
               }, []).length
             }{" "}
@@ -77,7 +79,9 @@ const AddedLocations = () => {
         </div>
         <div className="col-md-3">
           <Title>Total Budget Cost</Title>
-          <Value>#25,000</Value>
+          <Value>#{locations?.reduce((acc, e)  => {
+            return acc + e.businessPriceRangeFrom
+          }, 0)}</Value>
         </div>
         <div className="col-md-3">
           <Button onClick={() => window.print()}>Finish Selection</Button>

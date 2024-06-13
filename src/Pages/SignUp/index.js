@@ -10,6 +10,8 @@ import Avatar from "../../assets/signup-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
 import { businessSignUpSchema, userSignUpSchema } from "../../schemas";
+import { IoEyeSharp } from "react-icons/io5";
+import { FaEyeSlash } from "react-icons/fa6";
 
 import { notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +26,7 @@ import { AuthFormWrapper, AuthRoutes, ErrorText, RouteLink } from "../Login";
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [seePass, setSeePass] = useState(false);
   const userType = useSelector((state) => state.auth.userType);
   const [userSignUp, setUserSignUp] = useState(true);
 
@@ -228,12 +231,15 @@ const SignUp = () => {
                 value={userSignUp ? values.fullName : values.businessName}
                 className={`${
                   (userSignUp ? errors.fullName : errors.businessName) &&
+                  (values.fullName || values.businessName) &&
                   classes["input-error"]
                 } mt-4`}
                 placeholder={userSignUp ? "Full Name" : "Business Name"}
                 onChange={handleChange}
               />
-              {(userSignUp ? errors.fullName : errors.businessName) && (
+              {(userSignUp && (values.fullName || values.businessName)
+                ? errors.fullName
+                : errors.businessName) && (
                 <ErrorText>
                   {userSignUp ? errors.fullName : errors.businessName}
                 </ErrorText>
@@ -244,12 +250,15 @@ const SignUp = () => {
                 value={userSignUp ? values.userName : values.address}
                 className={`${
                   (userSignUp ? errors.userName : errors.address) &&
+                  (values.userName || values.address) &&
                   classes["input-error"]
                 } mt-4`}
                 placeholder={userSignUp ? "Username" : "Address"}
                 onChange={handleChange}
               />
-              {(userSignUp ? errors.userName : errors.address) && (
+              {(userSignUp && (values.address || values.userName)
+                ? errors.userName
+                : errors.address) && (
                 <ErrorText>
                   {userSignUp ? errors.userName : errors.address}
                 </ErrorText>
@@ -258,12 +267,16 @@ const SignUp = () => {
                 id="email"
                 name="email"
                 value={values.email}
-                className={`${errors.email && classes["input-error"]} mt-4`}
+                className={`${
+                  errors.email && values.email && classes["input-error"]
+                } mt-4`}
                 type="email"
                 placeholder={userSignUp ? "Email Address" : "Business Email"}
                 onChange={handleChange}
               />{" "}
-              {errors.email && <ErrorText>{errors.email}</ErrorText>}
+              {errors.email && values.email && (
+                <ErrorText>{errors.email}</ErrorText>
+              )}
               {userSignUp && (
                 <>
                   <input
@@ -273,25 +286,44 @@ const SignUp = () => {
                     name="occupation"
                     value={values.occupation}
                     className={`${
-                      errors.occupation && classes["input-error"]
+                      errors.occupation &&
+                      values.occupation &&
+                      classes["input-error"]
                     } mt-4`}
                     onChange={handleChange}
                   />
-                  {errors.occupation && (
+                  {errors.occupation && values.occupation && (
                     <ErrorText>{errors.occupation}</ErrorText>
                   )}
                 </>
               )}
-              <input
-                className={`${errors.passWord && classes["input-error"]} mt-4`}
-                id="passWord"
-                name="passWord"
-                type="passWord"
-                placeholder="Password"
-                value={values.passWord}
-                onChange={handleChange}
-              />{" "}
-              {errors.passWord && <ErrorText>{errors.passWord}</ErrorText>}
+              <span className="relative block mt-4">
+                <input
+                  className={`${
+                    errors.passWord && values.passWord && classes["input-error"]
+                  } w-full`}
+                  id="passWord"
+                  name="passWord"
+                  type={seePass ? "text" : "password"}
+                  placeholder="Password"
+                  value={values.passWord}
+                  onChange={handleChange}
+                />
+                {seePass ? (
+                  <FaEyeSlash
+                    className="absolute right-[2%] top-[10%] translate-y-[50%] cursor-pointer"
+                    onClick={() => setSeePass((prev) => !prev)}
+                  />
+                ) : (
+                  <IoEyeSharp
+                    className="absolute right-[2%] top-[10%] translate-y-[50%] cursor-pointer"
+                    onClick={() => setSeePass((prev) => !prev)}
+                  />
+                )}
+              </span>{" "}
+              {errors.passWord && values.passWord && (
+                <ErrorText>{errors.passWord}</ErrorText>
+              )}
             </div>
             <br />
             {/* <div className="d-flex justify-content-center mt-2">

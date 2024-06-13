@@ -7,7 +7,6 @@ import Header from "./components/Layout/Header/Header";
 import SideNav from "./components/Layout/SIdeNav";
 import Loader from "./components/UI/Loader";
 
-import { useSelector } from "react-redux";
 import RequireAuth from "./Layout/RequireAuth";
 import CreateEvent from "./Pages/CreateEvent";
 
@@ -36,6 +35,12 @@ const LocationDetails = lazy(() => {
 const Login = lazy(() => {
   return import("./Pages/Login");
 });
+const ForgotPassword = lazy(() => {
+  return import("./Pages/Login/ForgotPassword");
+});
+const ResetPassword = lazy(() => {
+  return import("./Pages/Login/ResetPassword");
+});
 const PlanTrip = lazy(() => {
   return import("./Pages/Plan-a-trip");
 });
@@ -54,6 +59,12 @@ const UserProfile = lazy(() => {
 const BusinessProfile = lazy(() => {
   return import("./Pages/BusinessProfile/BusinessProfile");
 });
+const BusinessSettings = lazy(() => {
+  return import("./Pages/Business/Settings");
+});
+const UserSettings = lazy(() => {
+  return import("./Pages/UserSettings/UserSettings");
+});
 const Subscribe = lazy(() => {
   return import("./Pages/Subscribe/Subscribe");
 });
@@ -63,8 +74,9 @@ function App() {
   const toggleSideNav = () => {
     setShowSideNav((prevState) => !prevState);
   };
-  const token = sessionStorage.getItem("authToken");
+  // const token = sessionStorage.getItem("authToken");g
   const userType = sessionStorage.getItem("userType");
+
   return (
     <>
       <Header onToggleSideNav={toggleSideNav} showSideNav={showSideNav} />
@@ -73,27 +85,37 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           {/* <Route path="/" element={<Main />} /> */}
-          {!token && <Route path="/login" element={<Login />} />}
-          {!token && <Route path="/signup" element={<SignUp />} />}
+          {<Route path="/login" element={<Login />} />}
+          {<Route path="/signup" element={<SignUp />} />}
+          {<Route path="/forgot-password" element={<ForgotPassword />} />}
+          {<Route path="/reset-password" element={<ResetPassword />} />}
           <Route path="" element={<RequireAuth />}>
             {userType === "user" && (
               <Route path="/user" element={<UserProfile />} />
             )}
-            {userType === "business" && (
-              <Route path="/register" element={<Register />} />
+            {/* {userType === "business" && ( */}
+            <Route path="/register" element={<Register />} />
+            {/* )} */}
+            {/* {userType === "business" && ( */}
+            <Route path="/business" element={<BusinessProfile />} />
+
+            {userType === "business" &&  (
+              <Route path="/settings" element={<BusinessSettings />} />
             )}
-            {userType === "business" && (
-              <Route path="/business" element={<BusinessProfile />} />
+            {userType === "user" &&  (
+              <Route path="/settings" element={<UserSettings />} />
             )}
+            <Route path="/settings" element={<BusinessProfile />} />
+            {/* )} */}
             {userType === "business" && (
               <Route path="/subscribe" element={<Subscribe />} />
             )}
             {/* Redirect to the appropriate route if user tries to access the wrong route */}
             {userType === "business" && (
-              <Route path="/user" element={<Navigate to="/business" />} />
+              <Route path="/user" element={<Navigate to='/business' />} />
             )}
             {userType === "user" && (
-              <Route path="/business" element={<Navigate to="/user" />} />
+              <Route path="/business" element={<BusinessProfile />} />
             )}
             <Route path="/plan-a-trip" element={<PlanTrip />} />
             <Route path="/verify-email" element={<Verification />} />

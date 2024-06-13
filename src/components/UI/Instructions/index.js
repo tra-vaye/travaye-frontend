@@ -4,14 +4,11 @@ import CardList from "../CardLIst";
 const Instructions = () => {
   return (
     <CardList className="instructions">
-      {Details.map(({ id, step, detail, img }) => {
+      {Details.map(({ id, step, img }) => {
         return (
           <li key={id}>
-            <div>
-              <img src={img} alt="vector" className="mb-3" />
-              <h5>{step}</h5>
-              <p>{detail}</p>
-            </div>
+            <img src={img} alt="vector" />
+            <h5>{step}</h5>
           </li>
         );
       })}

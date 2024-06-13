@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 const Links = [
   { name: "My Account", href: "/user" },
   { name: "View Locations", href: "/business-locations" },
+  { name: "Watch Stories", href: "/" },
 ];
 const Footer = () => {
   return (
@@ -25,10 +26,15 @@ const Footer = () => {
           </div>
         </div>
         <div className="mb-5">
-          <h4>Subscribe To Our Newsletter</h4>
+          {/* <h4>Subscribe To Our Newsletter</h4> */}
+          <h4>Join Our Waitlist</h4>
           <form>
-            <input type="email" placeholder="Enter Your Email" />
-            <button>
+            <input
+              className="text-black"
+              type="email"
+              placeholder="Enter Your Email"
+            />
+            <button className="md:mx-auto">
               <svg
                 width="30"
                 height="22"
@@ -59,11 +65,11 @@ const Footer = () => {
                 </li>
               );
             })}
-            <li>
-              <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQwMDM1NTU1MzYyODI0?story_media_id=2927036580269740747&igshid=YmMyMTA2M2Y=">
-                Watch Stories
+            {/* <li>
+              <a target="_blank" href="https://forms.gle/qgZ2RVkkqt2f49bs8">
+                submit survey
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

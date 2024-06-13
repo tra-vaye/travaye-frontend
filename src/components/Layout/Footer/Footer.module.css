@@ -1,12 +1,11 @@
 .footer {
   background: #009f57;
   color: white;
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-self: center;
-  /* padding: 2rem; */
 }
 
 .footer :last-child p {
@@ -20,7 +19,7 @@
   overflow-wrap: break-word;
 }
 
-.footer a {
+.footer a, footer li a {
   text-decoration: none;
   color: inherit;
 }
@@ -32,22 +31,22 @@
 .footer p,
 .footer ul li {
   font-weight: 600;
-  font-size: 15px;
-  line-height: 40px;
+  font-size: 16px;
+  line-height: 32px;
   color: #ffffff;
   margin-bottom: 0;
 }
 .footer input {
   width: 280px;
-  height: 55px;
+  height: 50px;
   outline: none;
   border: white;
   background: #ffffff;
   border-radius: 7px 0 0 7px;
   font-weight: 500;
   font-size: 15px;
-  line-height: 40px;
-  padding-left: 10px;
+  line-height: 36px;
+  padding-left: 20px;
 }
 
 .footer ul {
@@ -67,21 +66,24 @@
   height: 60px;
   transform: scale(0.8) translateX(-30px);
 }
-
 .footer h4 {
   font-style: normal;
   font-weight: 700;
   font-size: 22px;
   color: #ffffff;
   white-space: nowrap;
+  margin-bottom: 10px;
 }
 
 .footer button {
-  height: 55px;
+  height: 50px;
   width: 80px;
   background: #e9a309;
   border-radius: 0px 7px 7px 0px;
   border: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .socials {
