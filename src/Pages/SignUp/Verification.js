@@ -68,7 +68,7 @@ const Verification = () => {
           duration: 3,
           placement: "bottomRight",
         });
-        navigate(`/${userType}`);
+        navigate(`/register`);
       })
       .catch((error) => {
         notification.error({

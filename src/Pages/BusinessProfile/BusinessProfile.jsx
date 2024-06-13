@@ -123,7 +123,7 @@ const BusinessProfile = () => {
   let allReviews = [];
   locations?.map((location) => {
     if (location.locationAddedBy === userData._id) {
-      allReviews = [...allReviews, ...location.locationReviews];
+      allReviews = [...allReviews, ...location.reviews];
     }
   });
 
@@ -256,10 +256,10 @@ const BusinessProfile = () => {
                 </div>
               </div>
               <Review className={`flex flex-wrap gap-4 flex-1`}>
-                {locations && allReviews?.length > 0 ? (
-                  allReviews?.map((review, i) => {
+                {userData?.reviews.length > 0 ? (
+                  userData?.reviews.map((review, i) => {
                     return (
-                      <ReviewCard className="flex-[1_0_30%]">
+                      <ReviewCard className="flex-[1_0_30%]" key={i}>
                         <div>
                           <div className="flex items-center justify-between mb-3">
                             <ReviewUser>

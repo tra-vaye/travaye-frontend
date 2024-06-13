@@ -51,8 +51,8 @@ export const Button = styled.button`
   border-radius: ${(props) => (props.header ? "15px" : "10px")};
   background-color: ${(props) =>
     props.color === "green" ? " #009f57" : "#e9a009"};
-  background-color: ${(props) =>
-    props.disabled && props.color === "green" && "#009f576e"};
+  // background-color: ${(props) => props.disabled && props.color === "green" && "#009f576e"};
+  background-color: ${(props) => props.color};
   color: white;
   white-space: nowrap;
   margin-right: ${(props) => props.location && "20px"};

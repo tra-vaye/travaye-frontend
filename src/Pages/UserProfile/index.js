@@ -104,15 +104,12 @@ const UserProfile = () => {
       // refetchUserData();
     }
   }, [location.pathname, firstVisit, refetchLocations]);
-  const userLikedLocations = userData?.likedLocations?.map(
-    (likedLocationName) =>
-      locations?.find((location) => location.locationName === likedLocationName)
-  );
+  const userLikedLocations = userData?.likedLocations;
 
   // Filter out any undefined values in case a location name doesn't match any location
   const filteredUserLikedLocations = userLikedLocations?.filter(Boolean) || [];
 
-  console.log(locations);
+  console.log(userData);
   let content;
 
   if (filteredUserLikedLocations.length < 1) {
@@ -150,7 +147,7 @@ const UserProfile = () => {
             <Spin className="absolute bottom-[50%] left-[50%]" />
           )}
           <img
-            className="rounded-full"
+            className="rounded-full w-[150px] h-[150px]"
             src={userData?.profilePhoto || Avatar}
             alt="avatar"
           />
@@ -171,7 +168,7 @@ const UserProfile = () => {
         </div>
         <div>
           <h5 className="mt-1">{`${userData?.fullName}`}</h5>
-          <h6 usernamame={true}>{`@${userData?.username}`}</h6>
+          <h6>{`@${userData?.username}`}</h6>
           <h6>University Student</h6>
         </div>
         <div>
@@ -256,6 +253,9 @@ const Profile = styled.i`
   }
 `;
 const BoxContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   @media (max-width: 532px) {
     display: grid;
     place-items: center;

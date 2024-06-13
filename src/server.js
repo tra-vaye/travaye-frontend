@@ -9,3 +9,4 @@ if (process.env.NODE_ENV === "production") {
 // Use serverUrl to make API calls in your code
 
 export default serverUrl;
+export const googleApiKey = process.env.REACT_APP_GOOGLE_MAP_API_KEY;

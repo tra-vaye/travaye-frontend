@@ -17,27 +17,27 @@ export const LocationApi = createApi({
       invalidatesTags: ["Locations"],
     }),
     getLocations: builder.query({
-      query: ({ page, count, categories, locationCity }) =>
-        `location?page=${page}&count=${count}&filters=${encodeURIComponent(
-          categories
-        )}&location=${encodeURIComponent(locationCity)}`,
+      query: ({ page, count, categories, locationCity }) => ({
+        url: `locations`,
+        params: { page, count },
+      }),
       providesTags: ["Locations"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
     }),
     getLocationById: builder.query({
       query: ({ id }) => ({
-        url: `location/${id}`,
+        url: `locations/${id}`,
       }),
       providesTags: ["Location"],
     }),
     planATrip: builder.query({
       query: ({ state, city, category, lga, budget, subcategory }) =>
-        `location/plan?state=${state}&category=${category}&subcategory=${subcategory}&city=${city}&lga=${lga}&budget=${budget}`,
+        `locations/plan?state=${state}&category=${category}&subcategory=${subcategory}&city=${city}&lga=${lga}&budget=${budget}`,
       providesTags: ["Trip"],
     }),
     filterLocation: builder.query({
-      query: () => `location?filters=wildlife-attractions&location=lagos`,
+      query: () => `locations?filters=wildlife-attractions&location=lagos`,
       providesTags: ["Location"],
       refetchOnUpdate: true,
       refetchOnReconnect: true,
@@ -48,7 +48,7 @@ export const LocationApi = createApi({
       }),
       transformResponse: (res) => {
         const result = res.map((e) => ({
-          value: e.name,
+          value: e.slug || e.name,
           label: e.name,
           sub: e?.sub?.map((e) => ({
             value: e.slug,
@@ -60,7 +60,15 @@ export const LocationApi = createApi({
     }),
     addLocationToLikedLocations: builder.mutation({
       query: (body) => ({
-        url: "location/like",
+        url: "locations/like",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Location", "User"],
+    }),
+    unlikeLocation: builder.mutation({
+      query: (body) => ({
+        url: "locations/unlike",
         method: "POST",
         body,
       }),
@@ -68,11 +76,24 @@ export const LocationApi = createApi({
     }),
     reviewLocation: builder.mutation({
       query: (body) => ({
-        url: "location/review",
+        url: "locations/review",
         method: "POST",
         body,
       }),
       invalidatesTags: ["Location"],
+    }),
+    getStates: builder.query({
+      query: () => ({
+        url: "states",
+      }),
+      // transformResponse: (apiResponse) => {
+      //   const res = Object.entries(apiResponse).map(([key, value]) => ({
+      //     value: key,
+      //     label: key,
+      //     states: value,
+      //   }));
+      //   return res;
+      // },
     }),
   }),
 });
@@ -85,6 +106,8 @@ export const {
   useLazyPlanATripQuery,
   useGetCategoriesQuery,
   useAddLocationToLikedLocationsMutation,
+  useUnlikeLocationMutation,
   useGetPlanATripQuery,
   useReviewLocationMutation,
+  useGetStatesQuery,
 } = LocationApi;

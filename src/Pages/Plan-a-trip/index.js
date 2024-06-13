@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Button } from "../../components/UI/Buttons";
 import Loader from "../../components/UI/Loader";
 import {
-  useGetStatesQuery,
+  // useGetStatesQuery,
   useLazyGetCityQuery,
   useLazyGetLandmarksQuery,
   useLazyGetLgaQuery,
@@ -13,8 +13,10 @@ import {
 import {
   useGetCategoriesQuery,
   useLazyPlanATripQuery,
+  useGetStatesQuery,
 } from "../../redux/Api/locationApi";
 import classes from "./Trip.module.css";
+
 // import Loader from "../../components/UI/Loader";
 // import { Select } from "antd";
 // import { useState } from "react";
@@ -25,7 +27,7 @@ const PlanTrip = () => {
   const { data } = useGetStatesQuery();
   const { data: categories } = useGetCategoriesQuery();
   const [getCity, { data: city }] = useLazyGetCityQuery();
-  const [getLga, { data: lga }] = useLazyGetLgaQuery();
+  // const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
   const [planTrip, { isLoading }] = useLazyPlanATripQuery();
   const [queryData, setQueryData] = useState({
@@ -38,10 +40,15 @@ const PlanTrip = () => {
     subcategory: [],
   });
   const [subData, setSubData] = useState([]);
+  const [lga, setLga] = useState([]);
+  const [cities, setCities] = useState([]);
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate("/locations", { state: queryData });
   };
+
+  console.log(categories);
+
   return (
     <div className=" ">
       {isLoading && <Loader />}
@@ -58,21 +65,23 @@ const PlanTrip = () => {
           <div className="mt-2 flex flex-wrap md:flex-nowrap md:flex-row gap-3 md:gap-5">
             <Select
               placeholder="State"
-              onSelect={(value) => {
-                getLga({ state: value.toUpperCase() });
-                getCity({ state: value.toUpperCase() });
-                getLandMarks({ state: value.toUpperCase() });
+              onSelect={(value, obj) => {
+                // getLga({ state: value.toUpperCase() });
+                // getCity({ state: value.toUpperCase() });
+                // getLandMarks({ state: value.toUpperCase() });
                 setQueryData((prev) => ({
                   ...prev,
                   state: value,
                   city: "",
                   lga: "",
                 }));
+                setCities(obj.cities.map((city) => ({value:city, label: city})));
+                setLga(obj.lgas.map((d) => ({value: d, label: d})));
               }}
               // value={queryData.state}
               showSearch
               className="!w-[250px]"
-              options={data}
+              options={data?.map((d, index) => ({value: d.state, label: d.state, index, cities: d.cities, lgas: d.lgas}))}
             />
             <Select
               placeholder="City"
@@ -82,7 +91,7 @@ const PlanTrip = () => {
               }}
               // value={queryData.city}
               className="!w-[250px]"
-              options={city}
+              options={cities}
             />
             <Select
               placeholder="Local Government Area"
@@ -94,7 +103,7 @@ const PlanTrip = () => {
               className="!w-[250px]"
               options={lga}
             />
-            <Select
+            {/* <Select
               placeholder="Landmark Areas"
               showSearch
               onSelect={(value) => {
@@ -103,7 +112,7 @@ const PlanTrip = () => {
               // value={queryData.lga}
               className="!w-[250px]"
               options={landmarks}
-            />
+            /> */}
           </div>
         </div>
         <div className="mt-3">
@@ -158,10 +167,11 @@ const PlanTrip = () => {
             placeholder="Select Your Budget "
             className="!w-[250px]"
             options={[
-              { value: "free", label: "free" },
-              { value: "free - 5k", label: "free - 5k" },
-              { value: "5k - 10k", label: "5k - 10k" },
-              { value: "10k - 20k", label: "10k - 20k" },
+              { value: 0, label: "free" },
+              { value: 5000, label: "free - 5k" },
+              { value: 10000, label: "5k - 10k" },
+              { value: 20000, label: "10k - 20k" },
+              { value: 20001, label: "20k+" },
             ]}
             onSelect={(value) => {
               setQueryData((prev) => ({ ...prev, budget: value }));
