@@ -84,7 +84,7 @@
 }
 
 .revBox {
-  padding: 48px;
+  padding: 30px 36px;
 }
 
 .reviewSlide {
@@ -147,10 +147,6 @@
     font-size: 3.6rem;
     text-wrap: wrap !important;
   }
-  
-  .revBox {
-    padding: 36px;
-  }
 
   .name {
     font-size: 28px;
@@ -175,7 +171,6 @@
     margin-top: -20px !important;
     transform: scaleX(0.8) scaleY(0.75) !important;
   }
-
   
   .reviewSlide {
     margin-bottom: -180px;
@@ -184,7 +179,6 @@
   
   .revBox {
     padding: 28px;
-    transform: scale(0.8);
   }
   
   .name {
@@ -212,14 +206,19 @@
   }
   
   .name {
-    font-size: 22px;
+    font-size: 24px;
     line-height: 30px;
     margin-bottom: 20px;
   }
 
   .review {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 20px;
     margin-bottom: 16px;
+  }
+  
+  .explore {
+    height: 400px;
+    margin-bottom: 180px;
   }
 }

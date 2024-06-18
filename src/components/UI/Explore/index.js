@@ -35,28 +35,23 @@ const ExploreCarousel = ({classes}) => {
         speed={800}
         breakpoints={{
           1000: {
-            slidesPerGroup: 2,
             slidesPerView: 4,
+            slidesPerGroup: 2,
           },
-          750: {
+          600: {
             slidesPerView: 3,
             slidesPerGroup: 2,
           },
-          450: {
+          0: {
+            slidesPerView: 1,
             slidesPerGroup: 1,
-            slidesPerView: 2,
           }
-        }}
-        keyboard={{
-          enabled: true,
         }}
       >
         {Data.map((data, i) => {
           return (
-            <SwiperSlide key={i} className={classes.wholecover}>
-              {/* <div> */}
-                <img src={data} alt="poster" className="w-full h-full" />
-              {/* </div> */}
+            <SwiperSlide key={i} className={`sm:h-auto h-[360px] ${classes.wholecover}`}>
+              <img src={data} alt="poster" className="w-full h-full" />
             </SwiperSlide>
           );
         })}
