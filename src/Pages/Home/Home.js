@@ -5,9 +5,7 @@ import Explore from "../../components/UI/Explore";
 import PurpleBistro from "../../assets/purple-bistro.png";
 import Maryland from "../../assets/maryland-landing.png";
 
-import {
-  Button
-} from "../../components/UI/Buttons";
+import { Button } from "../../components/UI/Buttons";
 import Carousel from "../../components/UI/Carousel";
 import Footer from "../../components/Layout/Footer/Footer";
 import styled from "styled-components";
@@ -112,7 +110,6 @@ const LandingImagesContainer = styled.div`
   
   @media (max-width: 768px) {
     width: 100%;
-    /* transform: translateY(150px); */
   }
 `;
 

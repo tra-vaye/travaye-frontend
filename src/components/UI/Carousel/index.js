@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/bundle";
-import { A11y, Navigation, Pagination, Scrollbar } from "swiper";
+import { A11y, Autoplay } from "swiper";
 import Lagos from "../../../assets/lagos.png";
 import Ibadan from "../../../assets/ibadan.png";
 import Abuja from "../../../assets/abuja.png";
@@ -20,23 +20,20 @@ const Carousel = () => {
   return (
     <>
       <Swiper
-        slidesPerView={4}
-        slidesPerGroup={4}
-        spaceBetween={28}
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={20}
+        modules={[ A11y, Autoplay ]}
+        autoplay={true}
         grabCursor={true}
-        navigation={true}
         loop={true}
-        pagination={{ clickable: true }}
-        speed={1000}
+        speed={700}
         breakpoints={{
           1000: {
-            slidesPerGroup: 3,
+            slidesPerGroup: 1,
             slidesPerView: 3,
           },
           800: {
             slidesPerView: 2,
-            slidesPerGroup: 2,
+            slidesPerGroup: 1,
           },
           0: {
             slidesPerGroup: 1,

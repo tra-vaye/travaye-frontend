@@ -1,5 +1,4 @@
-import styled from "styled-components";
-import { A11y, Navigation, Pagination, EffectCoverflow } from "swiper";
+import { A11y, Autoplay, EffectCreative, EffectFade, EffectFlip } from "swiper";
 import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Avatar from "../../../assets/avatar.png";
@@ -53,29 +52,24 @@ const ReviewCarousel = ({ classes }) => {
   return (
     <Swiper
       className={classes.full}
-      slidesPerView={1.7}
-      centeredSlides={true}
-      modules={[Navigation, A11y, EffectCoverflow, Pagination]}
-      effect="coverflow"
-      coverflowEffect={{
-        rotate: 0,
-        stretch: 140,
-        depth: 220,
-        modifier: 1,
-      }}
+      modules={[ A11y, Autoplay ]}
+      autoplay={true}
       loop={true}
-      speed={1000}
-      navigation
+      speed={2000}
+      spaceBetween={28}
+      centeredSlides={true}
       breakpoints={{
-        560: {
-          slidesPerView: 1.2,
-          centeredSlides: true
+        0: {
+          slidesPerView: 1
+        },
+        800: {
+          slidesPerView: 2
         }
       }}
     >
       {reviews.map((data, i) => {
         return (
-          <SwiperSlide key={i} className={`w-full flex flex-col border-4 border-[#E9A309] bg-white rounded-lg ${classes.revBox}`}>
+          <SwiperSlide key={i} className={`flex flex-col gap-3 border-4 border-[#E9A309] bg-white rounded-lg ${classes.revBox}`}>
             <h4 className={classes.name}>{data.name} says</h4>
             <p className={classes.review}>{data.review}</p>
             <img src={Avatar} alt="" />
@@ -87,24 +81,3 @@ const ReviewCarousel = ({ classes }) => {
 };
 
 export default ReviewCarousel;
-
-const Review = styled.p`
-
-`;
-
-
-// .name {
-//   font-size: 32px;
-//   font-weight: 700;
-//   line-height: 40px;
-//   color: #009F57;
-//   margin-bottom: 32px;
-// }
-
-// .review {
-//   font-size: 28px;
-//   font-weight: 600;
-//   line-height: 32px;
-//   color: #9D9D9D;
-//   margin-bottom: 10px;
-// }
