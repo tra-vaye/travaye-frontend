@@ -89,7 +89,7 @@ function App() {
           {<Route path="/signup" element={<SignUp />} />}
           {<Route path="/forgot-password" element={<ForgotPassword />} />}
           {<Route path="/reset-password" element={<ResetPassword />} />}
-          {/* <Route path="" element={<RequireAuth />}> */}
+          <Route path="" element={<RequireAuth />}>
             {userType === "user" && (
               <Route path="/user" element={<UserProfile />} />
             )}
@@ -105,8 +105,9 @@ function App() {
             {userType === "user" &&  (
               <Route path="/settings" element={<UserSettings />} />
             )}
-            <Route path="/settings" element={<BusinessProfile />} />
-            {/* )} */}
+            {userType === "business" &&  (
+              <Route path="/settings" element={<BusinessProfile />} />
+            )}
             {userType === "business" && (
               <Route path="/subscribe" element={<Subscribe />} />
             )}
@@ -122,7 +123,7 @@ function App() {
             <Route path="/location/:id" element={<LocationDetails />} />
             <Route path="/location/map" element={<Maps />} />
             <Route path="/added-locations" element={<AddedLocations />} />
-          {/* </Route> */}
+          </Route>
           {/* <Route
             path="/user"
             element={
