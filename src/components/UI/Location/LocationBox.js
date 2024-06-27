@@ -25,12 +25,12 @@ const LocationBox = (props) => {
 export default LocationBox;
 
 const Box = styled.div`
-  min-width: 230px;
+  min-width: 210px;
   padding: 10px;
   margin-bottom: 25px;
   background-color: rgb(255, 254, 252);
   border-radius: 15px;
-  width: ${(props) => props.search && "200px"};
+  width: ${(props) => props.search && "190px"};
   box-shadow: ${(props) =>
     props.search && "0px 8px 16px rgba(0, 159, 87, 0.12)"};
   transform: scale(0.9);
