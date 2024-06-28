@@ -6,10 +6,10 @@ import styled from "styled-components";
 import Loader from "../../components/UI/Loader";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import { BackDrop } from "../../components/UI/Modal/Modal";
-import { useGetLocationsQuery } from "../../redux/Api/locationApi";
-import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
+import { useGetCategoriesQuery, useGetLocationsQuery } from "../../redux/Api/locationApi";
 import { useGetStatesQuery } from "../../redux/Api/geoApi";
 import { Select, Input, Rate } from "antd";
+import { CiSearch } from "react-icons/ci";
 
 const categories = [
   "All",
@@ -23,14 +23,18 @@ const categories = [
   "Historical/Tourist Attractions",
 ];
 
-const filters = ["All", "Abuja", "Ibadan", "Lagos"];
+// const searchFilters = ["All", "Trending", "5-Stars", "Lagos"];
+
+const locationFilters = ["All", "Abuja", "Ibadan", "Lagos"];
 
 const Locations = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  // const [searchFilter, setSearchFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [locations, setLocations] = useState([]);
   const [subData, setSubData] = useState([]);
   const [selectedCategories, updateSelectedCategories] = useState([]);
-  const [selectedFilters, updateSelectedFilters] = useState([]);
+  const [selectedLocations, updateSelectedLocations] = useState(["All"]);
   const { data: locationCategories } = useGetCategoriesQuery();
   const { data: states } = useGetStatesQuery();
 
@@ -44,7 +48,7 @@ const Locations = () => {
     categories: selectedCategories
       .map((category) => category.toLowerCase().replace(/\s+/g, "-"))
       .join(","),
-    locationCity: selectedFilters.join(","),
+    locationCity: selectedLocations.join(","),
   });
   const navigate = useNavigate();
 
@@ -65,6 +69,15 @@ const Locations = () => {
     setShowSidebar((prevState) => !prevState);
   };
 
+  useEffect(() => {
+    if (searchTerm) {
+      const searched = data?.data.filter((loc) => loc.businessName.toLowerCase().includes(searchTerm.toLowerCase()));
+      setLocations(searched);
+    } else {
+      data && setLocations(data?.data);
+    }
+  }, [searchTerm, setLocations, data]);
+
   return (
     <Container>
       {showSidebar && (
@@ -74,45 +87,49 @@ const Locations = () => {
         <Loader />
       ) : (
         <>
-          <div>
+          <div className="main">
             <Heading>
               <h4>Businesses and Locations</h4>
-              <p className="mt-2">Recent Searches</p>
               <MenuOpenIcon onClick={toggleSidebar} />
             </Heading>
-            <FilterButtonContainer>
-              {filters.map((filter, i) => {
-                return (
-                  <FilterButton
-                    key={i}
-                    active={selectedFilters.includes(filter)}
-                    onClick={() => {
-                      if (filter !== "All") {
-                        if (selectedFilters.includes(filter)) {
-                          updateSelectedFilters((prevState) => {
-                            return prevState.filter(
-                              (value) => value !== filter
-                            );
-                          });
+            <SearchContainer>
+              <div className="relative flex-1">
+                <input
+                  value={searchTerm}
+                  placeholder="Search Locations"
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="border-none bg-transparent w-full ps-8 md:ps-10 text-lg placeholder:text-[#d1d1d1] outline-none"
+                />
+                <CiSearch className="absolute left-1 top-1 text-xl" />
+              </div>
+              <div className="flex gap-3">
+                {
+                  locationFilters.map((filter) => (
+                    <FilterButton
+                      value={filter}
+                      key={filter}
+                      active={selectedLocations.includes(filter)}
+                      onClick={() => {
+                        if (filter !== "All") {
+                          if (selectedLocations.includes(filter)) {
+                            updateSelectedLocations((prevState) => prevState.filter((value) => value !== filter));
+                          } else {
+                            updateSelectedLocations((prevState) => {
+                              const newArray = prevState.filter((value) => value !== "All");
+                              return [...newArray, filter];
+                            });
+                          }
                         } else {
-                          updateSelectedFilters((prevState) => {
-                            const newArray = prevState.filter(
-                              (value) => value !== "All"
-                            );
-                            return [...newArray, filter];
-                          });
+                          updateSelectedLocations(["All"]);
                         }
-                      } else {
-                        updateSelectedFilters(["All"]);
-                      }
-                      console.log(selectedFilters);
-                    }}
-                  >
-                    {filter}
-                  </FilterButton>
-                );
-              })}
-            </FilterButtonContainer>
+                      }}
+                    >
+                      {filter}
+                    </FilterButton>
+                  ))
+                }
+              </div>
+            </SearchContainer>
             <div className="mt-5">
               <div>
                 <h6 style={{ color: "#e9a009" }}>Locations</h6>
@@ -239,6 +256,11 @@ const Container = styled.div`
   z-index: 30;
   padding: 2% 5%;
   display: flex;
+  
+  .main {
+    width: calc(100% - 280px);
+  }
+
   p {
     font-weight: 600;
     font-size: 16px;
@@ -254,6 +276,14 @@ const Container = styled.div`
   ul {
     padding-inline-start: 0;
     list-style-type: none;
+  }
+
+  @media (max-width: 1000px) {
+    width: 100%;
+    
+    .main {
+      width: 100%;
+    }
   }
 `;
 
@@ -290,19 +320,21 @@ const SideBar = styled.div`
   top: 0;
   background: #ffffff;
   box-shadow: -4px 0px 20px rgba(0, 0, 0, 0.08);
-  width: 290px;
+  width: 280px;
   height: 100%;
   padding: 3%;
   padding-top: 140px;
   z-index: 20;
   overflow-y: scroll;
+  
   h6 {
     margin-bottom: 20px;
     font-weight: 700;
   }
+
   @media (max-width: 840px) {
-    display: none;
-    display: ${(props) => props.showSidebar && "block"};
+    /* display: none; */
+    display: ${(props) => props.showSidebar ? "block" : "none"};
     z-index: 300;
   }
 `;
@@ -310,34 +342,49 @@ const SideBar = styled.div`
 const FilterButton = styled.button`
   background: #ffffff;
   border: 2px solid ${(props) => (props.active ? "#009f57" : "#f0f0f0")};
-  border-radius: 15px;
+  border-radius: 16px;
   color: ${(props) => (props.active ? "white" : "#9d9d9d")};
   font-weight: 600;
   padding: 4px 12px;
   font-size: 14px;
-  width: 100px;
-
+  
   background-color: ${(props) => props.active && "#009f57"};
+  
   @media (min-width: 520px) {
-    margin: 10px;
+    padding: 4px 16px;
+    /* margin: 10px; */
   }
 `;
 
-const FilterButtonContainer = styled.div`
+const SearchContainer = styled.section`
+  margin-top: 16px;
+  background: #ffffff;
+  width: 100%;
+  padding: 12px 32px;
+  border-radius: 12px;
+  box-shadow: 0px 2px 16px 8px #e1e1e1;
   display: flex;
-
-  @media (max-width: 520px) {
-    display: grid;
-    gap: 10px;
-    place-items: center;
-    grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  justify-content: space-between;
+  align-items: center;
+  
+  background-color: ${(props) => props.active && "#009f57"};
+  
+  @media (max-width: 768px) {
+    gap: 20px;
+    flex-direction: column;
+    
+    div {
+      width: 100%;
+    }
   }
 `;
 
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  width: 100%;
+
   @media (max-width: 1260px) {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -355,3 +402,38 @@ const GridContainer = styled.div`
     place-items: center;
   }
 `;
+
+
+{/* <FilterButtonContainer>
+  {filters.map((filter, i) => {
+    return (
+      <FilterButton
+        key={i}
+        active={selectedLocations.includes(filter)}
+        onClick={() => {
+          if (filter !== "All") {
+            if (selectedFilters.includes(filter)) {
+              updateSelectedFilters((prevState) => {
+                return prevState.filter(
+                  (value) => value !== filter
+                );
+              });
+            } else {
+              updateSelectedFilters((prevState) => {
+                const newArray = prevState.filter(
+                  (value) => value !== "All"
+                );
+                return [...newArray, filter];
+              });
+            }
+          } else {
+            updateSelectedFilters(["All"]);
+          }
+          console.log(selectedFilters);
+        }}
+      >
+        {filter}
+      </FilterButton>
+    );
+  })}
+</FilterButtonContainer> */}

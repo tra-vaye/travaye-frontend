@@ -4,6 +4,7 @@ import MaryLandImg from "../../assets/maryland-mall.png";
 import { FourStars, Bin } from "../../components/UI/svgs/svgs";
 import { useEffect, useState } from "react";
 import { Rate } from "antd";
+import Progress from "../../components/UI/Progress";
 
 const AddedLocations = () => {
   const [locations, setLocations] = useState(
@@ -16,7 +17,10 @@ const AddedLocations = () => {
   console.log(locations);
   return (
     <Container>
-      <h4>My Added Locations</h4>
+      <div className="flex justify-between items-end">
+        <h4>My Added Locations</h4>
+        <Progress step={2} />
+      </div>
       <div>
         {locations?.map((e) => (
           <Card>

@@ -16,6 +16,7 @@ import {
   useGetStatesQuery,
 } from "../../redux/Api/locationApi";
 import classes from "./Trip.module.css";
+import Progress from "../../components/UI/Progress";
 
 // import Loader from "../../components/UI/Loader";
 // import { Select } from "antd";
@@ -53,12 +54,17 @@ const PlanTrip = () => {
     <div className=" ">
       {isLoading && <Loader />}
       <form onSubmit={handleSubmit} className={classes.trip}>
-        <h1 className="text-center text-[2rem] font-extrabold mb-2">
-          Plan Your desired Trip with Travaye
-        </h1>
-        <h5 className="text-center">
-          Follow the Steps below to plan your trip in next to no time
-        </h5>
+        <div className="flex justify-between items-center">
+          <div className="w-2/3">
+            <h1 className="text-3xl font-extrabold mb-2">
+              Plan Your desired Trip with Travaye
+            </h1>
+            <h5 className="text-lg">
+              Follow the Steps below to plan your trip in next to no time
+            </h5>
+          </div>
+          <Progress step={1} />
+        </div>
         <div className="pt-4">
           <h4 className="mt-3 mb-2">Step 1</h4>
           <p>Please Fill in Your City / Address Details </p>
@@ -188,6 +194,7 @@ const PlanTrip = () => {
   );
 };
 export default PlanTrip;
+
 const ButtonContainer = styled.div`
   button {
     margin-left: auto;
@@ -197,6 +204,7 @@ const ButtonContainer = styled.div`
     }
   }
 `;
+
 const States = [
   "State",
   "Abia",
