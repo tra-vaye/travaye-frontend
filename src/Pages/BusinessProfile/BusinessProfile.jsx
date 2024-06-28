@@ -58,13 +58,12 @@ const BusinessProfile = () => {
   // } = useGetMeQuery({
   //   userType: userType,
   // });
-  const userData = useSelector((store) => store.auth.user).payload;
+  const userData = useSelector((store) => store.auth.user)?.payload;
   const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
     if (isSuccess) {
       setLocations(data?.data);
-      // console.log(locations);
     }
     if (isError) {
       notification.error({
@@ -199,13 +198,12 @@ const BusinessProfile = () => {
             <H3 color="#009f57" fontSize="30" fontWeight="700" className="mb-2">
               Your Profile
             </H3>
-            <a
-              target="_blank"
-              href="https://www.travaye.ng/create-event"
-              className="bg-[#009F57] px-[4px] font-[600] h-[2.5rem] rounded-[10px] flex items-center justify-center text-[15px] text-[#f0f0f0] w-fit"
+            <button
+              className="text-[#E9A309] font-semibold underline !scale-100"
+              onClick={() => navigate('/settings')}
             >
-              <p>Create Event</p>
-            </a>
+              Settings{">"}
+            </button>
           </div>
           {/* Check the length of businessLocationImages array */}
           {userData?.businessLocationImages &&

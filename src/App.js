@@ -105,8 +105,9 @@ function App() {
             {userType === "user" &&  (
               <Route path="/settings" element={<UserSettings />} />
             )}
-            <Route path="/settings" element={<BusinessProfile />} />
-            {/* )} */}
+            {userType === "business" &&  (
+              <Route path="/settings" element={<BusinessProfile />} />
+            )}
             {userType === "business" && (
               <Route path="/subscribe" element={<Subscribe />} />
             )}

@@ -10,6 +10,7 @@ import {
 } from '../../redux/Api/locationApi';
 import { useEffect, useState } from 'react';
 import Loader from '../../components/UI/Loader';
+import Progress from '../../components/UI/Progress';
 
 const Locations = () => {
 	const { state } = useLocation();
@@ -35,9 +36,7 @@ const Locations = () => {
 			<Container>
 				<div className="d-flex justify-content-between mt-5 align-items-center ">
 					<h3>Locations</h3>
-					<Button onClick={() => navigate('/added-locations')}>
-						View Added Locations
-					</Button>
+					<Progress step={3} />
 				</div>
 				<div>
 					{data?.data.map((e, i) => (
@@ -97,6 +96,11 @@ const Locations = () => {
 						</Card>
 					))}
 				</div>
+				<div className='flex justify-end mt-8'>
+					<Button onClick={() => navigate('/added-locations')}>
+						View Added Locations
+					</Button>
+				</div>
 			</Container>
 		</>
 	);
@@ -127,6 +131,7 @@ const Container = styled.div`
 	h3 {
 		color: #009f57;
 		font-weight: 700;
+		font-size: 28px;
 	}
 	button {
 		transform: scale(0.9);

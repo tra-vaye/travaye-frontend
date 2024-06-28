@@ -202,19 +202,18 @@ const UserProfile = () => {
             <AccountCircleIcon />
           </Profile>
           <div className="flex justify-start items-center gap-[0.3rem]">
-            {/* <Button color="green" onClick={toggleNewLocationModal}>
+            <Button color="green" onClick={toggleNewLocationModal}>
               Post New
-            </Button> */}
+            </Button>
             <Link to="/plan-a-trip">
               <Button>Plan A Trip</Button>
             </Link>
-            <a
-              target="_blank"
-              href="https://www.travaye.ng/create-event"
-              className="bg-[#009F57] px-[4px] font-[600] h-[2.5rem] rounded-[10px] flex items-center justify-center text-[15px] text-[#f0f0f0]"
+            <button
+              className="text-[#E9A309] font-semibold underline !scale-100"
+              onClick={() => navigate('/settings')}
             >
-              <p>Create Event</p>
-            </a>
+              Settings{">"}
+            </button>
           </div>
           <div
             style={{ transform: "scale(0.7)", cursor: "pointer" }}
