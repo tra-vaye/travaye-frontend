@@ -194,14 +194,14 @@ const SignUp = () => {
           <div className="px-5">
             <h3>
               {userSignUp
-                ? "Enjoy your money anywhere"
+                ? "Adventures for you from people like you"
                 : "Open a Business Account"}
-              <br /> {userSignUp ? "regardless of " : "with "}
-              <span>{userSignUp ? "Sapa" : "Travaye"}</span>
+              <br /> {userSignUp ? "" : "with "}
+              <span>{userSignUp ? "" : "Travaye"}</span>
             </h3>
             <p>
               {userSignUp
-                ? "Easy planning, Max Flexing"
+                ? "Satisfy the explorer in you"
                 : "Enjoy a 2-month Free-Trial"}
             </p>
             {userSignUp ? UserContent : BusinessContent}
@@ -369,8 +369,8 @@ export default SignUp;
 const BusinessContent = (
   <p className={classes.business}>
     Connect your business and events with clients <br />
-    from all over the country for just{" "}
-    <span style={{ color: "#009f57" }}>$75 Monthly. </span>
+    from all over the country {" "}
+    <span style={{ color: "#009f57" }}>with travaye.</span>
   </p>
 );
 
