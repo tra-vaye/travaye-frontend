@@ -184,11 +184,11 @@ const Login = () => {
             className={`col-md-6 d-flex justify-content-center align-items-center ${classes.text}`}
           >
             <div>
-              <h3>
-                Ready to go out without <br />
-                <span className={classes.sapa}>Sapa? </span>
+              <h3 className="text-3xl">
+                Ready to have fun on <br />
+                <span className={classes.sapa}> a budget?</span>
               </h3>
-              <p>Login now and Plan a Trip</p>
+              <p className="text-2xl mt-2">Login now and Plan a Trip</p>
             </div>
           </div>
           <div className="col-md-6 d-flex justify-content-center">
