@@ -18,7 +18,7 @@ import {
   useLazyGetLandmarksQuery,
   useLazyGetLgaQuery,
 } from "../../redux/Api/geoApi";
-import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
+import { useGetCategoriesQuery, useGetBudgetsQuery } from "../../redux/Api/locationApi";
 const Flex = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -30,6 +30,8 @@ const Register = () => {
   const { data: states } = useGetStatesQuery();
   const { data: categories, isLoading: getCategoriesLoading } =
     useGetCategoriesQuery();
+  const { data: budgets, isLoading: getBudgetsLoading } =
+    useGetBudgetsQuery();
 
   const [getCity, { data: city }] = useLazyGetCityQuery();
   const [getLga, { data: lga }] = useLazyGetLgaQuery();
@@ -262,26 +264,10 @@ const Register = () => {
                 Price Range <span>*</span>
               </label>
               <div className="flex gap-[1rem] items-center">
-                <input
-                  id="businessPriceRangeFrom"
-                  // value={businessInfo?.expiryDate}
-                  onChange={(e) =>
-                    handleChange("businessPriceRangeFrom", e.target.value)
-                  }
-                  type="number"
-                  min={1}
-                  placeholder="from"
-                />
-                <input
-                  id="businessPriceRangeFromTo"
-                  // value={businessInfo?.cvv}
-                  type="number"
-                  min={1}
-                  onChange={(e) =>
-                    handleChange("businessPriceRangeFromTo", e.target.value)
-                  }
-                  placeholder="to"
-                />
+              <select onChange={(e) => handleChange("businessBudget", e.target.value)} required>
+                <option disabled selected>Select a Price range</option>
+                {budgets?.map((budget) => <option key={budget._id} value={budget._id}>{budget.label}</option>)}
+              </select>
               </div>
             </div>
           </div>
