@@ -44,14 +44,14 @@ const Locations = () => {
 							<div className="w-full grid grid-cols-3">
 								<div className="d-flex colmd-6">
 									<img
-										src={e?.businessLocationImages[0]}
+										src={e?.business.businessLocationImages[0]}
 										alt=""
 										className="img-fluid w-[230px] h-[120px]"
 									/>
 									<div>
-										<p>{e?.businessName}</p>
-										<h5>{e?.locationDescription}</h5>
-										<h6>{e?.businessCategory}</h6>
+										<p>{e?.business.businessName}</p>
+										<h5>{e?.business.locationDescription}</h5>
+										<h6>{e?.business.businessCategory}</h6>
 									</div>
 								</div>
 								<StarContainer className="d-flex  align-items-center colmd-3">
@@ -59,7 +59,7 @@ const Locations = () => {
 								</StarContainer>
 
 								<div className="flex colmd-3 align-items-center justify-end w-full">
-									<p className="me-3">#{e?.businessPriceRangeFrom}</p>
+									<p className="me-3">{e?.budgetClass.label}</p>
 									{!addedLocations.find(
 										(location) => location._id == e._id
 									) && (

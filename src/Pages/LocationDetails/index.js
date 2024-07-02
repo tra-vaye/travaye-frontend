@@ -133,8 +133,8 @@ const LocationDetails = () => {
 							<figure>
 								<img
 									src={
-										location.businessLocationImages
-											? location.businessLocationImages[0]
+										location?.businessLocationImages
+											? location?.businessLocationImages[0]
 											: Maryland
 									}
 									alt="poster"
