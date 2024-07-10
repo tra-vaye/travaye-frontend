@@ -36,10 +36,6 @@ const Login = () => {
     dispatch(setUserType({ userType: type }));
   };
 
-  // useEffect(() => {
-  //   sessionStorage.clear();
-  // }, []);
-
   const [
     userLogin,
     {
@@ -134,8 +130,8 @@ const Login = () => {
 
   const handleClick = async () => {
     if (userSignUp) {
-      dispatch(setUserType({ userType: "user" }));
       sessionStorage.setItem("userType", "user");
+      dispatch(setUserType({ userType: "user" }));
 
       await userLogin({ username: values.userName, password: values.passWord })
         .unwrap()
@@ -181,12 +177,12 @@ const Login = () => {
       <section className={classes.login}>
         <div className="row">
           <div
-            className={`col-md-6 d-flex justify-content-center align-items-center ${classes.text}`}
+            className={`col-md-6 flex justify-start items-center flex-col gap-3 mb-4 ${classes.text}`}
           >
             <div>
               <h3 className="text-3xl">
-                Ready to have fun on <br />
-                <span className={classes.sapa}> a budget?</span>
+                Ready to have fun on a <br />
+                <span className={classes.sapa}>Budget?</span>
               </h3>
               <p className="text-2xl mt-2">Login now and Plan a Trip</p>
             </div>
@@ -260,11 +256,6 @@ const Login = () => {
                   Forgot Password?
                 </Link>
               </div>
-              {/* <div className="d-flex justify-content-center">{Alternate}</div> */}
-              {/* <SocialsContainer>
-                {FaceBookAuth} {<GoogleAuth onClick={googleSignIn} />}{" "}
-                {AppleAuth}
-              </SocialsContainer> */}
               <div
                 className={`d-flex justify-content-between mt-3 ${classes.text}`}
               >
@@ -318,15 +309,6 @@ export const AuthRoutes = styled.ul`
     color: inherit;
   }
 `;
-
-// const SocialsContainer = styled.div`
-//   display: flex;
-//   justify-content: space-evenly;
-//   margin-top: 2rem;
-//   svg {
-//     transform: scale(0.7);
-//   }
-// `;
 
 export const ErrorText = styled.p`
   color: #f67f7f;
