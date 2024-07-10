@@ -194,10 +194,10 @@ const SignUp = () => {
           <div className="px-5">
             <h3>
               {userSignUp
-                ? "Adventures for you from people like you"
+                ? "Adventures for you from people "
                 : "Open a Business Account"}
-              <br /> {userSignUp ? "" : "with "}
-              <span>{userSignUp ? "" : "Travaye"}</span>
+              <br /> {userSignUp ? "" : "with"}
+              <span>{userSignUp ? "like you" : " Travaye"}</span>
             </h3>
             <p>
               {userSignUp

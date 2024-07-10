@@ -83,3 +83,9 @@
   color: #009f57;
   font-weight: 600;
 }
+
+@media (max-width: 767px) {
+  .signup > div {
+    /* flex-direction: column-reverse !important; */
+  }
+}
