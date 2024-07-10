@@ -47,6 +47,7 @@
 .intro h3 {
   color: #009f57;
   font-weight: 700;
+  font-size: 32px;
 }
 
 .intro h3 span {
@@ -55,7 +56,7 @@
 
 .intro h3 + p {
   color: #9d9d9d;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 700;
   margin-top: 1.2rem;
 }
