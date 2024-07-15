@@ -12,7 +12,7 @@ import {
 	useCompleteBusinessRegistrationMutation,
 	useGetMeQuery,
 } from '../../redux/Api/authApi';
-import { useLazyGetLandmarksQuery } from '../../redux/Api/geoApi';
+import { useLazyGetCityQuery, useLazyGetLgaQuery } from '../../redux/Api/geoApi';
 
 import {
 	useGetCategoriesQuery,
