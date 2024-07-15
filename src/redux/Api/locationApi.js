@@ -95,6 +95,11 @@ export const LocationApi = createApi({
       //   return res;
       // },
     }),
+    getBudgets: builder.query({
+      query: () => ({
+        url: 'budgets'
+      })
+    })
   }),
 });
 
@@ -110,4 +115,5 @@ export const {
   useGetPlanATripQuery,
   useReviewLocationMutation,
   useGetStatesQuery,
+  useGetBudgetsQuery,
 } = LocationApi;

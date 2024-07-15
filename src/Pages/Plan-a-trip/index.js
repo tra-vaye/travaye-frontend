@@ -14,6 +14,7 @@ import {
   useGetCategoriesQuery,
   useLazyPlanATripQuery,
   useGetStatesQuery,
+  useGetBudgetsQuery,
 } from "../../redux/Api/locationApi";
 import classes from "./Trip.module.css";
 import Progress from "../../components/UI/Progress";
@@ -30,6 +31,9 @@ const PlanTrip = () => {
   const [getCity, { data: city }] = useLazyGetCityQuery();
   // const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [planTrip, { isLoading }] = useLazyPlanATripQuery();
+  const {data: budgets} = useGetBudgetsQuery();
+
+
   const [queryData, setQueryData] = useState({
     state: "",
     city: "",
@@ -168,13 +172,7 @@ const PlanTrip = () => {
           <Select
             placeholder="Select Your Budget "
             className="!w-[250px]"
-            options={[
-              { value: 0, label: "free" },
-              { value: 5000, label: "free - 5k" },
-              { value: 10000, label: "5k - 10k" },
-              { value: 20000, label: "10k - 20k" },
-              { value: 20001, label: "20k+" },
-            ]}
+            options={budgets?.map(b => ({value: b._id, label: b.label}))}
             onSelect={(value) => {
               setQueryData((prev) => ({ ...prev, budget: value }));
             }}

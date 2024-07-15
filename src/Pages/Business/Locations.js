@@ -134,7 +134,7 @@ const Locations = () => {
                     return (
                       <LocationBox
                         search={true}
-                        location={location}
+                        location={location?.business}
                         key={i}
                         onClick={() => {
                           navigate(`/location/${location?._id}`);

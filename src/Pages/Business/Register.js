@@ -1,28 +1,29 @@
-import { Box, Typography } from "@mui/material";
-import { Select, notification } from "antd";
-import { useEffect, useState } from "react";
-import Dropzone from "react-dropzone";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Button } from "../../components/UI/Buttons";
-import Loader from "../../components/UI/Loader";
-import { CloudUpload } from "../../components/UI/svgs/svgs";
+import { Box, Typography } from '@mui/material';
+import { Select, notification } from 'antd';
+import { useEffect, useState } from 'react';
+import Dropzone from 'react-dropzone';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { Button } from '../../components/UI/Buttons';
+import Loader from '../../components/UI/Loader';
+import { CloudUpload } from '../../components/UI/svgs/svgs';
 import {
-  useCompleteBusinessRegistrationMutation,
-  useGetMeQuery,
-} from "../../redux/Api/authApi";
+	useCompleteBusinessRegistrationMutation,
+	useGetMeQuery,
+} from '../../redux/Api/authApi';
+import { useLazyGetLandmarksQuery } from '../../redux/Api/geoApi';
+
 import {
-  useGetStatesQuery,
-  useLazyGetCityQuery,
-  useLazyGetLgaQuery,
-} from "../../redux/Api/geoApi";
-import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
+	useGetCategoriesQuery,
+	useGetBudgetsQuery,
+	useGetStatesQuery,
+} from '../../redux/Api/locationApi';
 const Flex = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  gap: "1px",
-  flexWrap: "wrap",
+	display: 'flex',
+	alignItems: 'center',
+	gap: '1px',
+	flexWrap: 'wrap',
 });
 
 const Register = () => {
@@ -34,188 +35,188 @@ const Register = () => {
   const [subData, setSubData] = useState([]);
   const [loading, setIsLoading] = useState(false);
 
-  const [businessInfo, setBusinessInfo] = useState({
-    businessName: "",
-    businessCategory: "",
-    businessSubCategory: "",
-    businessEmail: "",
-    businessAddress: "",
-    businessTelephone: "",
-    businessLGA: "",
-    businessState: "",
-    businessCity: "",
-    businessLocationImages: [],
-    cacRegistrationProof: [],
-    proofOfAddress: [],
-    businessPriceRange: "",
-  });
-  const navigate = useNavigate();
-  const userType = useSelector((state) => state.auth.userType);
-  const {
-    data: businessData,
-    isSuccess,
-    isLoading,
-    refetch,
-  } = useGetMeQuery({ userType });
-  const [
-    completeBusiness,
-    {
-      isLoading: completeBusinessLoading,
-      isSuccess: completeBusinessSuccess,
-      data,
-      error,
-      isError,
-    },
-  ] = useCompleteBusinessRegistrationMutation();
+	const [businessInfo, setBusinessInfo] = useState({
+		businessName: '',
+		businessCategory: '',
+		businessSubCategory: '',
+		businessEmail: '',
+		businessAddress: '',
+		businessTelephone: '',
+		businessLGA: '',
+		businessState: '',
+		businessCity: '',
+		businessLocationImages: [],
+		cacRegistrationProof: [],
+		proofOfAddress: [],
+		businessPriceRangeFrom: '',
+		businessPriceRangeTo: '',
+	});
+	const navigate = useNavigate();
+	const userType = useSelector((state) => state.auth.userType);
+	const {
+		data: businessData,
+		isSuccess,
+		isLoading,
+		refetch,
+	} = useGetMeQuery({ userType });
+	const [
+		completeBusiness,
+		{
+			isLoading: completeBusinessLoading,
+			isSuccess: completeBusinessSuccess,
+			data,
+			error,
+			isError,
+		},
+	] = useCompleteBusinessRegistrationMutation();
 
-  useEffect(() => {
-    console.log(businessData);
-    if (businessData?.user) {
-      setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData.user }));
-      if (businessData?.user?.businessVerified === "verified") {
-        if (businessData?.user?.addedCard === true) {
-          navigate(`/${userType}`);
-        } else {
-          navigate(`/subscribe`);
-        }
-      } else if (businessData?.user?.businessVerified === "pending") {
-        notification.warning({
-          message: " Business Verification Pending",
-          duration: 3,
-          placement: "bottomRight",
-        });
-        if (businessData?.user?.addedCard === true) {
-          navigate(`/${userType}`);
-        } else {
-          navigate(`/subscribe`);
-        }
-        refetch();
-      } else if (businessData?.user?.businessVerified === "false") {
-        notification.error({
-          message: " Business not Verified ",
-          duration: 3,
-          placement: "bottomRight",
-        });
-        refetch();
+	useEffect(() => {
+		if (isSuccess && businessData?.user) {
+			setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData.user }));
+			if (businessData?.user?.businessVerified === 'verified') {
+				if (businessData?.user?.addedCard === true) {
+					navigate(`/${userType}`);
+				} else {
+					navigate(`/subscribe`);
+				}
+			} else if (businessData?.user?.businessVerified === 'pending') {
+				notification.warning({
+					message: ' Business Verification Pending',
+					duration: 3,
+					placement: 'bottomRight',
+				});
+				if (businessData?.user?.addedCard === true) {
+					navigate(`/${userType}`);
+				} else {
+					navigate(`/subscribe`);
+				}
+				refetch();
+			} else if (businessData?.user?.businessVerified === 'false') {
+				notification.error({
+					message: ' Business not Verified ',
+					duration: 3,
+					placement: 'bottomRight',
+				});
+				refetch();
 
-        // Navigate to the verification page
-        navigate("/register");
-      }
-    }
-  }, [isSuccess, businessData?.user, navigate, refetch, userType]);
+				// Navigate to the verification page
+				navigate('/register');
+			}
+		}
+	}, [isSuccess, businessData?.user, navigate, refetch, userType]);
 
-  const handleChange = (field, value) => {
-    setBusinessInfo((prevInfo) => ({
-      ...prevInfo,
-      [field]: value,
-    }));
-  };
+	const handleChange = (field, value) => {
+		setBusinessInfo((prevInfo) => ({
+			...prevInfo,
+			[field]: value,
+		}));
+	};
 
-  const handleFileDrop = (acceptedFiles, field) => {
-    console.log(acceptedFiles);
-    setBusinessInfo((prevInfo) => ({
-      ...prevInfo,
-      [field]: [...acceptedFiles],
-    }));
-  };
-  const handleLocationImagesFileDrop = (acceptedFiles, field) => {
-    console.log(acceptedFiles);
-    setBusinessInfo((prevInfo) => ({
-      ...prevInfo,
-      [field]: [...businessInfo.businessLocationImages, ...acceptedFiles],
-    }));
-  };
+	const handleFileDrop = (acceptedFiles, field) => {
+		console.log(acceptedFiles);
+		setBusinessInfo((prevInfo) => ({
+			...prevInfo,
+			[field]: [...acceptedFiles],
+		}));
+	};
+	const handleLocationImagesFileDrop = (acceptedFiles, field) => {
+		console.log(acceptedFiles);
+		setBusinessInfo((prevInfo) => ({
+			...prevInfo,
+			[field]: [...businessInfo.businessLocationImages, ...acceptedFiles],
+		}));
+	};
 
-  useEffect(() => {
-    if (isError) {
-      notification.error({
-        message: error?.data?.error,
-        duration: 3,
-        placement: "bottomRight",
-      });
-    }
-    if (completeBusinessSuccess) {
-      notification.success({
-        message: "Business Verification Pending",
-        duration: 3,
-        placement: "bottomRight",
-      });
-      navigate(`/subscribe`);
-    }
-  }, [isError, error, completeBusinessSuccess, userType, navigate]);
+	useEffect(() => {
+		if (isError) {
+			notification.error({
+				message: error?.data?.error,
+				duration: 3,
+				placement: 'bottomRight',
+			});
+		}
+		if (completeBusinessSuccess) {
+			notification.success({
+				message: 'Business Verification Pending',
+				duration: 3,
+				placement: 'bottomRight',
+			});
+			navigate(`/subscribe`);
+		}
+	}, [isError, error, completeBusinessSuccess, userType, navigate]);
 
-  const handleSubmit = async (e) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    Object.entries(businessInfo).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    businessInfo.businessLocationImages.forEach((file) => {
-      formData.append("businessLocationImages", file);
-    });
-    businessInfo.cacRegistrationProof.forEach((file) => {
-      formData.append("cacRegistrationProof", file);
-    });
-    businessInfo.proofOfAddress.forEach((file) => {
-      formData.append("proofOfAddress", file);
-    });
-    console.log(formData);
-    e.preventDefault();
-    await completeBusiness(formData);
-    setIsLoading(false);
-  };
+	const handleSubmit = async (e) => {
+		setIsLoading(true);
+		const formData = new FormData();
+		Object.entries(businessInfo).forEach(([key, value]) => {
+			formData.append(key, value);
+		});
+		businessInfo.businessLocationImages.forEach((file) => {
+			formData.append('businessLocationImages', file);
+		});
+		businessInfo.cacRegistrationProof.forEach((file) => {
+			formData.append('cacRegistrationProof', file);
+		});
+		businessInfo.proofOfAddress.forEach((file) => {
+			formData.append('proofOfAddress', file);
+		});
+		console.log(formData);
+		e.preventDefault();
+		await completeBusiness(formData);
+		setIsLoading(false);
+	};
 
-  return (
-    <Container>
-      {(isLoading ||
-        loading ||
-        getCategoriesLoading ||
-        completeBusinessLoading) && <Loader />}
-      <h4>Complete Registration</h4>
-      <h6>
-        Please Complete Your Registration to gain full access to your Travaye
-        Business Page
-      </h6>
-      <form onSubmit={handleSubmit}>
-        <div className="row mt-3">
-          <div className="col-md-6">
-            <div>
-              <label htmlFor="name">
-                Business Name <span>*</span>
-              </label>
-              <input
-                id="name"
-                value={businessInfo?.businessName}
-                onChange={(e) => handleChange("businessName", e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="category">
-                Business Category <span>*</span>
-              </label>
-              <select
-                value={businessInfo.businessCategory}
-                required={true}
-                id="category"
-                onChange={(e) => {
-                  handleChange("businessCategory", e.target.value);
-                  setSubData([]);
-                  setSubData(
-                    categories.find((cat) => cat.value === e.target.value)
-                      ?.sub || []
-                  );
-                }}
-              >
-                <option value="" disabled selected>
-                  Select a category
-                </option>
-                {categories?.map((category, i) => (
-                  <option value={category.value} key={i}>
-                    {category.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+	return (
+		<Container>
+			{(isLoading ||
+				loading ||
+				getCategoriesLoading ||
+				completeBusinessLoading) && <Loader />}
+			<h4>Complete Registration</h4>
+			<h6>
+				Please Complete Your Registration to gain full access to your Travaye
+				Business Page
+			</h6>
+			<form onSubmit={handleSubmit}>
+				<div className="row mt-3">
+					<div className="col-md-6">
+						<div>
+							<label htmlFor="name">
+								Business Name <span>*</span>
+							</label>
+							<input
+								id="name"
+								value={businessInfo?.businessName}
+								onChange={(e) => handleChange('businessName', e.target.value)}
+							/>
+						</div>
+						<div>
+							<label htmlFor="category">
+								Business Category <span>*</span>
+							</label>
+							<select
+								value={businessInfo.businessCategory}
+								required={true}
+								id="category"
+								onChange={(e) => {
+									handleChange('businessCategory', e.target.value);
+									setSubData([]);
+									setSubData(
+										categories.find((cat) => cat.value === e.target.value)
+											?.sub || []
+									);
+								}}
+							>
+								<option value="" disabled selected>
+									Select a category
+								</option>
+								{categories?.map((category, i) => (
+									<option value={category.value} key={i}>
+										{category.label}
+									</option>
+								))}
+							</select>
+						</div>
 
             <div>
               <label htmlFor="subCategory">
@@ -477,70 +478,70 @@ const Register = () => {
               </div>
             </div>
           </div> */}
-          <div>
-            <Button color="green" type="submit">
-              Submit
-            </Button>
-          </div>
-        </div>
-      </form>
-    </Container>
-  );
+					<div>
+						<Button color="green" type="submit">
+							Submit
+						</Button>
+					</div>
+				</div>
+			</form>
+		</Container>
+	);
 };
 
 export default Register;
 
 const Container = styled.div`
-  padding: 2% 5%;
+	padding: 2% 5%;
 
-  span {
-    color: #ff3d00;
-    font-weight: 600;
-    font-size: 18px;
-  }
-  label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 700;
-    font-size: 15px;
-  }
-  input,
-  select {
-    outline: none;
-    display: block;
-    width: 100%;
-    background: #ffffff;
-    border: 2px solid rgba(0, 159, 87, 0.25);
-    border-radius: 5px;
+	span {
+		color: #ff3d00;
+		font-weight: 600;
+		font-size: 18px;
+	}
+	label {
+		display: block;
+		margin-bottom: 10px;
+		font-weight: 700;
+		font-size: 15px;
+	}
+	input,
+	select {
+		outline: none;
+		display: block;
+		width: 100%;
+		background: #ffffff;
+		border: 2px solid rgba(0, 159, 87, 0.25);
+		border-radius: 5px;
 
-    margin-bottom: 16px;
-    padding: 4px 8px;
-  }
+		margin-bottom: 16px;
+		padding: 4px 8px;
+	}
 
-  h4 {
-    font-weight: 600;
-    font-size: 24px;
-    color: #009f57;
-  }
-  button {
-    margin-left: auto;
-    border-radius: 5px;
-  }
+	h4 {
+		font-weight: 600;
+		font-size: 24px;
+		color: #009f57;
+	}
+	button {
+		margin-left: auto;
+		border-radius: 5px;
+	}
 `;
 
 const FileUpload = styled.div`
-  display: block;
-  width: 100%;
-  background: #ffffff;
-  text-align: center;
-  color: #e9a309;
-  border: 2px solid rgba(0, 159, 87, 0.25);
-  border-radius: 5px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  padding: 4px 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: auto;
+	display: block;
+	width: 100%;
+	background: #ffffff;
+	text-align: center;
+	color: #e9a309;
+	border: 2px solid rgba(0, 159, 87, 0.25);
+	border-radius: 5px;
+	margin-top: 16px;
+	margin-bottom: 16px;
+	padding: 4px 8px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: auto;
 `;
