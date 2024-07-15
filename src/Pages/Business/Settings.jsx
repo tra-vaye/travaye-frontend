@@ -217,7 +217,20 @@ const BusinessSettings = () => {
                 Price Range
               </label>
               <div className="flex gap-[1rem] items-center">
-                <input
+              <Select
+                  placeholder="Select Your Budget "
+                  className="!w-[250px] mt-3"
+                  options={[
+                    { value: "free", label: "free" },
+                    { value: "free - 5k", label: "free - 5k" },
+                    { value: "5k - 10k", label: "5k - 10k" },
+                    { value: "10k - 20k", label: "10k - 20k" },
+                  ]}
+                  // onSelect={(value) => {
+                  //   setQueryData((prev) => ({ ...prev, budget: value }));
+                  // }}
+                />
+                {/* <input
                   id="businessPriceRangeFrom"
                   // value={businessInfo?.expiryDate}
                   onChange={(e) =>
@@ -236,7 +249,7 @@ const BusinessSettings = () => {
                     handleChange("businessPriceRangeFromTo", e.target.value)
                   }
                   placeholder="to"
-                />
+                /> */}
               </div>
             </div>
           </div>

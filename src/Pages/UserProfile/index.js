@@ -13,10 +13,10 @@ import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 import { notification, Spin } from "antd";
 import { useUpdateProfilePhotoMutation } from "../../redux/Api/authApi";
 import { IoIosCamera } from "react-icons/io";
+import NewLocation from "../../components/UI/Modal/NewLocation";
 
 const UserProfile = () => {
-  const [updateProfile, { isLoading: updatingPhoto }] =
-    useUpdateProfilePhotoMutation();
+  const [updateProfile, { isLoading: updatingPhoto }] = useUpdateProfilePhotoMutation();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [newLocationModal, setNewLocationModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
@@ -30,17 +30,14 @@ const UserProfile = () => {
     setNewLocationModal((prevState) => !prevState);
   };
   const navigate = useNavigate();
-  const togglePointsModal = () => {
-    setShowPointsModal((prevState) => !prevState);
-  };
+  // const togglePointsModal = () => {
+  //   setShowPointsModal((prevState) => !prevState);
+  // };
   const [firstVisit, setFirstVisit] = useState(true);
   const toggleDashboard = () => {
     setShowDashboard((prevState) => !prevState);
   };
   const [locations, setLocations] = useState([]);
-
-  const [selectedCategories, updateSelectedCategories] = useState([]);
-  const [selectedFilters, updateSelectedFilters] = useState([]);
 
   // Categories and locationCity are queries for the backend and they are in array formats
   // I am joining every element in the array using .join() to make the request query a single query in a request to avoid server overload
@@ -56,10 +53,10 @@ const UserProfile = () => {
   } = useGetLocationsQuery({
     page: 1,
     count: 10,
-    categories: selectedCategories
-      .map((category) => category.toLowerCase().replace(/\s+/g, "-"))
-      .join(","),
-    locationCity: selectedFilters.join(","),
+    // categories: selectedCategories
+    //   .map((category) => category.toLowerCase().replace(/\s+/g, "-"))
+    //   .join(","),
+    // locationCity: selectedFilters.join(","),
   });
   const location = useLocation();
   // const {
@@ -101,7 +98,6 @@ const UserProfile = () => {
     } else {
       // Fetch data again when the page is revisited
       refetchLocations();
-      // refetchUserData();
     }
   }, [location.pathname, firstVisit, refetchLocations]);
   const userLikedLocations = userData?.likedLocations;
@@ -109,31 +105,7 @@ const UserProfile = () => {
   // Filter out any undefined values in case a location name doesn't match any location
   const filteredUserLikedLocations = userLikedLocations?.filter(Boolean) || [];
 
-  console.log(userData);
-  let content;
-
-  if (filteredUserLikedLocations.length < 1) {
-    content = (
-      <p>
-        No Liked Locations Yet,{" "}
-        <Button onClick={() => navigate(`/business-locations`)}>
-          Add some here{" "}
-        </Button>{" "}
-      </p>
-    );
-  } else {
-    content = filteredUserLikedLocations.map((location, i) => {
-      return (
-        <LocationBox
-          onClick={() => {
-            navigate(`/location/${location?._id}`);
-          }}
-          location={location}
-          key={i}
-        />
-      );
-    });
-  }
+  // console.log(userData);
 
   return (
     <Container>
@@ -202,9 +174,11 @@ const UserProfile = () => {
             <AccountCircleIcon />
           </Profile>
           <div className="flex justify-start items-center gap-[0.3rem]">
-            <Button color="green" onClick={toggleNewLocationModal}>
-              Post New
-            </Button>
+            <Link to="/create-event">
+              <Button color="green">
+                Create an Event
+              </Button>
+            </Link>
             <Link to="/plan-a-trip">
               <Button>Plan A Trip</Button>
             </Link>
@@ -215,22 +189,37 @@ const UserProfile = () => {
               Settings{">"}
             </button>
           </div>
-          <div
-            style={{ transform: "scale(0.7)", cursor: "pointer" }}
-            className="text-center"
-            onClick={togglePointsModal}
-          >
-            <h3 style={{ color: "#e9a009" }}>Travaye Points</h3>
-            <strong>80 Points</strong>
-          </div>
+          <Button color="green" onClick={toggleNewLocationModal}>
+            Created Events
+          </Button>
         </div>
         <BoxContainer>
           {showLocationModal && (
             <LocationModal onClick={toggleShowLocationModal} />
           )}
           {/* {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />} */}
-          {showPointsModal && <PointsModal onClick={togglePointsModal} />}
-          {content}
+          {/* {showPointsModal && <PointsModal onClick={togglePointsModal} />} */}
+          {
+            filteredUserLikedLocations.length < 1 ?
+              <p>
+                No Liked Locations Yet,{" "}
+                <Button onClick={() => navigate(`/business-locations`)}>
+                  Add some here{" "}
+                </Button>{" "}
+              </p>
+            : <GridContainer>
+                {filteredUserLikedLocations.map((location, i) => (
+                    <LocationBox
+                      onClick={() => {
+                        navigate(`/location/${location?._id}`);
+                      }}
+                      location={location}
+                      key={i}
+                    />
+                  )
+                )};
+              </GridContainer>
+          }
         </BoxContainer>
       </Main>
     </Container>
@@ -275,6 +264,7 @@ const Container = styled.div`
 const Dashboard = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 16px;
   align-items: center;
   text-align: center;
   width: 320px;
@@ -286,7 +276,7 @@ const Dashboard = styled.div`
   border-top: 0;
   border-right: 2px solid transparent;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-  padding-top: 120px;
+  padding-top: 100px;
 
   z-index: 10;
   &:nth-child(5) div {
@@ -319,5 +309,20 @@ const Main = styled.div`
   @media (max-width: 1150px) {
     margin-left: 0;
     width: 100%;
+  }
+`;
+
+export const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  gap: 24px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+    place-items: center;
   }
 `;

@@ -15,7 +15,6 @@ import {
 import {
   useGetStatesQuery,
   useLazyGetCityQuery,
-  useLazyGetLandmarksQuery,
   useLazyGetLgaQuery,
 } from "../../redux/Api/geoApi";
 import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
@@ -28,12 +27,10 @@ const Flex = styled(Box)({
 
 const Register = () => {
   const { data: states } = useGetStatesQuery();
-  const { data: categories, isLoading: getCategoriesLoading } =
-    useGetCategoriesQuery();
+  const { data: categories, isLoading: getCategoriesLoading } = useGetCategoriesQuery();
 
   const [getCity, { data: city }] = useLazyGetCityQuery();
   const [getLga, { data: lga }] = useLazyGetLgaQuery();
-  const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
   const [subData, setSubData] = useState([]);
   const [loading, setIsLoading] = useState(false);
 
@@ -50,8 +47,7 @@ const Register = () => {
     businessLocationImages: [],
     cacRegistrationProof: [],
     proofOfAddress: [],
-    businessPriceRangeFrom: "",
-    businessPriceRangeTo: "",
+    businessPriceRange: "",
   });
   const navigate = useNavigate();
   const userType = useSelector((state) => state.auth.userType);
@@ -73,7 +69,8 @@ const Register = () => {
   ] = useCompleteBusinessRegistrationMutation();
 
   useEffect(() => {
-    if (isSuccess && businessData?.user) {
+    console.log(businessData);
+    if (businessData?.user) {
       setBusinessInfo((prevInfo) => ({ ...prevInfo, ...businessData.user }));
       if (businessData?.user?.businessVerified === "verified") {
         if (businessData?.user?.addedCard === true) {
@@ -113,7 +110,6 @@ const Register = () => {
       [field]: value,
     }));
   };
-  console.log(businessInfo);
 
   const handleFileDrop = (acceptedFiles, field) => {
     console.log(acceptedFiles);
@@ -261,28 +257,17 @@ const Register = () => {
               <label htmlFor="businessPriceRange">
                 Price Range <span>*</span>
               </label>
-              <div className="flex gap-[1rem] items-center">
-                <input
-                  id="businessPriceRangeFrom"
-                  // value={businessInfo?.expiryDate}
-                  onChange={(e) =>
-                    handleChange("businessPriceRangeFrom", e.target.value)
-                  }
-                  type="number"
-                  min={1}
-                  placeholder="from"
-                />
-                <input
-                  id="businessPriceRangeFromTo"
-                  // value={businessInfo?.cvv}
-                  type="number"
-                  min={1}
-                  onChange={(e) =>
-                    handleChange("businessPriceRangeFromTo", e.target.value)
-                  }
-                  placeholder="to"
-                />
-              </div>
+              <Select
+                placeholder="Select Your Price Range"
+                className="w-full mt-3"
+                options={[
+                  { value: "free", label: "free" },
+                  { value: "free - 5k", label: "free - 5k" },
+                  { value: "5k - 10k", label: "5k - 10k" },
+                  { value: "10k - 20k", label: "10k - 20k" },
+                ]}
+                onSelect={(value) => handleChange("businessPriceRange", value)}
+              />
             </div>
           </div>
           <div className="col-md-6">
@@ -308,7 +293,7 @@ const Register = () => {
                   onSelect={(value) => {
                     getLga({ state: value.toUpperCase() });
                     getCity({ state: value.toUpperCase() });
-                    getLandMarks({ state: value.toUpperCase() });
+                    // getLandMarks({ state: value.toUpperCase() });
                     handleChange("businessState", value);
                   }}
                   // value={queryData.state}

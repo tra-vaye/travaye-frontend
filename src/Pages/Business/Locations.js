@@ -32,11 +32,11 @@ const Locations = () => {
   // const [searchFilter, setSearchFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [locations, setLocations] = useState([]);
-  const [subData, setSubData] = useState([]);
-  const [selectedCategories, updateSelectedCategories] = useState([]);
-  const [selectedLocations, updateSelectedLocations] = useState(["All"]);
-  const { data: locationCategories } = useGetCategoriesQuery();
-  const { data: states } = useGetStatesQuery();
+  // const [subData, setSubData] = useState([]);
+  // const [selectedCategories, updateSelectedCategories] = useState([]);
+  const [selectedLocationStates, updateSelectedLocationStates] = useState(["All"]);
+  // const { data: locationCategories } = useGetCategoriesQuery();
+  // const { data: states } = useGetStatesQuery();
 
   // Categories and locationCity are queries for the backend and they are in array formats
   // I am joining every element in the array using .join() to make the request query a single query in a request to avoid server overload
@@ -45,10 +45,7 @@ const Locations = () => {
   const { data, isError, error, isLoading } = useGetLocationsQuery({
     page: 1,
     count: 10,
-    categories: selectedCategories
-      .map((category) => category.toLowerCase().replace(/\s+/g, "-"))
-      .join(","),
-    locationCity: selectedLocations.join(","),
+    // locationCity: selectedLocationStates.join(","),
   });
   const navigate = useNavigate();
 
@@ -65,10 +62,6 @@ const Locations = () => {
     }
   }, [data, error?.error, isError]);
 
-  const toggleSidebar = () => {
-    setShowSidebar((prevState) => !prevState);
-  };
-
   useEffect(() => {
     if (searchTerm) {
       const searched = data?.data.filter((loc) => loc.businessName.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -76,27 +69,32 @@ const Locations = () => {
     } else {
       data && setLocations(data?.data);
     }
-  }, [searchTerm, setLocations, data]);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    const loweredStates = selectedLocationStates.map(el => el.toLowerCase());
+    const filtered = data?.data.filter((locate) => loweredStates.includes(locate.locationState.toLowerCase()));
+    // console.log(filtered);
+    selectedLocationStates[0] === 'All' ? setLocations(data?.data)
+    : setLocations(filtered);
+  }, [selectedLocationStates, data]);
 
   return (
     <Container>
-      {showSidebar && (
-        <BackDrop onClick={toggleSidebar} showSidebar={showSidebar} />
-      )}
       {isLoading ? (
         <Loader />
       ) : (
         <>
-          <div className="main">
+          <div className="main w-full ">
             <Heading>
               <h4>Businesses and Locations</h4>
-              <MenuOpenIcon onClick={toggleSidebar} />
+              {/* <MenuOpenIcon onClick={toggleSidebar} /> */}
             </Heading>
             <SearchContainer>
               <div className="relative flex-1">
                 <input
                   value={searchTerm}
-                  placeholder="Search Locations"
+                  placeholder="Search Location by name..."
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border-none bg-transparent w-full ps-8 md:ps-10 text-lg placeholder:text-[#d1d1d1] outline-none"
                 />
@@ -108,19 +106,17 @@ const Locations = () => {
                     <FilterButton
                       value={filter}
                       key={filter}
-                      active={selectedLocations.includes(filter)}
+                      active={selectedLocationStates.includes(filter)}
                       onClick={() => {
                         if (filter !== "All") {
-                          if (selectedLocations.includes(filter)) {
-                            updateSelectedLocations((prevState) => prevState.filter((value) => value !== filter));
+                          if (selectedLocationStates.includes(filter)) {
+                            updateSelectedLocationStates((prevState) => prevState.filter((value) => value !== filter));
                           } else {
-                            updateSelectedLocations((prevState) => {
-                              const newArray = prevState.filter((value) => value !== "All");
-                              return [...newArray, filter];
-                            });
+                            const newArray = selectedLocationStates.filter((value) => value !== "All");
+                            updateSelectedLocationStates([...newArray, filter]);
                           }
                         } else {
-                          updateSelectedLocations(["All"]);
+                          updateSelectedLocationStates(['All']);
                         }
                       }}
                     >
@@ -132,7 +128,7 @@ const Locations = () => {
             </SearchContainer>
             <div className="mt-5">
               <div>
-                <h6 style={{ color: "#e9a009" }}>Locations</h6>
+                <h6 style={{ color: "#e9a009" }} className="text-xl font-bold">Locations</h6>
                 <GridContainer>
                   {locations?.map((location, i) => {
                     return (
@@ -150,7 +146,7 @@ const Locations = () => {
               </div>
             </div>
           </div>
-          <SideBar showSidebar={showSidebar}>
+          {/* <SideBar showSidebar={showSidebar}>
             <h6>Categories</h6>
             <ul>
               {categories.map((category, i) => {
@@ -242,7 +238,7 @@ const Locations = () => {
             </div>
             <span className="text-[#009F57]">Rating</span>
             <Rate value={0} />
-          </SideBar>
+          </SideBar> */}
         </>
       )}
     </Container>
@@ -256,10 +252,6 @@ const Container = styled.div`
   z-index: 30;
   padding: 2% 5%;
   display: flex;
-  
-  .main {
-    width: calc(100% - 280px);
-  }
 
   p {
     font-weight: 600;
@@ -276,14 +268,6 @@ const Container = styled.div`
   ul {
     padding-inline-start: 0;
     list-style-type: none;
-  }
-
-  @media (max-width: 1000px) {
-    width: 100%;
-    
-    .main {
-      width: 100%;
-    }
   }
 `;
 
@@ -304,38 +288,6 @@ const Heading = styled.div`
   }
   @media (max-width: 840px) {
     flex-direction: column;
-  }
-`;
-
-const CategoryListItem = styled.li`
-  cursor: pointer;
-  margin-bottom: 10px;
-  color: ${(props) => (props.active ? "#e9a009" : "black")};
-  white-space: nowrap;
-`;
-
-const SideBar = styled.div`
-  position: fixed;
-  right: 0;
-  top: 0;
-  background: #ffffff;
-  box-shadow: -4px 0px 20px rgba(0, 0, 0, 0.08);
-  width: 280px;
-  height: 100%;
-  padding: 3%;
-  padding-top: 140px;
-  z-index: 20;
-  overflow-y: scroll;
-  
-  h6 {
-    margin-bottom: 20px;
-    font-weight: 700;
-  }
-
-  @media (max-width: 840px) {
-    /* display: none; */
-    display: ${(props) => props.showSidebar ? "block" : "none"};
-    z-index: 300;
   }
 `;
 
@@ -384,15 +336,16 @@ const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   width: 100%;
+  gap: 24px;
 
   @media (max-width: 1260px) {
     grid-template-columns: repeat(3, 1fr);
   }
   @media (max-width: 1030px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   @media (max-width: 840px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
   @media (max-width: 730px) {
     grid-template-columns: repeat(2, 1fr);
@@ -402,38 +355,3 @@ const GridContainer = styled.div`
     place-items: center;
   }
 `;
-
-
-{/* <FilterButtonContainer>
-  {filters.map((filter, i) => {
-    return (
-      <FilterButton
-        key={i}
-        active={selectedLocations.includes(filter)}
-        onClick={() => {
-          if (filter !== "All") {
-            if (selectedFilters.includes(filter)) {
-              updateSelectedFilters((prevState) => {
-                return prevState.filter(
-                  (value) => value !== filter
-                );
-              });
-            } else {
-              updateSelectedFilters((prevState) => {
-                const newArray = prevState.filter(
-                  (value) => value !== "All"
-                );
-                return [...newArray, filter];
-              });
-            }
-          } else {
-            updateSelectedFilters(["All"]);
-          }
-          console.log(selectedFilters);
-        }}
-      >
-        {filter}
-      </FilterButton>
-    );
-  })}
-</FilterButtonContainer> */}

@@ -29,7 +29,6 @@ const PlanTrip = () => {
   const { data: categories } = useGetCategoriesQuery();
   const [getCity, { data: city }] = useLazyGetCityQuery();
   // const [getLga, { data: lga }] = useLazyGetLgaQuery();
-  const [getLandMarks, { data: landmarks }] = useLazyGetLandmarksQuery();
   const [planTrip, { isLoading }] = useLazyPlanATripQuery();
   const [queryData, setQueryData] = useState({
     state: "",
@@ -47,8 +46,6 @@ const PlanTrip = () => {
     e.preventDefault();
     navigate("/locations", { state: queryData });
   };
-
-  console.log(categories);
 
   return (
     <div className=" ">
@@ -84,7 +81,6 @@ const PlanTrip = () => {
                 setCities(obj.cities.map((city) => ({value:city, label: city})));
                 setLga(obj.lgas.map((d) => ({value: d, label: d})));
               }}
-              // value={queryData.state}
               showSearch
               className="!w-[250px]"
               options={data?.map((d, index) => ({value: d.state, label: d.state, index, cities: d.cities, lgas: d.lgas}))}

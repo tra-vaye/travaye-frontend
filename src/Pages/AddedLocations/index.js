@@ -17,11 +17,11 @@ const AddedLocations = () => {
   console.log(locations);
   return (
     <Container>
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-end mb-24">
         <h4>My Added Locations</h4>
-        <Progress step={2} />
+        <Progress step={3} />
       </div>
-      <div>
+      <div className="">
         {locations?.map((e) => (
           <Card>
             <div className="row">
@@ -61,7 +61,7 @@ const AddedLocations = () => {
         ))}
       </div>
 
-      <footer className="row sticky bottom-0 bg-white py-[2%] shadow-md">
+      <footer className="row fixed left-0 right-0 w-screen border-red-600 border bottom-0 bg-white px-[5%] py-[2%] shadow-md">
         <div className="col-md-3">
           <Title>Total Added Locations</Title>
           <Value>{locations?.length} Locations</Value>

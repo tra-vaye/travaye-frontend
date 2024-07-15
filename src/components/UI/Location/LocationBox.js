@@ -1,6 +1,8 @@
+import { IoIosStar } from "react-icons/io";
 import styled from "styled-components";
 
 const LocationBox = (props) => {
+  // console.log(props.location);
   return (
     <Box
       onClick={props.onClick}
@@ -8,15 +10,19 @@ const LocationBox = (props) => {
       className="flex flex-col"
     >
       <img
-        src={props.location.businessLocationImages[0]}
+        src={props.location?.businessLocationImages?.[0] || props.location?.locationImagePath?.[0]}
         alt="location"
         className="img-fluid !w-[250px] h-[216px]"
       />
       <h6 className="mt-2 font-extrabold text-lg ">
-        {props.location.businessName}
+        {props.location?.business?.businessName}
       </h6>
-      <div className=" flex content-between flex-wrap break-words">
-        <p>{props.location.businessAddress}</p>
+      <div className=" flex content-between justify-between">
+        <p>{props.location?.business?.businessAddress}</p>
+        <div className="flex items-center">
+          <p className="!text-[#009f57] font-bold !text-xl">{props.location?.locationRating}</p>
+          <IoIosStar fill="#E9A309" size={24} />
+        </div>
       </div>
     </Box>
   );
@@ -24,16 +30,13 @@ const LocationBox = (props) => {
 
 export default LocationBox;
 
-const Box = styled.div`
-  min-width: 210px;
-  padding: 10px;
-  margin-bottom: 25px;
+const Box = styled.article`
+  width: 100%;
+  padding: 12px;
   background-color: rgb(255, 254, 252);
   border-radius: 15px;
-  width: ${(props) => props.search && "190px"};
-  box-shadow: ${(props) =>
-    props.search && "0px 8px 16px rgba(0, 159, 87, 0.12)"};
-  transform: scale(0.9);
+  box-shadow: 0px 8px 16px rgba(0, 159, 87, 0.12);
+  /* transform: scale(0.9); */
   cursor: pointer;
 
   div {

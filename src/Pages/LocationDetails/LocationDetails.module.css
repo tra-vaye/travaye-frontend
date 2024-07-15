@@ -2,15 +2,6 @@
   padding: 5%;
 }
 
-.location figure {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.location figure img {
-  width: 100%;
-}
 .location a {
   text-decoration: none;
 }
@@ -22,8 +13,7 @@
   color: #009f57;
 }
 
-.location h6,
-.location figcaption {
+.location h6 {
   font-weight: 600;
   font-size: 17px;
   line-height: 28px;

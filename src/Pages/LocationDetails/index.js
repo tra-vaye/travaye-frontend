@@ -23,7 +23,10 @@ import { Image, Input, notification } from 'antd';
 import Dropzone from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useUserLoginMutation } from '../../redux/Api/authApi';
+// import { useUserLoginMutation } from '../../redux/Api/authApi';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import "swiper/css/bundle";
+import { EffectCards, Navigation } from 'swiper';
 const { TextArea } = Input;
 
 const LocationDetails = () => {
@@ -40,8 +43,7 @@ const LocationDetails = () => {
 	const [rating, setRating] = useState(2);
 
 	const [location, setLocation] = useState({});
-	const [addLocationToLikedLocations, { isLoading: likeLocationLoading }] =
-		useAddLocationToLikedLocationsMutation();
+	const [addLocationToLikedLocations, { isLoading: likeLocationLoading }] = useAddLocationToLikedLocationsMutation();
 	const [
 		reviewLocation,
 		{
@@ -60,6 +62,7 @@ const LocationDetails = () => {
 
 	useEffect(() => {
 		if (data) {
+			console.log(data);
 			setLocation(data);
 		}
 		if (isError || reviewIsError) {
@@ -99,7 +102,6 @@ const LocationDetails = () => {
 		await reviewLocation(formData);
 	};
 
-	console.log(location, userData);
 	const handleAddClick = () => {
 		addLocationToLikedLocations({ locationName: location._id });
 	};
@@ -127,28 +129,34 @@ const LocationDetails = () => {
 				<Loader />
 			) : (
 				<>
-					{' '}
+					{/* {' '} */}
 					<div className="row">
 						<div className="col-md-6">
-							<figure>
-								<img
-									src={
-										location.businessLocationImages
-											? location.businessLocationImages[0]
-											: Maryland
-									}
-									alt="poster"
-								/>
-								<figcaption>
-									Please scroll/swipe to see additional images
-								</figcaption>
-							</figure>
+							<Swiper
+								className=''
+								slidesPerView={1}
+								modules={[ Navigation ]}
+								spaceBetween={20}
+								loop={true}
+								navigation
+							>
+								{
+									location?.businessLocationImages?.map((imag, i) => (
+										<SwiperSlide key={i}>
+											<img src={imag} className='w-[28rem]' alt={`Poster ${i+1}`} />
+										</SwiperSlide>
+									))
+								}
+							</Swiper>
+							<p>
+								Please scroll/swipe to see additional images
+							</p>
 						</div>
 						<div className={`col-md-6 ${classes.details}`}>
 							<div>
 								<h4>{location?.businessName}</h4>
 								<h6>{location?.businessAddress}</h6>
-								<h6>{location?.businessCategory}</h6>
+								<h6>{location?.businessCategory?.split("-").join(" ")}</h6>
 								<h6>{location?.businessRangeFrom}</h6>
 								<h6>0{location?.businessTelephone}</h6>
 							</div>
@@ -188,9 +196,7 @@ const LocationDetails = () => {
 					</div>
 					<div
 						className={`${classes.reviewContainer} 
-           ${
-							userType === 'user' ? `row` : `flex justify-center`
-						} mt-5 px-4 py-3`}
+           				${userType === 'user' ? `row` : `flex justify-center`} mt-5 px-4 py-3`}
 					>
 						{userType === 'user' && (
 							<div className="col-md-6">
@@ -281,6 +287,7 @@ const LocationDetails = () => {
 							<Review className={`flex flex-wrap gap-4`}>
 								{location && location?.reviews?.length > 0 ? (
 									location?.reviews?.map((review, i) => {
+										console.log(review);
 										return (
 											<ReviewCard>
 												<div>

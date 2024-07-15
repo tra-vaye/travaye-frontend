@@ -1,5 +1,4 @@
 import { Suspense, lazy, useState } from "react";
-
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import Home from "./Pages/Home/Home";
@@ -74,7 +73,7 @@ function App() {
   const toggleSideNav = () => {
     setShowSideNav((prevState) => !prevState);
   };
-  // const token = sessionStorage.getItem("authToken");g
+
   const userType = sessionStorage.getItem("userType");
 
   return (
@@ -84,20 +83,19 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/" element={<Main />} /> */}
           {<Route path="/login" element={<Login />} />}
           {<Route path="/signup" element={<SignUp />} />}
           {<Route path="/forgot-password" element={<ForgotPassword />} />}
           {<Route path="/reset-password" element={<ResetPassword />} />}
           <Route path="" element={<RequireAuth />}>
-            {userType === "user" && (
-              <Route path="/user" element={<UserProfile />} />
-            )}
-            {/* {userType === "business" && ( */}
             <Route path="/register" element={<Register />} />
-            {/* )} */}
-            {/* {userType === "business" && ( */}
-            <Route path="/business" element={<BusinessProfile />} />
+            {/* Redirect for both the /business page */}
+            {userType === "business" && (
+              <Route path="/business" element={<BusinessProfile />} />
+            )}
+            {userType === "user" && (
+              <Route path="/business" element={<Navigate to='/user' />} />
+            )}
 
             {userType === "business" &&  (
               <Route path="/settings" element={<BusinessSettings />} />
@@ -105,18 +103,17 @@ function App() {
             {userType === "user" &&  (
               <Route path="/settings" element={<UserSettings />} />
             )}
-            {userType === "business" &&  (
-              <Route path="/settings" element={<BusinessProfile />} />
-            )}
-            {userType === "business" && (
-              <Route path="/subscribe" element={<Subscribe />} />
-            )}
+
             {/* Redirect to the appropriate route if user tries to access the wrong route */}
+            {userType === "user" && (
+              <Route path="/user" element={<UserProfile />} />
+            )}
             {userType === "business" && (
               <Route path="/user" element={<Navigate to='/business' />} />
             )}
-            {userType === "user" && (
-              <Route path="/business" element={<BusinessProfile />} />
+
+            {userType === "business" && (
+              <Route path="/subscribe" element={<Subscribe />} />
             )}
             <Route path="/plan-a-trip" element={<PlanTrip />} />
             <Route path="/verify-email" element={<Verification />} />
@@ -124,28 +121,31 @@ function App() {
             <Route path="/location/map" element={<Maps />} />
             <Route path="/added-locations" element={<AddedLocations />} />
           </Route>
-          {/* <Route
-            path="/user"
-            element={
-              token ? <UserProfile /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/plan-a-trip"
-            element={token ? <PlanTrip /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/location/:id"
-            element={
-              token ? <LocationDetails /> : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/added"
-            element={
-              token ? <AddedLocations /> : <Navigate to="/login" />
-            }
-          /> */}
+          <>
+          
+            {/* <Route
+              path="/user"
+              element={
+                token ? <UserProfile /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="/plan-a-trip"
+              element={token ? <PlanTrip /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/location/:id"
+              element={
+                token ? <LocationDetails /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="/added"
+              element={
+                token ? <AddedLocations /> : <Navigate to="/login" />
+              }
+            /> */}
+          </>
           <Route path="/business-locations" element={<BusinessLocations />} />
           <Route path="/locations" element={<Locations />} />
           <Route path="/verify-email" element={<Verification />} />

@@ -12,7 +12,7 @@ import { Button } from "../../components/UI/Buttons";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
-import { useUpdateProfilePhotoMutation } from "../../redux/Api/authApi";
+import { useGetMeQuery, useUpdateProfilePhotoMutation } from "../../redux/Api/authApi";
 import { IoIosCamera } from "react-icons/io";
 
 const BusinessProfile = () => {
@@ -28,10 +28,6 @@ const BusinessProfile = () => {
   };
   const toggleNewLocationModal = () => {
     setNewLocationModal((prevState) => !prevState);
-  };
-
-  const togglePointsModal = () => {
-    setShowPointsModal((prevState) => !prevState);
   };
   const [firstVisit, setFirstVisit] = useState(true);
 
@@ -50,16 +46,13 @@ const BusinessProfile = () => {
       .join(","),
     locationCity: selectedFilters.join(","),
   });
-
-  // const {
-  //   data: userData,
-  //   isSuccess: userSuccess,
-  //   refetch: refetchUserData,
-  // } = useGetMeQuery({
-  //   userType: userType,
-  // });
-  const userData = useSelector((store) => store.auth.user)?.payload;
-  const [userInfo, setUserInfo] = useState();
+  const [userData, setuserData] = useState({});
+  const {
+    data: businessData
+    // isSuccess:,
+    // isLoading,
+    // refetch,
+  } = useGetMeQuery({ userType });
 
   useEffect(() => {
     if (isSuccess) {
@@ -75,6 +68,8 @@ const BusinessProfile = () => {
   }, [data, error, isError, isSuccess, locations]);
 
   useEffect(() => {
+    console.log(businessData);
+    setuserData(businessData.user);
     if (userData) {
       if (userData?.businessVerified === "verified") {
         navigate(`/${userType}`);
@@ -95,14 +90,13 @@ const BusinessProfile = () => {
         // refetchUserData();
 
         // Navigate to the verification page
-        navigate("/register");
+        // navigate("/register");
       }
     }
   }, [userData, navigate, userType]);
 
-  const userLikedLocations = userData?.user?.likedLocations?.map(
-    (likedLocationName) =>
-      locations?.find((location) => location.locationName === likedLocationName)
+  const userLikedLocations = userData?.user?.likedLocations?.map((likedLocationName) =>
+    locations?.find((location) => location.locationName === likedLocationName)
   );
 
   const userId = sessionStorage.getItem("user_id");
@@ -110,21 +104,12 @@ const BusinessProfile = () => {
     return location.locationAddedBy === userId;
   });
 
-  let content;
-
-  // if (userLocations?.length < 1) {
-  //   content = <p>No Location Added Yet</p>;
-  // } else {
-  //   content = userLocations?.map((location, i) => {
-  //     return <LocationBox location={location} key={i} />;
-  //   });
-  // }
-  let allReviews = [];
-  locations?.map((location) => {
-    if (location.locationAddedBy === userData._id) {
-      allReviews = [...allReviews, ...location.reviews];
-    }
-  });
+  // let allReviews = [];
+  // locations?.map((location) => {
+  //   if (location.locationAddedBy === userData._id) {
+  //     allReviews = [...allReviews, ...location?.reviews];
+  //   }
+  // });
 
   return (
     <Container>
@@ -155,10 +140,8 @@ const BusinessProfile = () => {
           />
         </div>
         <div>
-          <h5 className="mt-5">{userData?.businessName}</h5>
-          <h6 className="mt-1" usernamame={true}>
-            {`${userData?.businessEmail}`}
-          </h6>
+          <h4 className="mt-3">{userData?.businessName}</h4>
+          <h6 className="mt-2 text-[#E9A309] text-lg">{userData?.businessEmail}</h6>
           <h6 className="mt-1">{`${userData?.businessCategory
             ?.split("-")
             ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -207,9 +190,9 @@ const BusinessProfile = () => {
           </div>
           {/* Check the length of businessLocationImages array */}
           {userData?.businessLocationImages &&
-            userData?.businessLocationImages.length > 0 && (
+            userData?.businessLocationImages?.length > 0 && (
               <div className="md:grid md:grid-cols-3  gap-3 flex flex-wrap flex-auto h-auto">
-                {userData?.businessLocationImages.length === 1 ? (
+                {userData?.businessLocationImages?.length === 1 ? (
                   // If there is only one image, render a single image
                   <Image
                     src={userData?.businessLocationImages[0]}
@@ -254,8 +237,8 @@ const BusinessProfile = () => {
                 </div>
               </div>
               <Review className={`flex flex-wrap gap-4 flex-1`}>
-                {userData?.reviews.length > 0 ? (
-                  userData?.reviews.map((review, i) => {
+                {userData?.reviews?.length > 0 ? (
+                  userData?.reviews?.map((review, i) => {
                     return (
                       <ReviewCard className="flex-[1_0_30%]" key={i}>
                         <div>
@@ -384,7 +367,7 @@ const Dashboard = styled.div`
   padding-top: 70px;
   z-index: 10;
   ::-webkit-scrollbar {
-    width: 12px; /* Set the width of the scrollbar */
+    width: 10px; /* Set the width of the scrollbar */
   }
 
   ::-webkit-scrollbar-thumb {
@@ -397,6 +380,12 @@ const Dashboard = styled.div`
   }
   &:nth-child(5) div {
     margin-top: 1rem;
+  }
+
+  h4 {
+    color: #9D9D9D;
+    font-weight: 700;
+    font-size: 24px;
   }
 
   h5 {

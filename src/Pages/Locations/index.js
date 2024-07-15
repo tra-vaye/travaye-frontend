@@ -15,7 +15,14 @@ import Progress from '../../components/UI/Progress';
 const Locations = () => {
 	const { state } = useLocation();
 	const navigate = useNavigate();
-	const { data: locations } = useGetLocationsQuery();
+	console.log({state});
+	const { data: locations } = useGetLocationsQuery({
+		page: 1,
+    	count: 10,
+		categories: state.category
+			.map((category) => category.toLowerCase().replace(/\s+/g, "-"))
+			.join(","),
+	});
 	const [planATrip, { isLoading, data }] = useLazyPlanATripQuery();
 	useEffect(() => {
 		planATrip(state)
@@ -36,7 +43,7 @@ const Locations = () => {
 			<Container>
 				<div className="d-flex justify-content-between mt-5 align-items-center ">
 					<h3>Locations</h3>
-					<Progress step={3} />
+					<Progress step={2} />
 				</div>
 				<div>
 					{data?.data.map((e, i) => (

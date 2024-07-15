@@ -11,9 +11,9 @@ import { FaEyeSlash } from "react-icons/fa6";
 
 import classes from "./Login.module.css";
 
-import { businessLoginSchema, userLoginSchema } from "../../schemas";
+// import { businessLoginSchema, userLoginSchema } from "../../schemas";
 
-import { notification, message } from "antd";
+import { notification } from "antd";
 import {
   useBusinessLoginMutation,
   useUserLoginMutation,
