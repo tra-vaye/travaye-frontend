@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { Select, notification } from 'antd';
+import { Input, Select, notification } from 'antd';
 import { useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { useSelector } from 'react-redux';
@@ -12,19 +12,17 @@ import {
 	useCompleteBusinessRegistrationMutation,
 	useGetMeQuery,
 } from '../../redux/Api/authApi';
-import { useLazyGetCityQuery, useLazyGetLgaQuery } from '../../redux/Api/geoApi';
+import { useLazyGetCityQuery, useLazyGetLgaQuery, useGetStatesQuery } from '../../redux/Api/geoApi';
 
-import {
-	useGetCategoriesQuery,
-	useGetBudgetsQuery,
-	useGetStatesQuery,
-} from '../../redux/Api/locationApi';
+import { useGetCategoriesQuery } from '../../redux/Api/locationApi';
 const Flex = styled(Box)({
 	display: 'flex',
 	alignItems: 'center',
 	gap: '1px',
 	flexWrap: 'wrap',
 });
+
+const { TextArea } = Input;
 
 const Register = () => {
   const { data: states } = useGetStatesQuery();
@@ -42,14 +40,14 @@ const Register = () => {
 		businessEmail: '',
 		businessAddress: '',
 		businessTelephone: '',
+    businessAbout: '',
 		businessLGA: '',
 		businessState: '',
 		businessCity: '',
 		businessLocationImages: [],
 		cacRegistrationProof: [],
 		proofOfAddress: [],
-		businessPriceRangeFrom: '',
-		businessPriceRangeTo: '',
+    businessBudget: '',
 	});
 	const navigate = useNavigate();
 	const userType = useSelector((state) => state.auth.userType);
@@ -113,14 +111,14 @@ const Register = () => {
 	};
 
 	const handleFileDrop = (acceptedFiles, field) => {
-		console.log(acceptedFiles);
+		// console.log(acceptedFiles);
 		setBusinessInfo((prevInfo) => ({
 			...prevInfo,
 			[field]: [...acceptedFiles],
 		}));
 	};
 	const handleLocationImagesFileDrop = (acceptedFiles, field) => {
-		console.log(acceptedFiles);
+		// console.log(acceptedFiles);
 		setBusinessInfo((prevInfo) => ({
 			...prevInfo,
 			[field]: [...businessInfo.businessLocationImages, ...acceptedFiles],
@@ -129,11 +127,20 @@ const Register = () => {
 
 	useEffect(() => {
 		if (isError) {
-			notification.error({
-				message: error?.data?.error,
-				duration: 3,
-				placement: 'bottomRight',
-			});
+      // console.log(error.data.error);
+      if (error.data.error[0].message) {
+        notification.error({
+          message: error.data.error[0].message,
+          duration: 3,
+          placement: 'bottomRight',
+        });
+      } else {
+        notification.error({
+          message: error.data.error,
+          duration: 3,
+          placement: 'topRight',
+        });
+      }
 		}
 		if (completeBusinessSuccess) {
 			notification.success({
@@ -146,6 +153,7 @@ const Register = () => {
 	}, [isError, error, completeBusinessSuccess, userType, navigate]);
 
 	const handleSubmit = async (e) => {
+    e.preventDefault();
 		setIsLoading(true);
 		const formData = new FormData();
 		Object.entries(businessInfo).forEach(([key, value]) => {
@@ -160,8 +168,7 @@ const Register = () => {
 		businessInfo.proofOfAddress.forEach((file) => {
 			formData.append('proofOfAddress', file);
 		});
-		console.log(formData);
-		e.preventDefault();
+		// console.log(formData);
 		await completeBusiness(formData);
 		setIsLoading(false);
 	};
@@ -207,7 +214,7 @@ const Register = () => {
 									);
 								}}
 							>
-								<option value="" disabled selected>
+								<option value="default" disabled>
 									Select a category
 								</option>
 								{categories?.map((category, i) => (
@@ -225,17 +232,18 @@ const Register = () => {
               <select
                 required={true}
                 id="subCategory"
+                value={businessInfo.businessSubCategory}
                 onChange={(e) =>
                   handleChange("businessSubCategory", e.target.value)
                 }
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Select a Sub-category
                 </option>
                 {subData?.map((category, i) => (
                   <option
                     value={category.value}
-                    selected={i === 0 ? true : false}
+                    // selected={i === 0 ? true : false}
                     key={i}
                   >
                     {category.label}
@@ -255,21 +263,18 @@ const Register = () => {
               />
             </div>
             <div>
-              <label htmlFor="businessPriceRange">
-                Price Range <span>*</span>
+              <label htmlFor="email">
+                About Business<span>*</span>
               </label>
-              <Select
-                placeholder="Select Your Price Range"
-                className="w-full mt-3"
-                options={[
-                  { value: "free", label: "free" },
-                  { value: "free - 5k", label: "free - 5k" },
-                  { value: "5k - 10k", label: "5k - 10k" },
-                  { value: "10k - 20k", label: "10k - 20k" },
-                ]}
-                onSelect={(value) => handleChange("businessPriceRange", value)}
+              <TextArea
+                placeholder="Write about your business"
+                rows="4"
+                name="businessAbout"
+                value={businessInfo.businessAbout}
+                required
+                onChange={(e) => handleChange("businessAbout", e.target.value)}
               />
-            </div>
+              </div>
           </div>
           <div className="col-md-6">
             <div>
@@ -294,12 +299,11 @@ const Register = () => {
                   onSelect={(value) => {
                     getLga({ state: value.toUpperCase() });
                     getCity({ state: value.toUpperCase() });
-                    // getLandMarks({ state: value.toUpperCase() });
                     handleChange("businessState", value);
                   }}
                   // value={queryData.state}
                   // showSearch
-                  className="!w-[150px]"
+                  className="flex-1"
                   options={states}
                 />
                 <Select
@@ -309,7 +313,7 @@ const Register = () => {
                     handleChange("businessCity", value);
                   }}
                   // value={queryData.city}
-                  className="!w-[150px]"
+                  className="flex-1"
                   options={city}
                 />
                 <Select
@@ -319,7 +323,7 @@ const Register = () => {
                     handleChange("businessLGA", value);
                   }}
                   // value={queryData.lga}
-                  className="!w-[150px]"
+                  className="flex-1"
                   options={lga}
                 />
               </div>
@@ -336,6 +340,22 @@ const Register = () => {
                 onChange={(e) =>
                   handleChange("businessTelephone", e.target.value)
                 }
+              />
+            </div>
+            <div>
+              <label htmlFor="businessBudget">
+                Price Range <span>*</span>
+              </label>
+              <Select
+                placeholder="Select Your Price Range"
+                className="w-full mt-3"
+                options={[
+                  { value: "free", label: "free" },
+                  { value: "free - 5k", label: "free - 5k" },
+                  { value: "5k - 10k", label: "5k - 10k" },
+                  { value: "10k - 20k", label: "10k - 20k" },
+                ]}
+                onSelect={(value) => handleChange("businessBudget", value)}
               />
             </div>
           </div>
@@ -506,7 +526,7 @@ const Container = styled.div`
 		font-size: 15px;
 	}
 	input,
-	select {
+	select, textarea {
 		outline: none;
 		display: block;
 		width: 100%;

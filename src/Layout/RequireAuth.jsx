@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../redux/Slices/authSlice";
+import { Outlet } from "react-router-dom";
+// import { logout } from "../redux/Slices/authSlice";
 import { useGetMeQuery } from "../redux/Api/authApi";
 import Loader from "../components/UI/Loader";
 import { useSelector } from "react-redux";

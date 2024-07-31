@@ -81,3 +81,10 @@ body {
 .swiper-pagination-bullet {
   background-color: rgb(255, 255, 255) !important;
 }
+
+.iconBg {
+  background-image: url("./assets/landing-bg.png");
+  background-position: left top;
+  background-repeat: repeat-y;
+  background-size: contain;
+}

@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseUrl = process.env.REACT_APP_SERVER_URL;
 export const GeoApi = createApi({
   reducerPath: "GeoApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://nigeria-states-towns-lga.onrender.com/api/",
+    baseUrl: baseUrl,
   }),
   refetchOnReconnect: true,
   refetchOnUpdateTimeout: 50000,
@@ -15,8 +16,8 @@ export const GeoApi = createApi({
       }),
       transformResponse: (res) => {
         const newList = res?.map((e) => ({
-          value: e?.name,
-          label: e?.name,
+          value: e?.state,
+          label: e?.state,
         }));
         return newList;
       },
@@ -35,12 +36,10 @@ export const GeoApi = createApi({
           return []; // Returns an empty array if stateName is not provided
         }
         const filteredResults = res.filter(
-          (item) => item.name.toLowerCase() === stateName
+          (item) => item.state.toLowerCase() === stateName
         );
-
-        return filteredResults.map((item) => ({
-          value: item.capital,
-          label: item.capital,
+        return filteredResults[0].cities.map((cit) => ({
+          value: cit, label: cit
         }));
       },
     }),
@@ -58,15 +57,24 @@ export const GeoApi = createApi({
       },
     }),
     getLga: builder.query({
-      query: (body) => ({
-        url: `${body?.state}/lgas`,
-      }),
-      transformResponse: (res) => {
-        const result = res.map((e) => ({
-          value: e.name,
-          label: e.name,
+      query: (body) => {
+        const stateName = body.state ?? undefined; // Checks for stateName in body object
+        return {
+          url: `states`,
+          stateName,
+        };
+      },
+      transformResponse: (res, meta, args) => {
+        const stateName = args.state.toLowerCase();
+        if (!stateName) {
+          return []; // Returns an empty array if stateName is not provided
+        }
+        const filteredResults = res.filter(
+          (item) => item.state.toLowerCase() === stateName
+        );
+        return filteredResults[0].lgas.map((cit) => ({
+          value: cit, label: cit
         }));
-        return result;
       },
     }),
   }),

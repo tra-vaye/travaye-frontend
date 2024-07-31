@@ -3,12 +3,6 @@
   padding: 50px 10px;
 }
 
-.landing > div {
-  background-image: url("../../assets/landing-bg.png");
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 .intro {
   font-weight: 700;
   font-size: 4rem;

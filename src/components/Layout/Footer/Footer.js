@@ -2,6 +2,7 @@ import classes from "./Footer.module.css";
 import WhiteLogo from "../../../assets/white-logo.png";
 import { FacebookIcon, TwitterIcon, InstaIcon } from "../../UI/svgs/svgs";
 import { Link } from "react-router-dom";
+import bgpic from '../../../assets/landing.png';
 
 const Links = [
   { name: "My Account", href: "/user" },
@@ -11,6 +12,7 @@ const Links = [
 const Footer = () => {
   return (
     <footer className={classes.footer}>
+      <div className={classes.bgPicture} />
       <div className="d-flex justify-content-around p-5">
         <div className="mb-4">
           <img src={WhiteLogo} alt="logo" className="img-fluid" />

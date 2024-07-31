@@ -1,17 +1,13 @@
 .signup {
   margin-top: 1rem;
   margin-bottom: 8%;
-  background-image: url("../../assets/landing-bg.png");
-  background-size: 50% auto;
-  background-position: left;
-  background-repeat: no-repeat;
 }
-.signup .intro {
+/* .signup .intro {
   background-image: url("../../assets/plain-logo.png");
   background-size: 30% auto;
   background-repeat: no-repeat;
   background-position: center;
-}
+} */
 .signup a {
   text-decoration: none;
 }

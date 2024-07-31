@@ -1,10 +1,6 @@
 .login {
   margin-top: 5%;
   margin-bottom: 8%;
-  background-image: url("../../assets/landing-bg.png");
-  background-position: left;
-  background-repeat: repeat-x;
-  background-size: contain;
 }
 .login a {
   text-decoration: none;

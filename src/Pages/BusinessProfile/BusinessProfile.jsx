@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../../assets/user-avatar.png";
-import { Button } from "../../components/UI/Buttons";
 import LocationModal from "../../components/UI/Modal/LocationModal";
 import NewLocation from "../../components/UI/Modal/NewLocation";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
@@ -19,17 +18,15 @@ const BusinessProfile = () => {
   const [updateProfile, { isLoading }] = useUpdateProfilePhotoMutation();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [newLocationModal, setNewLocationModal] = useState(false);
-  const [showPointsModal, setShowPointsModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const userType = useSelector((state) => state.auth.userType);
   const navigate = useNavigate();
   const toggleShowLocationModal = () => {
     setShowLocationModal((prevState) => !prevState);
   };
-  const toggleNewLocationModal = () => {
-    setNewLocationModal((prevState) => !prevState);
-  };
-  const [firstVisit, setFirstVisit] = useState(true);
+  // const toggleNewLocationModal = () => {
+  //   setNewLocationModal((prevState) => !prevState);
+  // };
 
   const toggleDashboard = () => {
     setShowDashboard((prevState) => !prevState);
@@ -37,7 +34,6 @@ const BusinessProfile = () => {
   const [selectedCategories, updateSelectedCategories] = useState([]);
   const [selectedFilters, updateSelectedFilters] = useState([]);
   const [locations, setLocations] = useState([]);
-  const location = useLocation();
   const { data, isError, error, isSuccess } = useGetLocationsQuery({
     page: 1,
     count: 10,
@@ -68,7 +64,7 @@ const BusinessProfile = () => {
   }, [data, error, isError, isSuccess, locations]);
 
   useEffect(() => {
-    console.log(businessData);
+    console.log(businessData.user);
     setuserData(businessData.user);
     if (userData) {
       if (userData?.businessVerified === "verified") {
@@ -104,13 +100,6 @@ const BusinessProfile = () => {
     return location.locationAddedBy === userId;
   });
 
-  // let allReviews = [];
-  // locations?.map((location) => {
-  //   if (location.locationAddedBy === userData._id) {
-  //     allReviews = [...allReviews, ...location?.reviews];
-  //   }
-  // });
-
   return (
     <Container>
       <Dashboard showDashboard={showDashboard}>
@@ -140,35 +129,33 @@ const BusinessProfile = () => {
           />
         </div>
         <div>
-          <h4 className="mt-3">{userData?.businessName}</h4>
-          <h6 className="mt-2 text-[#E9A309] text-lg">{userData?.businessEmail}</h6>
-          <h6 className="mt-1">{`${userData?.businessCategory
+          <h4 className="mt-2 text-2xl font-bold text-[#9d9d9d] px-3">{userData?.businessName}</h4>
+          <h6 className="mt-2 text-[#E9A309] text-lg font-medium">{userData?.businessEmail}</h6>
+          <h6 className="mt-1 text-[#9d9d9d] font-semibold">{userData?.businessCategory ? `${userData?.businessCategory
             ?.split("-")
             ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ")}`}</h6>
+            .join(" ")}` : "Parks and Recreation"}</h6>
         </div>
         <div>
-          <div>
-            <h5 className="mt-1 px-1">{userData?.address}</h5>
-            <p className="mt-1">
-              {userData?.occupation
-                ? userData?.occupation
-                : "  No Occupation Provided"}
-            </p>
+          <div className="mt-6">
+            <h3 className="">Address</h3>
+            <p className="mt-1">{userData?.businessAddress || "Funtasticaland, Ikorodu-Ososun Rd, Lagos 105102, Ikeja"}</p>
           </div>
-          {!userData?.businessName && (
-            <div className="mt-1">
-              <h5>Total Outings</h5>
-              <p>27 Outings</p>
-            </div>
-          )}
-          <div className="mt-1">
-            <h5>{userData?.fullName ? "Total Posts" : "User Visits"}</h5>
-            <p>{userData?.fullName ? "6 Posts" : "null"}</p>
+          <div className="mt-4">
+            <h3 className="">About</h3>
+            <p className="">{userData?.businessAbout || "Maryland Mall Cinemas is one of Nigeria's leading cinema developers and operators of multiplex cinemas in Nigeria."}</p>
           </div>
-          <div className="mt-1">
-            <h5>Average Review</h5>
-            <p>4.5 stars</p>
+          <div className="mt-4">
+            <h3>User Visits</h3>
+            <p>{userData.visits || "200"}</p>
+          </div>
+          <div className="mt-4">
+            <h3>Average Review</h3>
+            <p>{userData.reviewAverage || "4.5 "} stars</p>
+          </div>
+          <div className="my-4">
+            <h3>Price Range</h3>
+            <p>{userData.priceRange || "#5 - #10k"}</p>
           </div>
         </div>
       </Dashboard>
@@ -382,15 +369,16 @@ const Dashboard = styled.div`
     margin-top: 1rem;
   }
 
-  h4 {
-    color: #9D9D9D;
-    font-weight: 700;
-    font-size: 24px;
-  }
-
-  h5 {
+  h3 {
     color: #009f57;
     font-weight: 700;
+    font-size: 20px;
+  }
+
+  p {
+    color: #9d9d9d;
+    padding-inline: 30px;
+    margin-top: 6px;
   }
 
   svg {

@@ -2,7 +2,6 @@ import { Box, Rating, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import Maryland from '../../assets/mm-ticket-prices.png';
 import Avatar from '../../assets/user-avatar.png';
 import { AltButton, Button } from '../../components/UI/Buttons';
 import Loader from '../../components/UI/Loader';
@@ -26,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
 // import { useUserLoginMutation } from '../../redux/Api/authApi';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import "swiper/css/bundle";
-import { EffectCards, Navigation } from 'swiper';
+import { Navigation } from 'swiper';
 const { TextArea } = Input;
 
 const LocationDetails = () => {
@@ -130,10 +129,10 @@ const LocationDetails = () => {
 			) : (
 				<>
 					{/* {' '} */}
-					<div className="row">
-						<div className="col-md-6">
+					<div className="flex justify-center gap-8">
+						<div className="w-6/12">
 							<Swiper
-								className=''
+								className='!scale-100'
 								slidesPerView={1}
 								modules={[ Navigation ]}
 								spaceBetween={20}
@@ -143,26 +142,22 @@ const LocationDetails = () => {
 								{
 									location?.businessLocationImages?.map((imag, i) => (
 										<SwiperSlide key={i}>
-											<img src={imag} className='w-[28rem]' alt={`Poster ${i+1}`} />
+											<img src={imag} className='h-[25rem] rounded-lg border border-red-500' alt={`Poster ${i+1}`} />
 										</SwiperSlide>
 									))
 								}
 							</Swiper>
-							<p>
-								Please scroll/swipe to see additional images
-							</p>
+							<p className='text-center text-[#9D9D9D] font-semibold text-lg italic'>Please scroll/swipe to see additional images</p>
 						</div>
-						<div className={`col-md-6 ${classes.details}`}>
-							<div>
-								<h4>{location?.businessName}</h4>
-								<h6>{location?.businessAddress}</h6>
-								<h6>{location?.businessCategory?.split("-").join(" ")}</h6>
-								<h6>{location?.businessRangeFrom}</h6>
-								<h6>0{location?.businessTelephone}</h6>
-							</div>
-
-							<p className="my-3">{location?.businessDescription}</p>
-
+						<div className='w-5/12'>
+							<h4>{location?.businessName}</h4>
+							<h6>{location?.businessAddress}</h6>
+							<p className='my-7 text-black text-justify'>{location.businessAbout || "Maryland Mall Cinemas is one of Nigeria's leading cinema developers and operators of multiplex cinemas in Nigeria. The Only ScreenX Cinema with a state of the art spund system and 3D viewing pleasure just for you."}</p>
+							<h5 className='text-xl text-[#009f57] font-semibold mb-7'>
+								Ticket prices:{"  "}
+								<span className='text-black font-normal'>{location.businessBudget || "Free - 5k"}</span>
+							</h5>
+						
 							<div className="d-flex mb-3">
 								{userData?.likedLocations?.find(
 									(l) => l._id == location?._id
@@ -193,6 +188,7 @@ const LocationDetails = () => {
 								</Button>
 							</div>
 						</div>
+
 					</div>
 					<div
 						className={`${classes.reviewContainer} 
@@ -287,9 +283,8 @@ const LocationDetails = () => {
 							<Review className={`flex flex-wrap gap-4`}>
 								{location && location?.reviews?.length > 0 ? (
 									location?.reviews?.map((review, i) => {
-										console.log(review);
 										return (
-											<ReviewCard>
+											<ReviewCard key={i}>
 												<div>
 													<div className="flex items-center justify-between mb-3">
 														<ReviewUser>
@@ -319,7 +314,7 @@ const LocationDetails = () => {
 														>
 															{review?.reviewImagePaths?.map((image, key) => {
 																return (
-																	<div className={`flex-[1_0_30%] `}>
+																	<div className={`flex-[1_0_30%]`} key={key}>
 																		<Image
 																			src={image}
 																			width={'100%'}
@@ -406,6 +401,7 @@ const Review = styled.div`
 		background-color: #d9d9d9;
 	}
 `;
+
 const ReviewCard = styled.div`
 	background: #ffffff;
 	border: 2px solid rgba(0, 159, 87, 0.5);
@@ -420,6 +416,7 @@ const ReviewCard = styled.div`
 		line-height: 24px;
 	}
 `;
+
 const ReviewUser = styled.div`
 	display: flex;
 	gap: 1rem;
