@@ -13,16 +13,18 @@
   top: 55vh;
   left: 50%;
   z-index: 30000;
-  width: 30%;
+  /* width: 30%; */
   height: fit-content;
   background-color: #fff;
   border-radius: 25px;
   transform: translate(-50%, -50%);
-  padding: 30px;
+  padding: 30px 24px;
   color: #9d9d9d;
   font-weight: 600;
   font-size: 13px;
   line-height: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .overlay h3 {

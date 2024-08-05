@@ -8,23 +8,32 @@ import Avatar from "../../assets/user-avatar.png";
 import { Button } from "../../components/UI/Buttons";
 import LocationBox from "../../components/UI/Location/LocationBox";
 import LocationModal from "../../components/UI/Modal/LocationModal";
-import PointsModal from "../../components/UI/Modal/PointsModal";
 import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 import { notification, Spin } from "antd";
-import { useUpdateProfilePhotoMutation } from "../../redux/Api/authApi";
+import { useGetMeQuery, useUpdateProfilePhotoMutation } from "../../redux/Api/authApi";
 import { IoIosCamera } from "react-icons/io";
 import NewLocation from "../../components/UI/Modal/NewLocation";
+import ChatIcon from "../../assets/Icons/ChatIcon";
+import { Dashboard, Main } from "../BusinessProfile/BusinessProfile";
+import ScanIcon from "../../assets/Icons/ScanIcon";
+import SupportModal from "../../components/UI/Modal/SupportModal";
+import AdvertModal from "../../components/UI/Modal/AdvertModal";
 
 const UserProfile = () => {
   const [updateProfile, { isLoading: updatingPhoto }] = useUpdateProfilePhotoMutation();
   const [showLocationModal, setShowLocationModal] = useState(false);
+  const [showSupportModal, setShowSupportModal] = useState(false);
+  const [showAdvertModal, setShowAdvertModal] = useState(true);
   const [newLocationModal, setNewLocationModal] = useState(false);
-  const [showPointsModal, setShowPointsModal] = useState(false);
+  // const [showPointsModal, setShowPointsModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const userType = useSelector((state) => state.auth.userType);
 
   const toggleShowLocationModal = () => {
     setShowLocationModal((prevState) => !prevState);
+  };
+  const toggleShowAdvertModal = () => {
+    setShowAdvertModal((prevState) => !prevState);
   };
   const toggleNewLocationModal = () => {
     setNewLocationModal((prevState) => !prevState);
@@ -59,21 +68,19 @@ const UserProfile = () => {
     // locationCity: selectedFilters.join(","),
   });
   const location = useLocation();
-  // const {
-  //   data: userData,
-  //   isSuccess: userSuccess,
-  //   refetch: refetchUserData,
-  //   isLoading: isFetching,
-  // } = useGetMeQuery({
-  //   userType: userType,
-  // });
-  const userData = useSelector((store) => store.auth.user).payload;
+  const {
+    data: userData,
+    isSuccess: userSuccess,
+    refetch: refetchUserData,
+    isLoading: isFetching,
+  } = useGetMeQuery({
+    userType: userType,
+  });
   const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
     if (isSuccess) {
       setLocations(data?.data);
-      console.log(locations);
     }
     if (isError) {
       notification.error({
@@ -85,9 +92,9 @@ const UserProfile = () => {
   }, [data, error?.error, isError, isSuccess, locations]);
 
   useEffect(() => {
-    // if (userSuccess) {
-    setUserInfo(userData?.user);
-    // }
+    if (userSuccess) {
+      setUserInfo(userData?.user);
+    }
   }, [userData?.user]);
 
   useEffect(() => {
@@ -105,8 +112,6 @@ const UserProfile = () => {
   // Filter out any undefined values in case a location name doesn't match any location
   const filteredUserLikedLocations = userLikedLocations?.filter(Boolean) || [];
 
-  // console.log(userData);
-
   return (
     <Container>
       <Dashboard showDashboard={showDashboard}>
@@ -120,7 +125,7 @@ const UserProfile = () => {
           )}
           <img
             className="rounded-full w-[150px] h-[150px]"
-            src={userData?.profilePhoto || Avatar}
+            src={userInfo?.profilePhoto || Avatar}
             alt="avatar"
           />
           <label htmlFor="photo">
@@ -138,37 +143,37 @@ const UserProfile = () => {
             className="hidden"
           />
         </div>
-        <div>
-          <h5 className="mt-1">{`${userData?.fullName}`}</h5>
-          <h6>{`@${userData?.username}`}</h6>
-          <h6>University Student</h6>
+        <div className="mb-3 -mt-2">
+          <h2 className="mt-1 text-black text-2xl font-semibold text-center mb-0">{`${userInfo?.fullName}`}</h2>
+          <h6 className="text-[#E9A309] text-lg">{`@${userInfo?.username}`}</h6>
+          <p className="mt-0">{userInfo?.occupation || "No Occupation Provided"}</p>
         </div>
         <div>
           <div>
-            <h5>
-              {userData?.address ? userData?.address : "No Address Provided"}
-            </h5>
-            <p>
-              {userData?.occupation
-                ? userData?.occupation
-                : "  No Occupation Provided"}
-            </p>
+            <h5 className="mb-1">About</h5>
+            <h6>{userInfo?.about || "No User bio"}</h6>
           </div>
-          <div>
+          <div className="mt-4">
             <h5>Total Outings</h5>
-            <p>27 Outings</p>
+            <h6>27 Outings</h6>
           </div>
-          <div>
-            <h5>{userData?.fullName ? "Total Posts" : "User Visits"}</h5>
-            <p>{userData?.fullName ? "6 Posts" : "null"}</p>
+          <div className="mt-4">
+            <h5>{userInfo?.fullName ? "Total Posts" : "User Visits"}</h5>
+            <h6>{userInfo?.fullName ? "6 Posts" : "null"}</h6>
           </div>
-          <div>
+          <div className="mt-4">
             <h5>Average Review</h5>
-            <p>4.5 stars</p>
+            <h6>4.5 stars</h6>
           </div>
         </div>
       </Dashboard>
       <Main>
+        <button className="absolute right-9 bottom-8 shadow-md rounded-full" onClick={() => setShowSupportModal(true)}>
+          <ChatIcon />
+        </button>
+        <button className="absolute right-9 bottom-24 p-2.5 bg-[#FDEECE] rounded-full shadow-md">
+          <ScanIcon />
+        </button>
         <div className="d-flex justify-content-between align-items-center mb-5 mt-3">
           <Profile onClick={toggleDashboard}>
             <AccountCircleIcon />
@@ -194,10 +199,16 @@ const UserProfile = () => {
           </Button>
         </div>
         <BoxContainer>
+          {showAdvertModal && (
+            <AdvertModal onClick={toggleShowAdvertModal} />
+          )}
           {showLocationModal && (
             <LocationModal onClick={toggleShowLocationModal} />
           )}
-          {/* {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />} */}
+          {showSupportModal && (
+            <SupportModal username={userInfo?.username} onClick={() => setShowSupportModal((prev) => !prev)} />
+          )}
+          {newLocationModal && <NewLocation onClick={toggleNewLocationModal} />}
           {/* {showPointsModal && <PointsModal onClick={togglePointsModal} />} */}
           {
             filteredUserLikedLocations.length < 1 ?
@@ -261,56 +272,56 @@ const Container = styled.div`
   }
 `;
 
-const Dashboard = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: center;
-  text-align: center;
-  width: 320px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: rgb(255, 254, 252);
-  border-top: 0;
-  border-right: 2px solid transparent;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-  padding-top: 100px;
+// const Dashboard = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   gap: 16px;
+//   align-items: center;
+//   text-align: center;
+//   width: 320px;
+//   height: 100vh;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   background-color: rgb(255, 254, 252);
+//   border-top: 0;
+//   border-right: 2px solid transparent;
+//   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
+//   padding-top: 100px;
 
-  z-index: 10;
-  &:nth-child(5) div {
-    margin-top: 1rem;
-  }
-  img {
-    width: 150px;
-    height: 150px;
-  }
-  h5 {
-    color: #009f57;
-    font-weight: 700;
-  }
-  svg {
-    display: none;
-  }
-  @media (max-width: 1150px) {
-    display: ${(props) => (props.showDashboard ? "block" : "none")};
-    padding-top: 100px;
-    svg {
-      display: block;
-    }
-  }
-`;
+//   z-index: 10;
+//   &:nth-child(5) div {
+//     margin-top: 1rem;
+//   }
+//   img {
+//     width: 150px;
+//     height: 150px;
+//   }
+//   h5 {
+//     color: #009f57;
+//     font-weight: 700;
+//   }
+//   svg {
+//     display: none;
+//   }
+//   @media (max-width: 1150px) {
+//     display: ${(props) => (props.showDashboard ? "block" : "none")};
+//     padding-top: 100px;
+//     svg {
+//       display: block;
+//     }
+//   }
+// `;
 
-const Main = styled.div`
-  width: 70%;
-  margin-left: 30%;
-  min-height: 100vh;
-  @media (max-width: 1150px) {
-    margin-left: 0;
-    width: 100%;
-  }
-`;
+// const Main = styled.div`
+//   width: 70%;
+//   margin-left: 30%;
+//   min-height: 100vh;
+//   @media (max-width: 1150px) {
+//     margin-left: 0;
+//     width: 100%;
+//   }
+// `;
 
 export const GridContainer = styled.div`
   display: grid;

@@ -48,10 +48,10 @@ export const LocationApi = createApi({
       }),
       transformResponse: (res) => {
         const result = res.map((e) => ({
-          value: e.slug || e.name,
+          value: e.slug.replace('&', '%26') || e.name.replace('&', '%26'),
           label: e.name,
           sub: e?.sub?.map((e) => ({
-            value: e.slug,
+            value: e.slug.replace('&', '%26'),
             label: e.name,
           })),
         }));

@@ -9,10 +9,11 @@ const ModalOverlay = (props) => {
   return (
     <div
       className={`${classes.overlay} ${
-        props.className === "points-modal" && classes["points-modal"]
-      }`}
+        props.className === "points-modal" && classes["points-modal"]}
+        ${props.type === 'ad' ? 'w-4/6' : 'w-1/3'}
+      `}
     >
-      <span onClick={props.onClick}>{CloseModalBtn}</span>
+      <span onClick={props.onClick} className={`${props.alignRight && "ml-auto"}`}>{CloseModalBtn}</span>
       {props.children}
     </div>
   );
@@ -25,7 +26,7 @@ const Modal = (props) => {
     <>
       {createPortal(<BackDrop onClick={props.onClick} />, portalElement)}
       {createPortal(
-        <ModalOverlay onClick={props.onClick} className={props.className}>
+        <ModalOverlay onClick={props.onClick} className={props.className} alignRight={props.alignRight} type={props.type}>
           {props.children}
         </ModalOverlay>,
         portalElement
