@@ -338,20 +338,21 @@ const Container = styled.div`
   }
 `;
 
-const Dashboard = styled.div`
+export const Dashboard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   width: 30%;
-  height: calc(100vh - 95px);
+  height: calc(100vh - 98px);
 
   overflow: auto;
   background-color: rgb(255, 254, 252);
   border-top: 0;
   border-right: 2px solid transparent;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
-  padding-top: 70px;
+  padding-top: 50px;
+  padding-bottom: 30px;
   z-index: 10;
   ::-webkit-scrollbar {
     width: 10px; /* Set the width of the scrollbar */
@@ -373,6 +374,11 @@ const Dashboard = styled.div`
     color: #009f57;
     font-weight: 700;
     font-size: 20px;
+  }
+
+  h5 {
+    color: #009f57;
+    font-weight: 700;
   }
 
   p {
@@ -397,7 +403,7 @@ const H3 = styled.h3`
   font-weight: ${(props) => `${props.fontWeight}`};
   font-size: ${(props) => `${props.fontSize}px`};
 `;
-const Main = styled.div`
+export const Main = styled.div`
   width: 100%;
   min-height: auto;
   margin-left: 0;

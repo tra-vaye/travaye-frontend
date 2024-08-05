@@ -1,42 +1,18 @@
-import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { notification } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Loader from "../../components/UI/Loader";
 import LocationBox from "../../components/UI/Location/LocationBox";
-import { BackDrop } from "../../components/UI/Modal/Modal";
-import { useGetCategoriesQuery, useGetLocationsQuery } from "../../redux/Api/locationApi";
-import { useGetStatesQuery } from "../../redux/Api/geoApi";
-import { Select, Input, Rate } from "antd";
 import { CiSearch } from "react-icons/ci";
-
-const categories = [
-  "All",
-  "Special Events",
-  "Food & Drinks",
-  "Entertainment Venues",
-  "Parks & Relaxation Spots",
-  "History & Arts",
-  "Wildlife Attractions",
-  "Sports & Recreation Centres",
-  "Historical/Tourist Attractions",
-];
-
-// const searchFilters = ["All", "Trending", "5-Stars", "Lagos"];
+import { useGetLocationsQuery } from "../../redux/Api/locationApi";
 
 const locationFilters = ["All", "Abuja", "Ibadan", "Lagos"];
 
 const Locations = () => {
-  const [showSidebar, setShowSidebar] = useState(false);
-  // const [searchFilter, setSearchFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [locations, setLocations] = useState([]);
-  // const [subData, setSubData] = useState([]);
-  // const [selectedCategories, updateSelectedCategories] = useState([]);
   const [selectedLocationStates, updateSelectedLocationStates] = useState(["All"]);
-  // const { data: locationCategories } = useGetCategoriesQuery();
-  // const { data: states } = useGetStatesQuery();
 
   // Categories and locationCity are queries for the backend and they are in array formats
   // I am joining every element in the array using .join() to make the request query a single query in a request to avoid server overload
@@ -45,7 +21,6 @@ const Locations = () => {
   const { data, isError, error, isLoading } = useGetLocationsQuery({
     page: 1,
     count: 10,
-    // locationCity: selectedLocationStates.join(","),
   });
   const navigate = useNavigate();
 
@@ -74,7 +49,6 @@ const Locations = () => {
   useEffect(() => {
     const loweredStates = selectedLocationStates.map(el => el.toLowerCase());
     const filtered = data?.data.filter((locate) => loweredStates.includes(locate.locationState.toLowerCase()));
-    // console.log(filtered);
     selectedLocationStates[0] === 'All' ? setLocations(data?.data)
     : setLocations(filtered);
   }, [selectedLocationStates, data]);
@@ -85,7 +59,7 @@ const Locations = () => {
         <Loader />
       ) : (
         <>
-          <div className="main w-full ">
+          <div className="main w-full">
             <Heading>
               <h4>Businesses and Locations</h4>
               {/* <MenuOpenIcon onClick={toggleSidebar} /> */}

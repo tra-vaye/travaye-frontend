@@ -549,7 +549,7 @@ const Container = styled.div`
 	}
 `;
 
-const FileUpload = styled.div`
+export const FileUpload = styled.div`
 	display: block;
 	width: 100%;
 	background: #ffffff;
