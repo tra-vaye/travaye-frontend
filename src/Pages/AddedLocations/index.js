@@ -5,6 +5,7 @@ import { FourStars, Bin } from "../../components/UI/svgs/svgs";
 import { useEffect, useState } from "react";
 import { Rate } from "antd";
 import Progress from "../../components/UI/Progress";
+import { useGetCategoriesQuery } from "../../redux/Api/locationApi";
 
 const AddedLocations = () => {
   const [locations, setLocations] = useState(
@@ -13,11 +14,12 @@ const AddedLocations = () => {
   useEffect(() => {
     setLocations(JSON.parse(localStorage.getItem("location")));
   }, [JSON.stringify(localStorage.getItem("location"))]);
+	const { data: categories } = useGetCategoriesQuery();
 
   console.log(locations);
   return (
     <Container>
-      <div className="flex justify-between items-end mb-24">
+      <div className="flex justify-between items-end mb-20">
         <h4>My Added Locations</h4>
         <Progress step={3} />
       </div>
@@ -27,18 +29,20 @@ const AddedLocations = () => {
             <div className="row">
               <div className="flex justify-between items-center">
                 <img
-                  src={e?.businessLocationImages[0]}
+                  src={e?.businessLocationImages?.[0] || e?.locationImagePath[0]}
                   alt=""
                   className="img-fluid"
                 />
                 <div>
-                  <p>{e?.businessName}</p>
-                  <h5>{e?.businessAddress}</h5>
-                  <h6>{e?.businessCategory}</h6>
+                  <p>{e?.locationName}</p>
+                  <h5 className="text-[#9d9d9d]">{e?.locationAddress}</h5>
+                  {/* <h6>{ e?.locationCategory}</h6> */}
+                  <h6 className='mb-0'>{categories?.find(cat => cat?.value === e?.locationCategory.replace('&', '%26'))?.label}</h6>
+
                 </div>
-                <Rate value={e?.rating} />
+                <Rate value={e?.locationRating || 3} disabled />
                 <div className="d-flex col-md-3 justify-content-between align-items-center ">
-                  <b>#{e?.businessPriceRangeFrom}</b>
+                  <b>#{e?.budgetClass.max}</b>
                   <span
                     className="cursor-pointer"
                     onClick={() => {
@@ -61,7 +65,7 @@ const AddedLocations = () => {
         ))}
       </div>
 
-      <footer className="row fixed left-0 right-0 w-screen border-red-600 border bottom-0 bg-white px-[5%] py-[2%] shadow-md">
+      <footer className="row fixed left-0 -right-1 border-red-600 border bottom-0 bg-white px-[5%] py-[2%] shadow-md">
         <div className="col-md-3">
           <Title>Total Added Locations</Title>
           <Value>{locations?.length} Locations</Value>
@@ -84,7 +88,7 @@ const AddedLocations = () => {
         <div className="col-md-3">
           <Title>Total Budget Cost</Title>
           <Value>#{locations?.reduce((acc, e)  => {
-            return acc + e.businessPriceRangeFrom
+            return acc + e.budgetClass.max
           }, 0)}</Value>
         </div>
         <div className="col-md-3">

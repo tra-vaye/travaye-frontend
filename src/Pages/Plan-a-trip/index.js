@@ -29,10 +29,8 @@ const PlanTrip = () => {
   const { data } = useGetStatesQuery();
   const { data: categories } = useGetCategoriesQuery();
   const [getCity, { data: city }] = useLazyGetCityQuery();
-  // const [getLga, { data: lga }] = useLazyGetLgaQuery();
   const [planTrip, { isLoading }] = useLazyPlanATripQuery();
   const {data: budgets} = useGetBudgetsQuery();
-
 
   const [queryData, setQueryData] = useState({
     state: "",
