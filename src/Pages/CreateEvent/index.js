@@ -2,120 +2,176 @@ import styled from "styled-components";
 import { Select } from "antd";
 import Dropzone from "react-dropzone";
 import { Button } from "../../components/UI/Buttons";
-import { ArrowCloud } from "../../components/UI/svgs/svgs";
+import { useState } from "react";
+import { useGetStatesQuery, useLazyGetLgaQuery } from "../../redux/Api/geoApi";
+import { useGetBudgetsQuery, useGetCategoriesQuery } from "../../redux/Api/locationApi";
+import { FileUpload } from "../Business/Register";
+import { Box, Typography } from "@mui/material";
+import { CloudUpload } from "../../components/UI/svgs/svgs";
+// import { ArrowCloud } from "../../components/UI/svgs/svgs";
+
+const Flex = styled(Box)({
+	display: 'flex',
+	alignItems: 'center',
+	gap: '1px',
+	flexWrap: 'wrap',
+});
 
 const CreateEvent = () => {
+  const [advertForm, setAdvertForm] = useState({
+    eventName: '',
+    eventAddress: '',
+    eventDescription: '',
+    advertImages: [],
+    advertState: '',
+    advertLGA: '',
+    advertBudget: '',
+    advertCategory: '',
+    advertPlan: ''
+  });
+
+  const { data: states } = useGetStatesQuery();
+  const { data: budgets } = useGetBudgetsQuery();
+  const [getLga, { data: lgas }] = useLazyGetLgaQuery();
+  const { data: categories } = useGetCategoriesQuery();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(advertForm);
+  }
+
+  const handleChange = (field, value) => {
+    setAdvertForm((prevInfo) => ({
+      ...prevInfo,
+      [field]: value,
+    }));
+  };
+
+  const handleLocationImagesFileDrop = (acceptedFiles, field) => {
+    // console.log(acceptedFiles);
+    setAdvertForm((prevInfo) => ({
+      ...prevInfo,
+      [field]: [...advertForm.advertImages, ...acceptedFiles],
+    }));
+  };
+
   return (
     <Style>
       <h2>Create an event (Advert)</h2>
-      <p className="text-center">
+      <p className="">
         Follow the Steps below to create an event in next to no time.
       </p>
-      <StepOneContainer>
-        <div>
-          <h3>Step 1</h3>
-
-          <TopGrid>
-            <p>Upload a picture of your event</p>
-            <span>+ Add a new picture</span>
-          </TopGrid>
-          <UploadContainer>
-            <span>Upoad event pictures </span>
-            <i>{ArrowCloud}</i>
-          </UploadContainer>
+      <form className="grid grid-cols-6 gap-10 mt-8" onSubmit={handleSubmit}>
+        <FormControl className="col-span-3">
+          <h5>Step 1</h5>
+          <label>Please upload a picture of your event</label>
+          <Dropzone
+            acceptedFiles=".jpg,.jpeg,.png"
+            multiple={false}
+            onDrop={(acceptedFiles) =>
+              handleLocationImagesFileDrop(acceptedFiles, "advertImages")
+            }
+          >
+            {({ getRootProps, getInputProps }) => (
+              <section {...getRootProps()}>
+                <input {...getInputProps()} />
+                <FileUpload className="!my-0 !p-0 !px-3">
+                  {advertForm.advertImages.length === 0 ? (
+                    `Upload Event Pictures`
+                  ) : (
+                    <div className="flex gap-3 flex-wrap">
+                      {advertForm.advertImages.map(
+                        (file, index) => (
+                          <Flex key={index}>
+                            <Typography sx={{ marginRight: "1px", display: "inline-block" }}>
+                              {file.name}{index !== advertForm.advertImages.length-1 && " , "}
+                            </Typography>
+                          </Flex>
+                        )
+                      )}
+                    </div>
+                  )}
+                  <i>{CloudUpload}</i>
+                </FileUpload>
+                <span className="text-right !block cursor-pointer">+ Add a new picture</span>
+              </section>
+            )}
+          </Dropzone>
+        </FormControl>
+        <FormControl className="col-span-3">
+          <h5>Step 2</h5>
+          <label>Select a Location</label>
+          <div className="grid grid-cols-2 gap-4">
+            <Select
+              placeholder="State"
+              options={states}
+              showSearch
+              onSelect={(value) => {
+                getLga({ state: value.toUpperCase() });
+                handleChange("advertState", value)
+              }}
+            />
+            <Select
+              placeholder="LGA"
+              options={lgas}
+              showSearch
+              onSelect={(value) => handleChange("advertLGA", value)}
+              // value={advertForm.advertLGA}
+            />
+          </div>
+        </FormControl>
+        <FormControl className="col-span-2">
+          <h5>Step 3</h5>
+          <label>Please select a price range</label>
+          <Select
+            placeholder="Select Range"
+            options={budgets}
+            onSelect={(value) => handleChange("advertBudget", value)}
+          />
+        </FormControl>
+        <FormControl className="col-span-2">
+          <h5>Step 4</h5>
+          <label>Please select a Category of Special Events</label>
+          <Select
+            placeholder="Select Category"
+            options={categories}
+            onSelect={(value) => handleChange("advertCategory", value)}
+          />
+        </FormControl>
+        <FormControl className="col-span-2">
+          <h5>Step 5</h5>
+          <label>Select an Advert Plan</label>
+          <Select
+            placeholder="Advert Plan"
+            onSelect={(value) => handleChange("advertPlan", value)}
+            // value={advertForm.advertPlan}
+            className="text-[#9d9d9d]"
+          />
+        </FormControl>
+        <FormControl className="col-span-6">
+          <h4 className="text-2xl text-[#009F57] font-bold mb-4">Extra Information</h4>  
+          <section className="flex gap-4">
+            <div className="flex-1">
+              <h5>Event Name</h5>
+              <label>Please enter a name for the event</label>
+              <input value={advertForm.eventName} onChange={(e) => handleChange("eventName", e.target.value)} placeholder="Enter name" type="text" />
+            </div>
+            <div className="flex-1">
+              <h5>Event Address</h5>
+              <label>Please enter an exact address for your event</label>
+              <input value={advertForm.eventAddress} onChange={(e) => handleChange("eventAddress", e.target.value)} placeholder="Enter address" type="text" />
+            </div>
+            <div className="flex-1">
+              <h5>About Event</h5>
+              <label>Please describe the event in a few words</label>
+              <textarea rows="3" placeholder="Enter description" value={advertForm.eventDescription} onChange={(e) => handleChange("eventDescription", e.target.value)} />
+            </div>
+          </section>
+        </FormControl>
+        <div className="col-span-6 flex">
+          <button type="submit" className="ml-auto py-2.5 px-16 rounded-xl border-none bg-[#009F57] text-[#F0F0F0] font-semibold text-xl">Post</button>
         </div>
-      </StepOneContainer>
-      {/* newblock */}
-      <div className=" mt-2">
-        <h3>Step 2</h3>
-        <p>Select a Location</p>
-        <OptionsBox>
-          <Select
-            placeholder="State"
-            // onSelect={(value) => {
-            //   getLga({ state: value.toUpperCase() });
-            //   getCity({ state: value.toUpperCase() });
-            //   getLandMarks({ state: value.toUpperCase() });
-            //   setQueryData((prev) => ({
-            //     ...prev,
-            //     state: value,
-            //     city: "",
-            //     lga: "",
-            //   }));
-            // }}
-            // value={queryData.state}
-            showSearch
-            className="!w-[250px] mt-3"
-          />
-          <Select
-            placeholder="City"
-            showSearch
-            // onSelect={(value) => {
-            //   setQueryData((prev) => ({ ...prev, city: value }));
-            // }}
-            // value={queryData.city}
-            className="!w-[250px] mt-3"
-          />
-          <Select
-            placeholder="Local Government Area"
-            // showSearch
-            // onSelect={(value) => {
-            //   setQueryData((prev) => ({ ...prev, lga: value }));
-            // }}
-            // value={queryData.lga}
-            className="!w-[250px] mt-3"
-          />
-        </OptionsBox>
-      </div>
-      {/* newblock */}
-      <OptionsBox>
-        <div>
-          <h3>Step 3</h3>
-          <p>Select a price range</p>
-          <Select
-            placeholder="Select Your Budget "
-            className="!w-[250px] mt-3"
-            options={[
-              { value: "free", label: "free" },
-              { value: "free - 5k", label: "free - 5k" },
-              { value: "5k - 10k", label: "5k - 10k" },
-              { value: "10k - 20k", label: "10k - 20k" },
-            ]}
-            // onSelect={(value) => {
-            //   setQueryData((prev) => ({ ...prev, budget: value }));
-            // }}
-          />
-        </div>
-        <div>
-          <h3>Step 4</h3>
-          <p>Select a Category of Special Events</p>
-          <Select
-            placeholder="Local Government Area"
-            // showSearch
-            // onSelect={(value) => {
-            //   setQueryData((prev) => ({ ...prev, lga: value }));
-            // }}
-            // value={queryData.lga}
-            className="!w-[250px] mt-3"
-          />
-        </div>
-        <div>
-          <h3>Step 5</h3>
-          <p>Select an Advert Plan</p>
-          <Select
-            placeholder="Local Government Area"
-            // showSearch
-            // onSelect={(value) => {
-            //   setQueryData((prev) => ({ ...prev, lga: value }));
-            // }}
-            // value={queryData.lga}
-            className="!w-[250px] mt-3"
-          />
-        </div>
-      </OptionsBox>
-      <ButtonContainer>
-        <Button color="green">Make Payment</Button>
-      </ButtonContainer>
+      </form>
     </Style>
   );
 };
@@ -128,12 +184,8 @@ const Style = styled.div`
   padding: 20px 5%;
   line-height: 32px;
   letter-spacing: 0em;
-  /* @media (max-width: 640px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  } */
-  span {
+
+  span, label {
     color: #e9a309;
   }
   h2 {
@@ -151,11 +203,38 @@ const Style = styled.div`
   }
 `;
 
-const StepOneContainer = styled.div`
-  margin-top: 30px;
+const FormControl = styled.div`
+  display: flex;
+  flex-direction: column;
 
-  span {
-    cursor: pointer;
+  h5 {
+    font-size: 20px;
+    line-height: 32px;
+    font-weight: 700;
+    color: #0c0c0c;
+  }
+
+  label {
+		display: block;
+		font-size: 14px;
+    /* line-height: 24px; */
+    color: black;
+    font-weight: 400;
+    white-space: nowrap;
+	}
+	
+  input, select, textarea {
+		display: block;
+		width: 100%;
+		background: #ffffff;
+		border: 2px solid #CCFFE8;
+		border-radius: 5px;
+    color: #9D9D9D;
+		padding: 4px 10px;
+    outline: none;
+	}
+  span.ant-select-selection-item {
+    color: #9D9D9D;
   }
 `;
 
@@ -166,48 +245,6 @@ const ButtonContainer = styled.div`
   @media (max-width: 600px) {
     justify-content: center;
   }
-`;
-
-const OptionsBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  /* gap: 370px; */
-  gap: 20%;
-  margin-bottom: 20px;
-  @media (max-width: 1340px) {
-    gap: 17%;
-  }
-  @media (max-width: 1170px) {
-    gap: 12%;
-  }
-  @media (max-width: 1040px) {
-    gap: 9%;
-  }
-  @media (max-width: 960px) {
-    gap: 5%;
-  }
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media (max-width: 640px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
-`;
-
-const UploadContainer = styled.div`
-  border: 1px solid rgba(0, 159, 87, 0.25);
-  color: #e9a009;
-  width: 300px;
-  padding: 5px;
-  border-radius: 5px;
-  display: flex;
-
-  justify-content: space-between;
-
-  svg {
-    transform: scale(0.4);
-  }
-  /* transform: scale(0.9) translateX(-20px); */
 `;
 
 const TopGrid = styled.div`

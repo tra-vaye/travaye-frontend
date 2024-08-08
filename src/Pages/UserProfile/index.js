@@ -17,13 +17,11 @@ import ChatIcon from "../../assets/Icons/ChatIcon";
 import { Dashboard, Main } from "../BusinessProfile/BusinessProfile";
 import ScanIcon from "../../assets/Icons/ScanIcon";
 import SupportModal from "../../components/UI/Modal/SupportModal";
-import AdvertModal from "../../components/UI/Modal/AdvertModal";
 
 const UserProfile = () => {
   const [updateProfile, { isLoading: updatingPhoto }] = useUpdateProfilePhotoMutation();
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showSupportModal, setShowSupportModal] = useState(false);
-  const [showAdvertModal, setShowAdvertModal] = useState(true);
   const [newLocationModal, setNewLocationModal] = useState(false);
   // const [showPointsModal, setShowPointsModal] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
@@ -31,9 +29,6 @@ const UserProfile = () => {
 
   const toggleShowLocationModal = () => {
     setShowLocationModal((prevState) => !prevState);
-  };
-  const toggleShowAdvertModal = () => {
-    setShowAdvertModal((prevState) => !prevState);
   };
   const toggleNewLocationModal = () => {
     setNewLocationModal((prevState) => !prevState);
@@ -199,9 +194,6 @@ const UserProfile = () => {
           </Button>
         </div>
         <BoxContainer>
-          {showAdvertModal && (
-            <AdvertModal onClick={toggleShowAdvertModal} />
-          )}
           {showLocationModal && (
             <LocationModal onClick={toggleShowLocationModal} />
           )}
